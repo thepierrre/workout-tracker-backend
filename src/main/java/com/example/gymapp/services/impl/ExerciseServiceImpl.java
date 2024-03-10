@@ -6,6 +6,8 @@ import com.example.gymapp.services.ExerciseService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
@@ -26,8 +28,21 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        exerciseRepository.deleteById(String.valueOf(id));
+    public void deleteById(UUID id) {
+        exerciseRepository.deleteById(id);
     }
 
+    @Override
+    public boolean isExists(UUID id) {
+        return exerciseRepository.existsById(id);
+    }
+
+    @Override
+    public ExerciseEntity update(UUID id, ExerciseEntity exerciseEntity) {
+        exerciseEntity.setId(id);
+        return exerciseRepository.findById(id).map(existingExercise -> {
+            Optional.ofNullable(exerciseEntity.getName()).ifPresent(existingExercise::setName);
+            return exerciseRepository.save(existingExercise);
+        }).orElseThrow(() -> new RuntimeException("Exercise does not exist"));
+    }
 }

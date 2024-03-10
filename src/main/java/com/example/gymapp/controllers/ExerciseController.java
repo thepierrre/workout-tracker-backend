@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class ExerciseController {
@@ -37,8 +38,21 @@ public class ExerciseController {
     }
 
     @DeleteMapping(path = "/exercises/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
         exerciseService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping(path = "/exercises/{id}")
+    public ResponseEntity<ExerciseDto> update(
+            @PathVariable("id") UUID id,
+            @RequestBody ExerciseDto exerciseDto
+    ) {
+        if(!exerciseService.isExists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ExerciseEntity exerciseEntity = exerciseMapper.mapFrom(exerciseDto);
+        ExerciseEntity updatedExercise = exerciseService.update(id, exerciseEntity);
+        return new ResponseEntity<>(exerciseMapper.mapTo(updatedExercise), HttpStatus.OK);
     }
 }

@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -11,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ExerciseDto {
 
-    private Long id;
+    private UUID id;
 
     private String name;
 }

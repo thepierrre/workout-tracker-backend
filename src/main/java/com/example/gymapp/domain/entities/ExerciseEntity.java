@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -15,8 +19,9 @@ import lombok.NoArgsConstructor;
 public class ExerciseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID id;
 
     private String name;
 }
