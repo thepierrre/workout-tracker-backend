@@ -7,9 +7,9 @@ import com.example.gymapp.mappers.Mapper;
 import com.example.gymapp.services.ExerciseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ExerciseController {
@@ -25,7 +25,20 @@ public class ExerciseController {
     @PostMapping(path = "/exercises")
     public ResponseEntity<ExerciseDto> createExercise(@RequestBody ExerciseDto exerciseDto) {
         ExerciseEntity exerciseEntity = exerciseMapper.mapFrom(exerciseDto);
-        ExerciseEntity createdExerciseEntity = exerciseService.save(exerciseEntity);
+        ExerciseEntity createdExerciseEntity = exerciseService.createExercise(exerciseEntity);
         return new ResponseEntity<>(exerciseMapper.mapTo(createdExerciseEntity), HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/exercises")
+    public List<ExerciseEntity> findAll() {
+        List<ExerciseEntity> foundExercises = exerciseService.findAll();
+        return foundExercises;
+
+    }
+
+    @DeleteMapping(path = "/exercises/{id}")
+    public ResponseEntity deleteById(@PathVariable("id") Long id) {
+        exerciseService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
