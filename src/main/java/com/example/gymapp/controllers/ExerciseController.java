@@ -5,6 +5,7 @@ import com.example.gymapp.domain.dto.ExerciseDto;
 import com.example.gymapp.domain.entities.ExerciseEntity;
 import com.example.gymapp.mappers.Mapper;
 import com.example.gymapp.services.ExerciseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +16,16 @@ import java.util.UUID;
 @RestController
 public class ExerciseController {
 
+    @Autowired
     private ExerciseService exerciseService;
+
+    @Autowired
     private Mapper<ExerciseEntity, ExerciseDto> exerciseMapper;
 
-    public ExerciseController(ExerciseService exerciseService, Mapper<ExerciseEntity, ExerciseDto> exerciseMapper) {
-        this.exerciseService = exerciseService;
-        this.exerciseMapper = exerciseMapper;
-    }
+//    public ExerciseController(ExerciseService exerciseService, Mapper<ExerciseEntity, ExerciseDto> exerciseMapper) {
+//        this.exerciseService = exerciseService;
+//        this.exerciseMapper = exerciseMapper;
+//    }
 
     @PostMapping(path = "/exercises")
     public ResponseEntity<ExerciseDto> createExercise(@RequestBody ExerciseDto exerciseDto) {
