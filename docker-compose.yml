@@ -7,4 +7,4 @@ services:
       - "5432:5432"
     restart: always
     environment:
-      POSTGRES_PASSWORD: AdAh2@!EpOr
+      POSTGRES_PASSWORD: $PASSWORD
