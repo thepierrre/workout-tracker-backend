@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "exercises")
+@Table(name = "exercise_types")
 public class ExerciseEntity {
 
     @Id
