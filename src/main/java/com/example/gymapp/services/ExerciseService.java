@@ -1,5 +1,6 @@
 package com.example.gymapp.services;
 
+import com.example.gymapp.domain.dto.ExerciseDto;
 import com.example.gymapp.domain.entities.ExerciseEntity;
 
 import java.util.List;

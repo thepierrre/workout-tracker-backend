@@ -1,8 +1,17 @@
+//package com.example.gymapp.mappers;
+//
+//public interface Mapper<A, B> {
+//
+//    B mapTo(A a);
+//
+//    A mapFrom(B b);
+//}
+
 package com.example.gymapp.mappers;
 
-public interface Mapper<A, B> {
+public interface Mapper<Entity, Dto> {
 
-    B mapTo(A a);
+    Dto mapTo(Entity entity);
 
-    A mapFrom(B b);
+    Entity mapFrom(Dto dto);
 }

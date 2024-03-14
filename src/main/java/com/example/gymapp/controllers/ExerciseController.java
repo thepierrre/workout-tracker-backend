@@ -32,12 +32,18 @@ public class ExerciseController {
 //        this.exerciseMapper = exerciseMapper;
 //    }
 
+    @GetMapping(path = "/exercises")
+    public List<ExerciseEntity> findAll() {
+        return exerciseService.findAll();
+    }
+
     @PostMapping(path = "/exercises")
     public ResponseEntity<ExerciseDto> createExercise(@Valid @RequestBody ExerciseDto exerciseDto) {
         ExerciseEntity exerciseEntity = exerciseMapper.mapFrom(exerciseDto);
         ExerciseEntity createdExerciseEntity = exerciseService.createExercise(exerciseEntity);
         return new ResponseEntity<>(exerciseMapper.mapTo(createdExerciseEntity), HttpStatus.CREATED);
     }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -52,12 +58,6 @@ public class ExerciseController {
         return errors;
     }
 
-    @GetMapping(path = "/exercises")
-    public List<ExerciseEntity> findAll() {
-        List<ExerciseEntity> foundExercises = exerciseService.findAll();
-        return foundExercises;
-
-    }
 
     @DeleteMapping(path = "/exercises/{id}")
     public ResponseEntity deleteById(@PathVariable("id") UUID id) {
