@@ -45,20 +45,6 @@ public class ExerciseController {
     }
 
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
-
-
     @DeleteMapping(path = "/exercises/{id}")
     public ResponseEntity deleteById(@PathVariable("id") UUID id) {
         exerciseService.deleteById(id);
@@ -76,5 +62,18 @@ public class ExerciseController {
         ExerciseEntity exerciseEntity = exerciseMapper.mapFrom(exerciseDto);
         ExerciseEntity updatedExercise = exerciseService.update(id, exerciseEntity);
         return new ResponseEntity<>(exerciseMapper.mapTo(updatedExercise), HttpStatus.OK);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }

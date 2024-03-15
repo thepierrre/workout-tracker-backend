@@ -17,7 +17,7 @@ public class UserDto {
 
     @Id
     @UuidGenerator
-    UUID id;
-    String name;
-    String password;
+    private UUID id;
+    private String name;
+    private String password;
 }

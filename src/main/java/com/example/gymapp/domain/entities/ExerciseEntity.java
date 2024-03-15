@@ -23,4 +23,8 @@ public class ExerciseEntity {
     private UUID id;
 
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
 }
