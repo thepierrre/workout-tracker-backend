@@ -32,6 +32,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
+
+    @Override
     public boolean isExists(UUID id) {
         return userRepository.existsById(id);
     }

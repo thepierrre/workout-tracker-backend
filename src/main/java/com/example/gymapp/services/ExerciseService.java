@@ -13,6 +13,8 @@ public interface ExerciseService {
 
     void deleteById(UUID id);
 
+    void deleteAll();
+
     ExerciseEntity update(UUID id, ExerciseEntity exerciseEntity);
 
     boolean isExists(UUID id);

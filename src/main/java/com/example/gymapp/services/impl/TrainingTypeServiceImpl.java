@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TrainingTypeServiceImpl implements TrainingTypeService {
@@ -22,5 +23,15 @@ public class TrainingTypeServiceImpl implements TrainingTypeService {
     @Override
     public List<TrainingTypeEntity> findAll() {
         return trainingTypeRepository.findAll();
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        trainingTypeRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAll() {
+        trainingTypeRepository.deleteAll();
     }
 }

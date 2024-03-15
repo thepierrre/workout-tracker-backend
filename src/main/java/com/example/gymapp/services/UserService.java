@@ -11,7 +11,7 @@ public interface UserService {
 
     void deleteById(UUID id);
 
-
+    void deleteAll();
     UserEntity update(UUID id, UserEntity userEntity);
     boolean isExists(UUID id);
 

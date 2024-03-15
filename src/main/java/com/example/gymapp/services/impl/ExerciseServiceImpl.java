@@ -33,6 +33,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
+    public void deleteAll() {
+        exerciseRepository.deleteAll();
+    }
+
+    @Override
     public boolean isExists(UUID id) {
         return exerciseRepository.existsById(id);
     }

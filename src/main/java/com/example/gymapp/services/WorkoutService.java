@@ -13,4 +13,6 @@ public interface WorkoutService {
 
     void deleteById(UUID id);
 
+    void deleteAll();
+
 }

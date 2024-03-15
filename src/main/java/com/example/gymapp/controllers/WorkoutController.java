@@ -41,5 +41,11 @@ public class WorkoutController {
 
     }
 
+    @DeleteMapping(path = "/workouts")
+    public ResponseEntity deleteAll() {
+        workoutService.deleteAll();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
 }

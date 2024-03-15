@@ -51,6 +51,12 @@ public class ExerciseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping(path = "/exercises")
+    public ResponseEntity deleteAll() {
+        exerciseService.deleteAll();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @PatchMapping(path = "/exercises/{id}")
     public ResponseEntity<ExerciseDto> update(
             @PathVariable("id") UUID id,
