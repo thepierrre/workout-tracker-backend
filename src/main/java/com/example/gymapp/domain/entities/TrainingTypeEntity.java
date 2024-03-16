@@ -1,5 +1,7 @@
 package com.example.gymapp.domain.entities;
 
+import com.example.gymapp.domain.dto.ExerciseDto;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +25,9 @@ public class TrainingTypeEntity {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity user;
+//    @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ExerciseEntity> exercises;
+
+
 }

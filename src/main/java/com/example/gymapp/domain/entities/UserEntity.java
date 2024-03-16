@@ -1,14 +1,13 @@
 package com.example.gymapp.domain.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -22,6 +21,11 @@ public class UserEntity {
     @Id
     @UuidGenerator
     private UUID id;
+
     private String name;
+
     private String password;
+
+    @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<TrainingTypeEntity> trainingTypes;
 }

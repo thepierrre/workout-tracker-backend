@@ -9,6 +9,7 @@ import java.util.UUID;
 public interface ExerciseService {
 
     ExerciseEntity createExercise(ExerciseEntity exerciseEntity);
+
     List<ExerciseEntity> findAll();
 
     void deleteById(UUID id);

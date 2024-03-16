@@ -1,5 +1,7 @@
 package com.example.gymapp.domain.entities;
 
+import com.example.gymapp.domain.dto.TrainingTypeDto;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +26,8 @@ public class ExerciseEntity {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "training_type_id", referencedColumnName = "id")
+    @JsonIgnore
+    private TrainingTypeEntity trainingType;
 }
