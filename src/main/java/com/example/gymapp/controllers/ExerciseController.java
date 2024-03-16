@@ -27,11 +27,6 @@ public class ExerciseController {
     @Autowired
     private Mapper<ExerciseEntity, ExerciseDto> exerciseMapper;
 
-//    public ExerciseController(ExerciseService exerciseService, Mapper<ExerciseEntity, ExerciseDto> exerciseMapper) {
-//        this.exerciseService = exerciseService;
-//        this.exerciseMapper = exerciseMapper;
-//    }
-
     @GetMapping(path = "/exercises")
     public List<ExerciseEntity> findAll() {
         return exerciseService.findAll();

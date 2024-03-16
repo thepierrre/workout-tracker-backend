@@ -1,13 +1,16 @@
 package com.example.gymapp.domain.dto;
 
+import com.example.gymapp.domain.entities.ExerciseEntity;
 import com.example.gymapp.domain.entities.UserEntity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -20,8 +23,6 @@ public class TrainingTypeDto {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity user;
+    private List<ExerciseDto> exercises;
 
 }

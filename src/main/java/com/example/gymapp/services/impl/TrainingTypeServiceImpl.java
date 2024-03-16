@@ -1,5 +1,6 @@
 package com.example.gymapp.services.impl;
 
+import com.example.gymapp.domain.entities.ExerciseEntity;
 import com.example.gymapp.domain.entities.TrainingTypeEntity;
 import com.example.gymapp.repositories.TrainingTypeRepository;
 import com.example.gymapp.services.TrainingTypeService;
@@ -17,13 +18,17 @@ public class TrainingTypeServiceImpl implements TrainingTypeService {
 
     @Override
     public TrainingTypeEntity createTrainingType(TrainingTypeEntity trainingTypeEntity) {
+
+        for (ExerciseEntity exerciseEntity :trainingTypeEntity.getExercises()) {
+            exerciseEntity.setTrainingType(trainingTypeEntity);
+        }
+        trainingTypeEntity.setExercises(trainingTypeEntity.getExercises());
+
         return trainingTypeRepository.save(trainingTypeEntity);
     }
 
     @Override
-    public List<TrainingTypeEntity> findAll() {
-        return trainingTypeRepository.findAll();
-    }
+    public List<TrainingTypeEntity> findAll() { return trainingTypeRepository.findAll(); }
 
     @Override
     public void deleteById(UUID id) {

@@ -24,4 +24,5 @@ public class ExerciseMapper implements Mapper<ExerciseEntity, ExerciseDto> {
     public ExerciseEntity mapFrom(ExerciseDto exerciseDto) {
         return modelMapper.map(exerciseDto, ExerciseEntity.class);
     }
+
 }
