@@ -1,6 +1,5 @@
 package com.example.gymapp.domain.entities;
 
-import com.example.gymapp.domain.dto.ExerciseDto;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,9 +24,12 @@ public class TrainingTypeEntity {
 
     private String name;
 
-//    @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ExerciseEntity> exercises;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
+    private UserEntity user;
 
 }

@@ -4,6 +4,7 @@ import com.example.gymapp.domain.entities.ExerciseEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,5 +25,8 @@ public class TrainingTypeDto {
     private String name;
 
     private List<ExerciseDto> exercises;
+
+    @NotNull(message = "You must specify a user for this training type.")
+    private UserDto user;
 
 }

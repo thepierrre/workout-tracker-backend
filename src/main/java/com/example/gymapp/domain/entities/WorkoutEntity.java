@@ -35,6 +35,3 @@ public class WorkoutEntity {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
 }
-
-//user: user 1810b2c7-650d-43ea-8b99-7786b3d3dc86
-//training-type: Training A 748566ca-d27c-4b4f-b2c7-d6e989eed0d3

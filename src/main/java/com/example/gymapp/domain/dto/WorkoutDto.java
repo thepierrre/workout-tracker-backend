@@ -20,18 +20,13 @@ import java.util.UUID;
 @Builder
 public class WorkoutDto {
 
-    @Id
-    @UuidGenerator
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
     private UserEntity user_id;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
     private TrainingTypeEntity training_type_id;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
+
+
 }
