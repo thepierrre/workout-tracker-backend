@@ -16,7 +16,7 @@ public class ExerciseTypeDto {
 
     private String name;
 
-    private TrainingRoutineDto trainingType;
+//    private TrainingRoutineDto trainingType;
 
 
 }

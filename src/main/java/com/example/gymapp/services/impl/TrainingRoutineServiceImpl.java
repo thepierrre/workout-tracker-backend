@@ -18,9 +18,9 @@ public class TrainingRoutineServiceImpl implements TrainingRoutineService {
     @Override
     public TrainingRoutineEntity createTrainingType(TrainingRoutineEntity trainingRoutineEntity) {
 
-        for (ExerciseTypeEntity exerciseTypeEntity : trainingRoutineEntity.getExercises()) {
-            exerciseTypeEntity.setTrainingType(trainingRoutineEntity);
-        }
+//        for (ExerciseTypeEntity exerciseTypeEntity : trainingRoutineEntity.getExercises()) {
+//            exerciseTypeEntity.setTrainingType(trainingRoutineEntity);
+//        }
         trainingRoutineEntity.setExercises(trainingRoutineEntity.getExercises());
 
         return trainingRoutineRepository.save(trainingRoutineEntity);

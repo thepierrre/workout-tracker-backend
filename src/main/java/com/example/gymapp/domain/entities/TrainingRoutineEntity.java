@@ -23,12 +23,15 @@ public class TrainingRoutineEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<ExerciseTypeEntity> exercises;
+
+    @ManyToMany
     private List<ExerciseTypeEntity> exercises;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
+    @JsonIgnoreProperties({"trainingRoutines", "password"})
     private UserEntity user;
 
 }

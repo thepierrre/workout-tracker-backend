@@ -24,7 +24,7 @@ public class TrainingRoutineController {
     @Autowired
     private Mapper<TrainingRoutineEntity, TrainingRoutineDto> trainingTypeMapper;
 
-    @PostMapping(path = "/training-types")
+    @PostMapping(path = "/training-routines")
     public ResponseEntity<TrainingRoutineDto> createTrainingType(@Valid @RequestBody TrainingRoutineDto trainingRoutineDto) {
         TrainingRoutineEntity trainingRoutineEntity = trainingTypeMapper.mapFrom(trainingRoutineDto);
         TrainingRoutineEntity createdTrainingType = trainingRoutineService.createTrainingType(trainingRoutineEntity);
@@ -43,19 +43,19 @@ public class TrainingRoutineController {
         return new ResponseEntity<>(trainingTypeMapper.mapTo(trainingRoutineEntity), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/training-types")
+    @GetMapping(path = "/training-routines")
     public List<TrainingRoutineEntity> getAll() {
         List<TrainingRoutineEntity> foundTrainingTypes = trainingRoutineService.findAll();
         return foundTrainingTypes;
     }
 
-    @DeleteMapping(path = "/training-types/{id}")
+    @DeleteMapping(path = "/training-routines/{id}")
     public ResponseEntity deleteById(@PathVariable("id") Long id) {
         trainingRoutineService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "/training-types")
+    @DeleteMapping(path = "/training-routines")
     public ResponseEntity deleteAll() {
         trainingRoutineService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

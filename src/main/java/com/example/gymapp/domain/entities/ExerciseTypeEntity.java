@@ -21,8 +21,8 @@ public class ExerciseTypeEntity {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "training_type_id", referencedColumnName = "id")
-    @JsonIgnore
-    private TrainingRoutineEntity trainingType;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "training_type_id", referencedColumnName = "id")
+//    @JsonIgnore
+//    private TrainingRoutineEntity trainingType;
 }
