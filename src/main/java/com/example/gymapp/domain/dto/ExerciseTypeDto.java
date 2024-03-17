@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 
 @Data
 @AllArgsConstructor
@@ -12,11 +15,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ExerciseTypeDto {
 
-    private Long id;
+    private UUID id;
 
     private String name;
 
-//    private TrainingRoutineDto trainingType;
+//    private TrainingRoutineDto trainingRoutine;
 
+    private List<ExerciseInstanceDto> exerciseInstances;
 
 }

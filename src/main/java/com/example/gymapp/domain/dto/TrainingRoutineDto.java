@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -14,11 +15,11 @@ import java.util.List;
 @Builder
 public class TrainingRoutineDto {
 
-    private Long id;
+    private UUID id;
 
     private String name;
 
-    private List<ExerciseTypeDto> exercises;
+    private List<ExerciseTypeDto> exerciseTypes;
 
     @NotNull(message = "You must specify a user for this training type.")
     private UserDto user;

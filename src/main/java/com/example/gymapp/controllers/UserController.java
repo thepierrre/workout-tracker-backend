@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/users/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
         userService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PatchMapping(path = "/users/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> update(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
         if (!userService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

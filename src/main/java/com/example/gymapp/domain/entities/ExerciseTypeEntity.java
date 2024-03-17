@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -16,10 +20,13 @@ import lombok.NoArgsConstructor;
 public class ExerciseTypeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator
+    private UUID id;
 
     private String name;
+
+    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ExerciseInstanceEntity> exerciseInstances;
 
 //    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "training_type_id", referencedColumnName = "id")

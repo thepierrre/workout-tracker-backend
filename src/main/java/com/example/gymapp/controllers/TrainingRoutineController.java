@@ -50,7 +50,7 @@ public class TrainingRoutineController {
     }
 
     @DeleteMapping(path = "/training-routines/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
         trainingRoutineService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

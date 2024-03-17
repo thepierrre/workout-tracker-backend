@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -18,8 +20,8 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    @GeneratedValue
-    private  Long id;
+    @UuidGenerator
+    private UUID id;
 
     private String username;
 

@@ -23,8 +23,8 @@ import java.util.UUID;
 public class WorkoutEntity {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @UuidGenerator
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

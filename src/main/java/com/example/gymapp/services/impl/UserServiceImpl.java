@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         userRepository.deleteById(id);
     }
 
@@ -36,11 +37,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isExists(Long id) {
+    public boolean isExists(UUID id) {
         return userRepository.existsById(id);
     }
     @Override
-    public UserEntity update(Long id, UserEntity userEntity) {
+    public UserEntity update(UUID id, UserEntity userEntity) {
         userEntity.setId(id);
         return userRepository.findById(id).map(existingUser -> {
             Optional.ofNullable(userEntity.getUsername()).ifPresent(existingUser::setUsername);

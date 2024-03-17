@@ -28,7 +28,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ExerciseMapper implements Mapper<ExerciseTypeEntity, ExerciseTypeDto> {
+public class ExerciseTypeMapper implements Mapper<ExerciseTypeEntity, ExerciseTypeDto> {
 
     @Autowired
     ModelMapper modelMapper;

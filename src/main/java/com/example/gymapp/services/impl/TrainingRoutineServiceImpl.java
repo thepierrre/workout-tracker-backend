@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TrainingRoutineServiceImpl implements TrainingRoutineService {
@@ -21,7 +22,7 @@ public class TrainingRoutineServiceImpl implements TrainingRoutineService {
 //        for (ExerciseTypeEntity exerciseTypeEntity : trainingRoutineEntity.getExercises()) {
 //            exerciseTypeEntity.setTrainingType(trainingRoutineEntity);
 //        }
-        trainingRoutineEntity.setExercises(trainingRoutineEntity.getExercises());
+        trainingRoutineEntity.setExerciseTypes(trainingRoutineEntity.getExerciseTypes());
 
         return trainingRoutineRepository.save(trainingRoutineEntity);
     }
@@ -30,7 +31,7 @@ public class TrainingRoutineServiceImpl implements TrainingRoutineService {
     public List<TrainingRoutineEntity> findAll() { return trainingRoutineRepository.findAll(); }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         trainingRoutineRepository.deleteById(id);
     }
 

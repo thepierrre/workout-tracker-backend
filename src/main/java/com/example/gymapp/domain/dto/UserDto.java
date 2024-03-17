@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +15,7 @@ import java.util.List;
 @Builder
 public class UserDto {
 
-    private Long id;
+    private UUID id;
 
     @NotBlank(message = "The username must not be empty.")
     private String username;

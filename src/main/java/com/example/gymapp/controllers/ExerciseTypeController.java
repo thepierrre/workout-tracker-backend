@@ -4,7 +4,7 @@ package com.example.gymapp.controllers;
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.mappers.Mapper;
-import com.example.gymapp.services.ExerciseService;
+import com.example.gymapp.services.ExerciseTypeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,53 +16,54 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
-public class ExerciseController {
+public class ExerciseTypeController {
 
     @Autowired
-    private ExerciseService exerciseService;
+    private ExerciseTypeService exerciseTypeService;
 
     @Autowired
-    private Mapper<ExerciseTypeEntity, ExerciseTypeDto> exerciseMapper;
+    private Mapper<ExerciseTypeEntity, ExerciseTypeDto> exerciseTypeMapper;
 
-    @GetMapping(path = "/exercises")
+    @GetMapping(path = "/exercise-types")
     public List<ExerciseTypeEntity> findAll() {
-        return exerciseService.findAll();
+        return exerciseTypeService.findAll();
     }
 
-    @PostMapping(path = "/exercises")
+    @PostMapping(path = "/exercise-types")
     public ResponseEntity<ExerciseTypeDto> createExercise(@Valid @RequestBody ExerciseTypeDto exerciseTypeDto) {
-        ExerciseTypeEntity exerciseTypeEntity = exerciseMapper.mapFrom(exerciseTypeDto);
-        ExerciseTypeEntity createdExerciseTypeEntity = exerciseService.createExercise(exerciseTypeEntity);
-        return new ResponseEntity<>(exerciseMapper.mapTo(createdExerciseTypeEntity), HttpStatus.CREATED);
+        ExerciseTypeEntity exerciseTypeEntity = exerciseTypeMapper.mapFrom(exerciseTypeDto);
+        ExerciseTypeEntity createdExerciseTypeEntity = exerciseTypeService.createExercise(exerciseTypeEntity);
+        return new ResponseEntity<>(exerciseTypeMapper.mapTo(createdExerciseTypeEntity), HttpStatus.CREATED);
     }
 
 
-    @DeleteMapping(path = "/exercises/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") Long id) {
-        exerciseService.deleteById(id);
+    @DeleteMapping(path = "/exercise-types/{id}")
+    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
+        exerciseTypeService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "/exercises")
+    @DeleteMapping(path = "/exercise-types")
     public ResponseEntity deleteAll() {
-        exerciseService.deleteAll();
+        exerciseTypeService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(path = "/exercises/{id}")
     public ResponseEntity<ExerciseTypeDto> update(
-            @PathVariable("id") Long id,
+            @PathVariable("id") UUID id,
             @RequestBody ExerciseTypeDto exerciseTypeDto
     ) {
-        if(!exerciseService.isExists(id)) {
+        if(!exerciseTypeService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        ExerciseTypeEntity exerciseTypeEntity = exerciseMapper.mapFrom(exerciseTypeDto);
-        ExerciseTypeEntity updatedExercise = exerciseService.update(id, exerciseTypeEntity);
-        return new ResponseEntity<>(exerciseMapper.mapTo(updatedExercise), HttpStatus.OK);
+        ExerciseTypeEntity exerciseTypeEntity = exerciseTypeMapper.mapFrom(exerciseTypeDto);
+        ExerciseTypeEntity updatedExercise = exerciseTypeService.update(id, exerciseTypeEntity);
+        return new ResponseEntity<>(exerciseTypeMapper.mapTo(updatedExercise), HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
