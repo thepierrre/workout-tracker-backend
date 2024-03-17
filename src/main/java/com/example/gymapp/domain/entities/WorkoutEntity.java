@@ -1,6 +1,7 @@
 package com.example.gymapp.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,17 +23,18 @@ import java.util.UUID;
 public class WorkoutEntity {
 
     @Id
-    @UuidGenerator
-    private UUID id;
+    @GeneratedValue
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
-    private UserEntity user_id;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
+    private UserEntity user;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
-    private TrainingTypeEntity training_type_id;
+//    @ManyToOne
+//    @JoinColumn(referencedColumnName = "id")
+//    private TrainingTypeEntity training_type_id;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date date;
+    @JsonFormat
+    private LocalDateTime date;
 }

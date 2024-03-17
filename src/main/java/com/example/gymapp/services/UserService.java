@@ -9,11 +9,11 @@ public interface UserService {
 
     List<UserEntity> findAll();
 
-    void deleteById(UUID id);
+    void deleteById(Long id);
 
     void deleteAll();
-    UserEntity update(UUID id, UserEntity userEntity);
-    boolean isExists(UUID id);
+    UserEntity update(Long id, UserEntity userEntity);
+    boolean isExists(Long id);
 
 
 }

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.util.*;
 
@@ -16,16 +15,16 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "training_types")
-public class TrainingTypeEntity {
+public class TrainingRoutineEntity {
 
     @Id
-    @UuidGenerator
-    private UUID id;
+    @GeneratedValue
+    private Long id;
 
     private String name;
 
     @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ExerciseEntity> exercises;
+    private List<ExerciseTypeEntity> exercises;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

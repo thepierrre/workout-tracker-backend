@@ -1,18 +1,15 @@
 package com.example.gymapp.services.impl;
 
-import com.example.gymapp.domain.dto.ExerciseDto;
-import com.example.gymapp.domain.entities.ExerciseEntity;
-import com.example.gymapp.mappers.impl.TrainingTypeMapper;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
+import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.repositories.ExerciseRepository;
 import com.example.gymapp.mappers.impl.ExerciseMapper;
 import com.example.gymapp.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
@@ -22,25 +19,25 @@ public class ExerciseServiceImpl implements ExerciseService {
     ExerciseMapper exerciseMapper;
 
     @Autowired
-    TrainingTypeMapper trainingTypeMapper;
+    TrainingRoutineMapper trainingRoutineMapper;
 
     public ExerciseServiceImpl(ExerciseRepository exerciseRepository) {
         this.exerciseRepository = exerciseRepository;
     }
 
     @Override
-    public ExerciseEntity createExercise(ExerciseEntity exerciseEntity) {
-        return exerciseRepository.save(exerciseEntity);
+    public ExerciseTypeEntity createExercise(ExerciseTypeEntity exerciseTypeEntity) {
+        return exerciseRepository.save(exerciseTypeEntity);
     }
 
     @Override
-    public List<ExerciseEntity> findAll() {
+    public List<ExerciseTypeEntity> findAll() {
         return exerciseRepository.findAll();
     }
 
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteById(Long id) {
         exerciseRepository.deleteById(id);
     }
 
@@ -50,15 +47,15 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public boolean isExists(UUID id) {
+    public boolean isExists(Long id) {
         return exerciseRepository.existsById(id);
     }
 
     @Override
-    public ExerciseEntity update(UUID id, ExerciseEntity exerciseEntity) {
-        exerciseEntity.setId(id);
+    public ExerciseTypeEntity update(Long id, ExerciseTypeEntity exerciseTypeEntity) {
+        exerciseTypeEntity.setId(id);
         return exerciseRepository.findById(id).map(existingExercise -> {
-            Optional.ofNullable(exerciseEntity.getName()).ifPresent(existingExercise::setName);
+            Optional.ofNullable(exerciseTypeEntity.getName()).ifPresent(existingExercise::setName);
             return exerciseRepository.save(existingExercise);
         }).orElseThrow(() -> new RuntimeException("Exercise does not exist"));
     }

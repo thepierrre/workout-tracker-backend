@@ -1,11 +1,10 @@
 package com.example.gymapp.controllers;
 
-import com.example.gymapp.domain.dto.TrainingTypeDto;
-import com.example.gymapp.domain.entities.ExerciseEntity;
-import com.example.gymapp.domain.entities.TrainingTypeEntity;
+import com.example.gymapp.domain.dto.TrainingRoutineDto;
+import com.example.gymapp.domain.entities.TrainingRoutineEntity;
 import com.example.gymapp.mappers.Mapper;
 
-import com.example.gymapp.services.TrainingTypeService;
+import com.example.gymapp.services.TrainingRoutineService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,18 +16,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-public class TrainingTypeController {
+public class TrainingRoutineController {
 
     @Autowired
-    private TrainingTypeService trainingTypeService;
+    private TrainingRoutineService trainingRoutineService;
 
     @Autowired
-    private Mapper<TrainingTypeEntity, TrainingTypeDto> trainingTypeMapper;
+    private Mapper<TrainingRoutineEntity, TrainingRoutineDto> trainingTypeMapper;
 
     @PostMapping(path = "/training-types")
-    public ResponseEntity<TrainingTypeDto> createTrainingType(@Valid @RequestBody TrainingTypeDto trainingTypeDto) {
-        TrainingTypeEntity trainingTypeEntity = trainingTypeMapper.mapFrom(trainingTypeDto);
-        TrainingTypeEntity createdTrainingType = trainingTypeService.createTrainingType(trainingTypeEntity);
+    public ResponseEntity<TrainingRoutineDto> createTrainingType(@Valid @RequestBody TrainingRoutineDto trainingRoutineDto) {
+        TrainingRoutineEntity trainingRoutineEntity = trainingTypeMapper.mapFrom(trainingRoutineDto);
+        TrainingRoutineEntity createdTrainingType = trainingRoutineService.createTrainingType(trainingRoutineEntity);
 
 //        List<ExerciseEntity> exercises = new ArrayList<>();
 //
@@ -41,24 +40,24 @@ public class TrainingTypeController {
 //
 //        trainingTypeEntity.setExercises(exercises);
 
-        return new ResponseEntity<>(trainingTypeMapper.mapTo(trainingTypeEntity), HttpStatus.CREATED);
+        return new ResponseEntity<>(trainingTypeMapper.mapTo(trainingRoutineEntity), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/training-types")
-    public List<TrainingTypeEntity> getAll() {
-        List<TrainingTypeEntity> foundTrainingTypes = trainingTypeService.findAll();
+    public List<TrainingRoutineEntity> getAll() {
+        List<TrainingRoutineEntity> foundTrainingTypes = trainingRoutineService.findAll();
         return foundTrainingTypes;
     }
 
     @DeleteMapping(path = "/training-types/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
-        trainingTypeService.deleteById(id);
+    public ResponseEntity deleteById(@PathVariable("id") Long id) {
+        trainingRoutineService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/training-types")
     public ResponseEntity deleteAll() {
-        trainingTypeService.deleteAll();
+        trainingRoutineService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

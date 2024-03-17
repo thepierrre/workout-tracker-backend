@@ -1,28 +1,27 @@
 package com.example.gymapp.mappers.impl;
 
-import com.example.gymapp.domain.dto.ExerciseDto;
-import com.example.gymapp.domain.entities.ExerciseEntity;
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.mappers.Mapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ExerciseMapper implements Mapper<ExerciseEntity, ExerciseDto> {
+public class ExerciseMapper implements Mapper<ExerciseTypeEntity, ExerciseTypeDto> {
 
+    @Autowired
     ModelMapper modelMapper;
 
-    public ExerciseMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+
+    @Override
+    public ExerciseTypeDto mapTo(ExerciseTypeEntity exerciseTypeEntity) {
+        return modelMapper.map(exerciseTypeEntity, ExerciseTypeDto.class);
     }
 
     @Override
-    public ExerciseDto mapTo(ExerciseEntity exercise) {
-        return modelMapper.map(exercise, ExerciseDto.class);
-    }
-
-    @Override
-    public ExerciseEntity mapFrom(ExerciseDto exerciseDto) {
-        return modelMapper.map(exerciseDto, ExerciseEntity.class);
+    public ExerciseTypeEntity mapFrom(ExerciseTypeDto exerciseTypeDto) {
+        return modelMapper.map(exerciseTypeDto, ExerciseTypeEntity.class);
     }
 
 }

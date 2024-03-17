@@ -1,9 +1,7 @@
 package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.UserDto;
-import com.example.gymapp.domain.entities.ExerciseEntity;
 import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.mappers.Mapper;
 import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.services.UserService;
 import jakarta.validation.Valid;
@@ -41,7 +39,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/users/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
+    public ResponseEntity deleteById(@PathVariable("id") Long id) {
         userService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -53,7 +51,7 @@ public class UserController {
     }
 
     @PatchMapping(path = "/users/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> update(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
         if (!userService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

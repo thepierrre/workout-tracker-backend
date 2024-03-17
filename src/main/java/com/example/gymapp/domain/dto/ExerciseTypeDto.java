@@ -5,20 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class WorkoutDto {
+public class ExerciseTypeDto {
 
     private Long id;
 
-//    private UserEntity user_id;
+    private String name;
 
-//    private TrainingTypeEntity training_type_id;
-    private LocalDateTime date;
+    private TrainingRoutineDto trainingType;
 
 
 }

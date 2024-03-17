@@ -1,7 +1,6 @@
 package com.example.gymapp.mappers.impl;
 
 import com.example.gymapp.domain.dto.UserDto;
-import com.example.gymapp.domain.entities.TrainingTypeEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.Mapper;
 import org.modelmapper.ModelMapper;

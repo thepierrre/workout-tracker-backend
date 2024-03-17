@@ -1,8 +1,8 @@
 package com.example.gymapp.controllers;
 
 
-import com.example.gymapp.domain.dto.ExerciseDto;
-import com.example.gymapp.domain.entities.ExerciseEntity;
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.mappers.Mapper;
 import com.example.gymapp.services.ExerciseService;
 import jakarta.validation.Valid;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 
 @RestController
 public class ExerciseController {
@@ -25,23 +25,23 @@ public class ExerciseController {
     private ExerciseService exerciseService;
 
     @Autowired
-    private Mapper<ExerciseEntity, ExerciseDto> exerciseMapper;
+    private Mapper<ExerciseTypeEntity, ExerciseTypeDto> exerciseMapper;
 
     @GetMapping(path = "/exercises")
-    public List<ExerciseEntity> findAll() {
+    public List<ExerciseTypeEntity> findAll() {
         return exerciseService.findAll();
     }
 
     @PostMapping(path = "/exercises")
-    public ResponseEntity<ExerciseDto> createExercise(@Valid @RequestBody ExerciseDto exerciseDto) {
-        ExerciseEntity exerciseEntity = exerciseMapper.mapFrom(exerciseDto);
-        ExerciseEntity createdExerciseEntity = exerciseService.createExercise(exerciseEntity);
-        return new ResponseEntity<>(exerciseMapper.mapTo(createdExerciseEntity), HttpStatus.CREATED);
+    public ResponseEntity<ExerciseTypeDto> createExercise(@Valid @RequestBody ExerciseTypeDto exerciseTypeDto) {
+        ExerciseTypeEntity exerciseTypeEntity = exerciseMapper.mapFrom(exerciseTypeDto);
+        ExerciseTypeEntity createdExerciseTypeEntity = exerciseService.createExercise(exerciseTypeEntity);
+        return new ResponseEntity<>(exerciseMapper.mapTo(createdExerciseTypeEntity), HttpStatus.CREATED);
     }
 
 
     @DeleteMapping(path = "/exercises/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
+    public ResponseEntity deleteById(@PathVariable("id") Long id) {
         exerciseService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -53,15 +53,15 @@ public class ExerciseController {
     }
 
     @PatchMapping(path = "/exercises/{id}")
-    public ResponseEntity<ExerciseDto> update(
-            @PathVariable("id") UUID id,
-            @RequestBody ExerciseDto exerciseDto
+    public ResponseEntity<ExerciseTypeDto> update(
+            @PathVariable("id") Long id,
+            @RequestBody ExerciseTypeDto exerciseTypeDto
     ) {
         if(!exerciseService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        ExerciseEntity exerciseEntity = exerciseMapper.mapFrom(exerciseDto);
-        ExerciseEntity updatedExercise = exerciseService.update(id, exerciseEntity);
+        ExerciseTypeEntity exerciseTypeEntity = exerciseMapper.mapFrom(exerciseTypeDto);
+        ExerciseTypeEntity updatedExercise = exerciseService.update(id, exerciseTypeEntity);
         return new ResponseEntity<>(exerciseMapper.mapTo(updatedExercise), HttpStatus.OK);
     }
 

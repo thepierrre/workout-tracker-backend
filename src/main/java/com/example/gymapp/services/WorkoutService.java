@@ -11,7 +11,7 @@ public interface WorkoutService {
     List<WorkoutEntity> findAll();
     WorkoutEntity createWorkout(WorkoutEntity workoutEntity);
 
-    void deleteById(UUID id);
+    void deleteById(Long id);
 
     void deleteAll();
 
