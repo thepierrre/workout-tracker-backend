@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SetDto {
+public class WorkingSetDto {
 
     private Short id;
 

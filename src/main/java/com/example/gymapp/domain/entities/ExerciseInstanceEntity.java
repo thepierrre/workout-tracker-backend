@@ -27,5 +27,5 @@ public class ExerciseInstanceEntity {
     private ExerciseTypeEntity exerciseType;
 
     @OneToMany(mappedBy = "exerciseInstance", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<SetEntity> sets;
+    private List<WorkingSetEntity> workingSets;
 }

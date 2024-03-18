@@ -20,5 +20,5 @@ public class ExerciseInstanceDto {
     @NotNull(message = "You must specify an exercise type for this exercise instance.")
     private ExerciseTypeDto exerciseType;
 
-    private List<SetDto> sets;
+    private List<WorkingSetDto> workingSets;
 }
