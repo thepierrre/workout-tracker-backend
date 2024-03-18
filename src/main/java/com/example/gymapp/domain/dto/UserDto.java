@@ -17,10 +17,10 @@ public class UserDto {
 
     private UUID id;
 
-    @NotBlank(message = "The username must not be empty.")
+    @NotBlank(message = "You must specify a username.")
     private String username;
 
-    @NotBlank(message = "The password must not be empty.")
+    @NotBlank(message = "You must specify a password.")
     private String password;
 
     private List<TrainingRoutineDto> trainingRoutines;

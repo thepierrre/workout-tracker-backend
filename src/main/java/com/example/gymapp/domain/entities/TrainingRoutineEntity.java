@@ -28,6 +28,7 @@ public class TrainingRoutineEntity {
 //    private List<ExerciseTypeEntity> exercises;
 
     @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("exerciseInstances")
     private List<ExerciseTypeEntity> exerciseTypes;
 
     @ManyToOne(fetch = FetchType.EAGER)
