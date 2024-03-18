@@ -24,3 +24,4 @@ public class SetEntity {
 
     private Short weight;
 }
+

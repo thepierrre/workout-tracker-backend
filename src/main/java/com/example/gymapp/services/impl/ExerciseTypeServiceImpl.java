@@ -28,6 +28,9 @@ public class ExerciseTypeServiceImpl implements ExerciseTypeService {
 
     @Override
     public ExerciseTypeEntity createExercise(ExerciseTypeEntity exerciseTypeEntity) {
+
+        exerciseTypeEntity.setExerciseInstances(exerciseTypeEntity.getExerciseInstances());
+
         return exerciseTypeRepository.save(exerciseTypeEntity);
     }
 

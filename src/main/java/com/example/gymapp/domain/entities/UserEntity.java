@@ -31,8 +31,4 @@ public class UserEntity {
     @JsonIgnoreProperties({"exercises", "user"})
     private List<TrainingRoutineEntity> trainingRoutines;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<WorkoutEntity> workouts;
 }
-
-//fred id: 09fcd8e4-fd25-45a1-bb6d-0ccba5382386

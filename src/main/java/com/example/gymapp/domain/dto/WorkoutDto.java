@@ -16,9 +16,6 @@ public class WorkoutDto {
 
     private UUID id;
 
-//    private UserEntity user_id;
-
-//    private TrainingTypeEntity training_type_id;
     private LocalDateTime date;
 
 

@@ -26,10 +26,8 @@ public class ExerciseTypeEntity {
     private String name;
 
     @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("exerciseType")
+    @JsonIgnore
     private List<ExerciseInstanceEntity> exerciseInstances;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "training_type_id", referencedColumnName = "id")
-//    @JsonIgnore
-//    private TrainingRoutineEntity trainingType;
 }
