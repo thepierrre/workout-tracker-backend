@@ -1,13 +1,12 @@
 package com.example.gymapp.domain.entities;
 
-import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -19,11 +18,12 @@ public class ExerciseInstanceEntity {
 
     @Id
     @UuidGenerator
-    UUID id;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_type_id", referencedColumnName = "id")
-    ExerciseTypeEntity exerciseType;
+    private ExerciseTypeEntity exerciseType;
 
-//    SetDto set;
+    @OneToMany(mappedBy = "exerciseInstance", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<SetEntity> sets;
 }

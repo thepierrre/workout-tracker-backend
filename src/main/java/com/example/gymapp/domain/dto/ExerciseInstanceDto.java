@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -14,10 +15,10 @@ import java.util.UUID;
 @Builder
 public class ExerciseInstanceDto {
 
-    UUID id;
+    private UUID id;
 
     @NotNull(message = "You must specify an exercise type for this exercise instance.")
-    ExerciseTypeDto exerciseType;
+    private ExerciseTypeDto exerciseType;
 
-//    SetDto set;
+    private List<SetDto> sets;
 }
