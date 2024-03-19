@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 
 @Data
 @AllArgsConstructor
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class WorkingSetDto {
 
-    private Short id;
+    private UUID id;
 
     @NotNull(message = "You must specify a training instance for this set.")
     private ExerciseInstanceDto exerciseInstance;

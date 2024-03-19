@@ -4,25 +4,24 @@ import com.example.gymapp.domain.entities.WorkingSetEntity;
 import com.example.gymapp.repositories.WorkingSetRepository;
 import com.example.gymapp.services.WorkingSetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class WorkingSetServiceImpl implements WorkingSetService {
-
-    @Autowired
-    WorkingSetService workingSetService;
 
     @Autowired
     WorkingSetRepository workingSetRepository;
 
     @Override
     public WorkingSetEntity createWorkingSet(WorkingSetEntity workingSetEntity) {
-        return null;
+        return workingSetRepository.save(workingSetEntity);
     }
 
     @Override
     public List<WorkingSetEntity> findAll() {
-        return null;
+        return workingSetRepository.findAll();
     }
 
     @Override

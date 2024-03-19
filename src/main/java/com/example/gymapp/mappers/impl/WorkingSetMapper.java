@@ -5,7 +5,9 @@ import com.example.gymapp.domain.entities.WorkingSetEntity;
 import com.example.gymapp.mappers.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WorkingSetMapper implements Mapper<WorkingSetEntity, WorkingSetDto> {
 
     @Autowired

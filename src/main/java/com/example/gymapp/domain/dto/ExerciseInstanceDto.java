@@ -21,4 +21,6 @@ public class ExerciseInstanceDto {
     private ExerciseTypeDto exerciseType;
 
     private List<WorkingSetDto> workingSets;
+
+    private WorkoutDto workout;
 }
