@@ -27,4 +27,9 @@ public class ExerciseInstanceServiceImpl implements ExerciseInstanceService {
     public ExerciseInstanceEntity createExerciseInstance(ExerciseInstanceEntity exerciseInstanceEntity) {
         return exerciseInstanceRepository.save(exerciseInstanceEntity);
     }
+
+    @Override
+    public void deleteAll() {
+        exerciseInstanceRepository.deleteAll();
+    }
 }

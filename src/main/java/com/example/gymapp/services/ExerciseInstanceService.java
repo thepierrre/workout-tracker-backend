@@ -9,4 +9,6 @@ public interface ExerciseInstanceService {
 
     ExerciseInstanceEntity createExerciseInstance(ExerciseInstanceEntity exerciseInstanceEntity);
     List<ExerciseInstanceEntity> findAll();
+
+    void deleteAll();
 }

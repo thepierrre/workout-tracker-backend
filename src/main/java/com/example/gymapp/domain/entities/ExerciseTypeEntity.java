@@ -30,4 +30,9 @@ public class ExerciseTypeEntity {
     @JsonIgnore
     private List<ExerciseInstanceEntity> exerciseInstances;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
+    private UserEntity user;
+
 }

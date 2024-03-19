@@ -1,9 +1,13 @@
 package com.example.gymapp.controllers;
 
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.UserDto;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
+import com.example.gymapp.domain.entities.TrainingRoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.services.UserService;
+import com.example.gymapp.services.impl.UserNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,11 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.Array;
+import java.util.*;
 
 @RestController
 public class UserController {
@@ -72,4 +75,23 @@ public class UserController {
         });
         return errors;
     }
+
+    @GetMapping(path = "/users/{userId}/exercise-types")
+    public ResponseEntity<List<ExerciseTypeEntity>> getExerciseTypesForUser(@PathVariable("userId") UUID userId) {
+        try {
+//            List<ExerciseTypeEntity> foundExerciseTypes = new ArrayList<ExerciseTypeEntity>(userService.getExerciseTypesForUser(userId));
+//            return new ResponseEntity<>(new ArrayList<ExerciseTypeEntity>(userService.getExerciseTypesForUser(userId)), HttpStatus.OK);
+            return (ResponseEntity<List<ExerciseTypeEntity>>) userService.getExerciseTypesForUser(userId);
+        } catch (UserNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+//        } catch (ResponseStatusException ex) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ("User not found for id:" + userId));
+//        }
+
+    }
 }
+
+// Fred 9766a1ff-87ae-4cfe-8d5d-45185d9790dc
+// Max 6d8054aa-db4c-4bde-9128-516c22723f33
+

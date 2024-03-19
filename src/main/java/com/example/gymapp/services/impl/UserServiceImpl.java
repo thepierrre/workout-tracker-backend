@@ -1,14 +1,17 @@
 package com.example.gymapp.services.impl;
 
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
+import com.example.gymapp.domain.entities.TrainingRoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -50,5 +53,28 @@ public class UserServiceImpl implements UserService {
         }).orElseThrow(() -> new RuntimeException("User does not exist."));
     }
 
+    @Override
+    public List<TrainingRoutineEntity> getTrainingRoutinesForUser(UUID id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, ("No user found for id:" + id)
+            );
+        }
+        return userEntity.get().getTrainingRoutines();
+    }
+
+    @Override
+    public List<ExerciseTypeEntity> getExerciseTypesForUser(UUID id) throws UserNotFoundException {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isEmpty()) {
+            throw new UserNotFoundException("User not found in repository");
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, ("No user found for id:" + id)
+//            );
+            }
+        return userEntity.get().getExerciseTypes();
+        }
 
 }
+

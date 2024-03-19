@@ -37,6 +37,12 @@ public class ExerciseInstanceController {
         return new ResponseEntity<>(exerciseInstanceMapper.mapTo(createdExerciseInstanceEntity), HttpStatus.CREATED);
     }
 
+    @DeleteMapping(path = "/exercise-instances")
+    public ResponseEntity deleteAll() {
+        exerciseInstanceService.deleteAll();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(

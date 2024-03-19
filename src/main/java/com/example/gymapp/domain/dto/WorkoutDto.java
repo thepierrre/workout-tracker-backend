@@ -24,3 +24,5 @@ public class WorkoutDto {
     private UserDto user;
 
 }
+
+// exercise instance cool-exercise e4f3dfd7-6d50-4e66-aab5-bb0c97856956

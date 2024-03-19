@@ -43,8 +43,14 @@ public class TrainingRoutineController {
         return new ResponseEntity<>(trainingTypeMapper.mapTo(trainingRoutineEntity), HttpStatus.CREATED);
     }
 
+//    @GetMapping(path = "/training-routines")
+//    public List<TrainingRoutineEntity> getAll() {
+//        List<TrainingRoutineEntity> foundTrainingTypes = trainingRoutineService.findAll();
+//        return foundTrainingTypes;
+//    }
+
     @GetMapping(path = "/training-routines")
-    public List<TrainingRoutineEntity> getAll() {
+    public List<TrainingRoutineEntity> getAll(@PathVariable("userId") String userId) {
         List<TrainingRoutineEntity> foundTrainingTypes = trainingRoutineService.findAll();
         return foundTrainingTypes;
     }

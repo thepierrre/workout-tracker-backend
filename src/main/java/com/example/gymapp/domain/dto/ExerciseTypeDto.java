@@ -21,4 +21,6 @@ public class ExerciseTypeDto {
 
     private List<ExerciseInstanceDto> exerciseInstances;
 
+    private UserDto user;
+
 }

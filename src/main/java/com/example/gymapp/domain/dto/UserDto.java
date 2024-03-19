@@ -24,4 +24,8 @@ public class UserDto {
     private String password;
 
     private List<TrainingRoutineDto> trainingRoutines;
+
+    private List<WorkoutDto> workouts;
+
+    private List<ExerciseTypeDto> exerciseTypes;
 }
