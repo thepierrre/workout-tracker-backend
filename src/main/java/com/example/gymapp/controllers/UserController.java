@@ -9,6 +9,7 @@ import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -113,7 +115,7 @@ public class UserController {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Object> NotFoundHandler(ResponseStatusException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User with the provided ID not found"));
     }
 
     @GetMapping(path = "/users/{userId}/exercise-types")
@@ -131,7 +133,7 @@ public class UserController {
         try {
             foundExerciseTypes = new ArrayList<>(userService.getExerciseTypesForUser(id));
         } catch (ResponseStatusException e) {
-            throw new IllegalArgumentException("No user found for the provided ID");
+            throw e;
         }
         return ResponseEntity.ok(foundExerciseTypes);
     }
