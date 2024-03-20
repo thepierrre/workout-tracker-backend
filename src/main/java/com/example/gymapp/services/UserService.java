@@ -3,7 +3,6 @@ import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.TrainingRoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.domain.entities.WorkoutEntity;
-import com.example.gymapp.services.impl.UserNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +23,7 @@ public interface UserService {
 
     List<ExerciseTypeEntity> getExerciseTypesForUser(UUID id);
 
-//    List<WorkoutEntity> getWorkoutsForUser(UUID id);
+    List<WorkoutEntity> getWorkoutsForUser(UUID id);
 
 
 }

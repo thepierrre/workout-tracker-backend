@@ -1,13 +1,12 @@
 package com.example.gymapp.controllers;
 
-import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.TrainingRoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.services.UserService;
-import com.example.gymapp.services.impl.UserNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Array;
 import java.util.*;
 
 @RestController
@@ -77,22 +75,67 @@ public class UserController {
     }
 
     @GetMapping(path = "/users/{userId}/training-routines")
-    public ResponseEntity<List<TrainingRoutineEntity>> getTrainingRoutinesForUser(@PathVariable("userId") UUID userId) {
-        List<TrainingRoutineEntity> foundTrainingRoutines = new ArrayList<>(userService.getTrainingRoutinesForUser(userId));
+    public ResponseEntity<List<TrainingRoutineEntity>> getTrainingRoutinesForUser(@PathVariable("userId") String userId) {
+        UUID id;
+        try {
+            id = UUID.fromString(userId);
+        }
+        catch (IllegalArgumentException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        }
+        List<TrainingRoutineEntity> foundTrainingRoutines = new ArrayList<>(userService.getTrainingRoutinesForUser(id));
         if (foundTrainingRoutines.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(foundTrainingRoutines);
     }
 
-    @GetMapping(path = "/users/{userId}/exercise-types")
-    public ResponseEntity<List<ExerciseTypeEntity>> getExerciseTypesForUser(@PathVariable("userId") UUID userId) {
-        List<ExerciseTypeEntity> foundExerciseTypes = new ArrayList<>(userService.getExerciseTypesForUser(userId));
-        if (foundExerciseTypes.isEmpty()) {
+    @GetMapping(path = "/users{userId}/workouts")
+    public ResponseEntity<List<WorkoutEntity>> getWorkoutsForUser(@PathVariable("userId") String userId) {
+        UUID id;
+        try {
+            id = UUID.fromString(userId);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<WorkoutEntity> foundWorkouts = new ArrayList<>(userService.getWorkoutsForUser(id));
+        if (foundWorkouts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(foundWorkouts);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> BadRequestHandler(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Object> NotFoundHandler(ResponseStatusException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage()));
+    }
+
+    @GetMapping(path = "/users/{userId}/exercise-types")
+    public ResponseEntity<List<ExerciseTypeEntity>> getExerciseTypesForUser(@PathVariable("userId") String userId) throws Exception {
+        UUID id;
+        try {
+            id = UUID.fromString(userId);
+        }
+        catch (IllegalArgumentException e){
+            throw new IllegalArgumentException("Provided user ID cannot be converted to a valid UUID");
+
+        }
+
+        List<ExerciseTypeEntity> foundExerciseTypes;
+        try {
+            foundExerciseTypes = new ArrayList<>(userService.getExerciseTypesForUser(id));
+        } catch (ResponseStatusException e) {
+            throw new IllegalArgumentException("No user found for the provided ID");
         }
         return ResponseEntity.ok(foundExerciseTypes);
     }
+
 }
 
 
