@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
     public boolean isExists(UUID id) {
         return userRepository.existsById(id);
     }
+
     @Override
     public UserEntity update(UUID id, UserEntity userEntity) {
         userEntity.setId(id);
@@ -65,16 +66,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ExerciseTypeEntity> getExerciseTypesForUser(UUID id) throws UserNotFoundException {
+    public List<ExerciseTypeEntity> getExerciseTypesForUser(UUID id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isEmpty()) {
-            throw new UserNotFoundException("User not found in repository");
-//            throw new ResponseStatusException(
-//                    HttpStatus.NOT_FOUND, ("No user found for id:" + id)
-//            );
-            }
-        return userEntity.get().getExerciseTypes();
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, ("No user found for id:" + id)
+            );
         }
+        return userEntity.get().getExerciseTypes();
+    }
+
+
+
 
 }
 

@@ -24,7 +24,7 @@ public interface UserService {
 
     List<ExerciseTypeEntity> getExerciseTypesForUser(UUID id);
 
-//    List<WorkoutEntity> getWorkoutsForUser(UUID id) throws UserNotFoundException;
+//    List<WorkoutEntity> getWorkoutsForUser(UUID id);
 
 
 }

@@ -76,22 +76,23 @@ public class UserController {
         return errors;
     }
 
+    @GetMapping(path = "/users/{userId}/training-routines")
+    public ResponseEntity<List<TrainingRoutineEntity>> getTrainingRoutinesForUser(@PathVariable("userId") UUID userId) {
+        List<TrainingRoutineEntity> foundTrainingRoutines = new ArrayList<>(userService.getTrainingRoutinesForUser(userId));
+        if (foundTrainingRoutines.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(foundTrainingRoutines);
+    }
+
     @GetMapping(path = "/users/{userId}/exercise-types")
     public ResponseEntity<List<ExerciseTypeEntity>> getExerciseTypesForUser(@PathVariable("userId") UUID userId) {
-        try {
-//            List<ExerciseTypeEntity> foundExerciseTypes = new ArrayList<ExerciseTypeEntity>(userService.getExerciseTypesForUser(userId));
-//            return new ResponseEntity<>(new ArrayList<ExerciseTypeEntity>(userService.getExerciseTypesForUser(userId)), HttpStatus.OK);
-            return (ResponseEntity<List<ExerciseTypeEntity>>) userService.getExerciseTypesForUser(userId);
-        } catch (UserNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        List<ExerciseTypeEntity> foundExerciseTypes = new ArrayList<>(userService.getExerciseTypesForUser(userId));
+        if (foundExerciseTypes.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-//        } catch (ResponseStatusException ex) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ("User not found for id:" + userId));
-//        }
-
+        return ResponseEntity.ok(foundExerciseTypes);
     }
 }
 
-// Fred 9766a1ff-87ae-4cfe-8d5d-45185d9790dc
-// Max 6d8054aa-db4c-4bde-9128-516c22723f33
 
