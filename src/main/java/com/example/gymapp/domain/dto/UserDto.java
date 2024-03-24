@@ -23,6 +23,9 @@ public class UserDto {
     @NotBlank(message = "You must specify a password.")
     private String password;
 
+    @NotBlank(message = "You must specify an e-mail address.")
+    private String email;
+
     private List<TrainingRoutineDto> trainingRoutines;
 
     private List<WorkoutDto> workouts;

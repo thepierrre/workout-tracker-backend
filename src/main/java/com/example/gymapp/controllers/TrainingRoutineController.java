@@ -25,44 +25,24 @@ public class TrainingRoutineController {
     private Mapper<TrainingRoutineEntity, TrainingRoutineDto> trainingTypeMapper;
 
     @PostMapping(path = "/training-routines")
-    public ResponseEntity<TrainingRoutineDto> createTrainingType(@Valid @RequestBody TrainingRoutineDto trainingRoutineDto) {
-        TrainingRoutineEntity trainingRoutineEntity = trainingTypeMapper.mapFrom(trainingRoutineDto);
-        TrainingRoutineEntity createdTrainingType = trainingRoutineService.createTrainingType(trainingRoutineEntity);
-
-//        List<ExerciseEntity> exercises = new ArrayList<>();
-//
-//        for (ExerciseEntity exercise: trainingTypeEntity.getExercises()) {
-//            ExerciseEntity exerciseEntity = new ExerciseEntity(exercise.getName());
-//
-//            exerciseEntity.setTrainingType(trainingTypeEntity);
-//            exercises.add(exerciseEntity);
-//        }
-//
-//        trainingTypeEntity.setExercises(exercises);
-
-        return new ResponseEntity<>(trainingTypeMapper.mapTo(trainingRoutineEntity), HttpStatus.CREATED);
+    public ResponseEntity<TrainingRoutineDto> createTrainingRoutine(@Valid @RequestBody TrainingRoutineDto trainingRoutineDto) {
+        TrainingRoutineDto createdTrainingRoutine = trainingRoutineService.createTrainingType(trainingRoutineDto);
+        return new ResponseEntity<>(createdTrainingRoutine, HttpStatus.CREATED);
     }
 
-//    @GetMapping(path = "/training-routines")
-//    public List<TrainingRoutineEntity> getAll() {
-//        List<TrainingRoutineEntity> foundTrainingTypes = trainingRoutineService.findAll();
-//        return foundTrainingTypes;
-//    }
-
     @GetMapping(path = "/training-routines")
-    public List<TrainingRoutineEntity> getAll(@PathVariable("userId") String userId) {
-        List<TrainingRoutineEntity> foundTrainingTypes = trainingRoutineService.findAll();
-        return foundTrainingTypes;
+    public List<TrainingRoutineDto> getAll(@PathVariable("userId") String userId) {
+        return trainingRoutineService.findAll();
     }
 
     @DeleteMapping(path = "/training-routines/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
         trainingRoutineService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/training-routines")
-    public ResponseEntity deleteAll() {
+    public ResponseEntity<Void> deleteAll() {
         trainingRoutineService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -26,19 +26,18 @@ public class ExerciseInstanceController {
     private Mapper<ExerciseInstanceEntity, ExerciseInstanceDto> exerciseInstanceMapper;
 
     @GetMapping(path = "/exercise-instances")
-    public List<ExerciseInstanceEntity> findAll() {
+    public List<ExerciseInstanceDto> findAll() {
         return exerciseInstanceService.findAll();
     }
 
     @PostMapping(path = "/exercise-instances")
     public ResponseEntity<ExerciseInstanceDto> createExerciseInstance(@Valid @RequestBody ExerciseInstanceDto exerciseInstanceDto) {
-        ExerciseInstanceEntity exerciseInstanceEntity = exerciseInstanceMapper.mapFrom(exerciseInstanceDto);
-        ExerciseInstanceEntity createdExerciseInstanceEntity = exerciseInstanceService.createExerciseInstance(exerciseInstanceEntity);
-        return new ResponseEntity<>(exerciseInstanceMapper.mapTo(createdExerciseInstanceEntity), HttpStatus.CREATED);
+        ExerciseInstanceDto createdExerciseInstance = exerciseInstanceService.createExerciseInstance(exerciseInstanceDto);
+        return new ResponseEntity<>(createdExerciseInstance, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/exercise-instances")
-    public ResponseEntity deleteAll() {
+    public ResponseEntity<Void> deleteAll() {
         exerciseInstanceService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

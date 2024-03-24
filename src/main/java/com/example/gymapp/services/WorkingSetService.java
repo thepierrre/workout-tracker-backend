@@ -1,5 +1,6 @@
 package com.example.gymapp.services;
 
+import com.example.gymapp.domain.dto.WorkingSetDto;
 import com.example.gymapp.domain.entities.WorkingSetEntity;
 
 import java.util.List;
@@ -7,8 +8,8 @@ import java.util.List;
 public interface WorkingSetService {
 
 
-    WorkingSetEntity createWorkingSet(WorkingSetEntity workingSetEntity);
-    List<WorkingSetEntity> findAll();
+    WorkingSetDto createWorkingSet(WorkingSetDto workingSetDto);
+    List<WorkingSetDto> findAll();
 
     void deleteById(Short id);
 

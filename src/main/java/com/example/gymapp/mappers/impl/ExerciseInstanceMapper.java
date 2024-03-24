@@ -14,12 +14,12 @@ public class ExerciseInstanceMapper implements Mapper<ExerciseInstanceEntity, Ex
     ModelMapper modelMapper;
 
     @Override
-    public ExerciseInstanceDto mapTo(ExerciseInstanceEntity exerciseInstanceEntity) {
+    public ExerciseInstanceDto mapToDto(ExerciseInstanceEntity exerciseInstanceEntity) {
         return modelMapper.map(exerciseInstanceEntity, ExerciseInstanceDto.class);
     }
 
     @Override
-    public ExerciseInstanceEntity mapFrom(ExerciseInstanceDto exerciseInstanceDto) {
+    public ExerciseInstanceEntity mapFromDto(ExerciseInstanceDto exerciseInstanceDto) {
         return modelMapper.map(exerciseInstanceDto, ExerciseInstanceEntity.class);
     }
 }

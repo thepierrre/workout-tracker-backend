@@ -1,7 +1,8 @@
 package com.example.gymapp.services.impl;
 
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
+import com.example.gymapp.domain.dto.TrainingRoutineDto;
 import com.example.gymapp.domain.entities.TrainingRoutineEntity;
+import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.repositories.TrainingRoutineRepository;
 import com.example.gymapp.services.TrainingRoutineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +17,26 @@ public class TrainingRoutineServiceImpl implements TrainingRoutineService {
     @Autowired
     private TrainingRoutineRepository trainingRoutineRepository;
 
-    @Override
-    public TrainingRoutineEntity createTrainingType(TrainingRoutineEntity trainingRoutineEntity) {
+    @Autowired
+    private TrainingRoutineMapper trainingRoutineMapper;
 
-//        for (ExerciseTypeEntity exerciseTypeEntity : trainingRoutineEntity.getExercises()) {
-//            exerciseTypeEntity.setTrainingType(trainingRoutineEntity);
-//        }
+    @Override
+    public TrainingRoutineDto createTrainingType(TrainingRoutineDto trainingRoutineDto) {
+
+        TrainingRoutineEntity trainingRoutineEntity = trainingRoutineMapper.mapFromDto(trainingRoutineDto);
+
         trainingRoutineEntity.setExerciseTypes(trainingRoutineEntity.getExerciseTypes());
 
-        return trainingRoutineRepository.save(trainingRoutineEntity);
+        TrainingRoutineEntity savedTrainingRoutineEntity = trainingRoutineRepository.save(trainingRoutineEntity);
+
+        return trainingRoutineMapper.mapToDto(savedTrainingRoutineEntity);
     }
 
     @Override
-    public List<TrainingRoutineEntity> findAll() { return trainingRoutineRepository.findAll(); }
+    public List<TrainingRoutineDto> findAll() {
+        return trainingRoutineRepository.
+                findAll().stream().map(trainingRoutineMapper::mapToDto).
+                toList(); }
 
     @Override
     public void deleteById(UUID id) {

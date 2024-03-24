@@ -1,5 +1,6 @@
 package com.example.gymapp.services.impl;
 
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
@@ -27,11 +28,16 @@ public class ExerciseTypeServiceImpl implements ExerciseTypeService {
     }
 
     @Override
-    public ExerciseTypeEntity createExercise(ExerciseTypeEntity exerciseTypeEntity) {
+    public ExerciseTypeDto createExercise(ExerciseTypeDto exerciseTypeDto) {
+
+        ExerciseTypeEntity exerciseTypeEntity = exerciseTypeMapper.mapFromDto(exerciseTypeDto);
 
         exerciseTypeEntity.setExerciseInstances(exerciseTypeEntity.getExerciseInstances());
 
-        return exerciseTypeRepository.save(exerciseTypeEntity);
+        exerciseTypeRepository.save(exerciseTypeEntity);
+
+        return exerciseTypeMapper.mapToDto(exerciseTypeEntity);
+
     }
 
     @Override
@@ -56,11 +62,12 @@ public class ExerciseTypeServiceImpl implements ExerciseTypeService {
     }
 
     @Override
-    public ExerciseTypeEntity update(UUID id, ExerciseTypeEntity exerciseTypeEntity) {
-        exerciseTypeEntity.setId(id);
+    public ExerciseTypeDto update(UUID id, ExerciseTypeDto exerciseTypeDto) {
+        exerciseTypeDto.setId(id);
         return exerciseTypeRepository.findById(id).map(existingExercise -> {
-            Optional.ofNullable(exerciseTypeEntity.getName()).ifPresent(existingExercise::setName);
-            return exerciseTypeRepository.save(existingExercise);
+            Optional.ofNullable(exerciseTypeDto.getName()).ifPresent(existingExercise::setName);
+            exerciseTypeRepository.save(existingExercise);
+            return exerciseTypeMapper.mapToDto(existingExercise);
         }).orElseThrow(() -> new RuntimeException("Exercise does not exist"));
     }
 }

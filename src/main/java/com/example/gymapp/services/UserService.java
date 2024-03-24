@@ -1,4 +1,8 @@
 package com.example.gymapp.services;
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
+import com.example.gymapp.domain.dto.TrainingRoutineDto;
+import com.example.gymapp.domain.dto.UserDto;
+import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.TrainingRoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
@@ -9,21 +13,21 @@ import java.util.UUID;
 
 public interface UserService {
 
-    UserEntity createUser(UserEntity userEntity);
+    UserDto createUser(UserDto userDto);
 
-    List<UserEntity> findAll();
+    List<UserDto> findAll();
 
     void deleteById(UUID id);
 
     void deleteAll();
-    UserEntity update(UUID id, UserEntity userEntity);
+    UserDto update(UUID id, UserDto userDto);
     boolean isExists(UUID id);
 
-    List<TrainingRoutineEntity> getTrainingRoutinesForUser(UUID id);
+    List<TrainingRoutineDto> getTrainingRoutinesForUser(UUID id);
 
-    List<ExerciseTypeEntity> getExerciseTypesForUser(UUID id);
+    List<ExerciseTypeDto> getExerciseTypesForUser(UUID id);
 
-    List<WorkoutEntity> getWorkoutsForUser(UUID id);
+    List<WorkoutDto> getWorkoutsForUser(UUID id);
 
 
 }

@@ -29,26 +29,25 @@ public class WorkoutController {
     WorkoutMapper workoutMapper;
 
     @GetMapping(path = "/workouts")
-    public List<WorkoutEntity> findAll() {
+    public List<WorkoutDto> findAll() {
         return workoutService.findAll();
     }
 
     @PostMapping(path = "/workouts")
     public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workoutDto) {
-        WorkoutEntity workoutEntity = workoutMapper.mapFrom(workoutDto);
-        WorkoutEntity createdWorkout = workoutService.createWorkout(workoutEntity);
-        return new ResponseEntity<>(workoutMapper.mapTo(workoutEntity), HttpStatus.CREATED);
+        WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto);
+        return new ResponseEntity<>(createdWorkout, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/workouts/{id}")
-    public ResponseEntity deleteById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
         workoutService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 
     @DeleteMapping(path = "/workouts")
-    public ResponseEntity deleteAll() {
+    public ResponseEntity<Void> deleteAll() {
         workoutService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

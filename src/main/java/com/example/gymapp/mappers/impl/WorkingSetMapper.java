@@ -14,12 +14,12 @@ public class WorkingSetMapper implements Mapper<WorkingSetEntity, WorkingSetDto>
     ModelMapper modelMapper;
 
     @Override
-    public WorkingSetDto mapTo(WorkingSetEntity workingSetEntity) {
+    public WorkingSetDto mapToDto(WorkingSetEntity workingSetEntity) {
         return modelMapper.map(workingSetEntity, WorkingSetDto.class);
     }
 
     @Override
-    public WorkingSetEntity mapFrom(WorkingSetDto workingSetDto) {
+    public WorkingSetEntity mapFromDto(WorkingSetDto workingSetDto) {
         return modelMapper.map(workingSetDto, WorkingSetEntity.class);
     }
 

@@ -27,6 +27,8 @@ public class UserEntity {
 
     private String password;
 
+    private String email;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"exercises", "user"})
     private List<TrainingRoutineEntity> trainingRoutines;

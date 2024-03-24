@@ -1,11 +1,17 @@
 package com.example.gymapp.services.impl;
 
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-import com.example.gymapp.domain.entities.TrainingRoutineEntity;
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
+import com.example.gymapp.domain.dto.TrainingRoutineDto;
+import com.example.gymapp.domain.dto.UserDto;
+import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.domain.entities.WorkoutEntity;
+import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
+import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
+import com.example.gymapp.mappers.impl.UserMapper;
+import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.services.UserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +27,35 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private TrainingRoutineMapper trainingRoutineMapper;
+
+    @Autowired
+    private ExerciseTypeMapper exerciseTypeMapper;
+
+    @Autowired
+    private WorkoutMapper workoutMapper;
+
     @Override
-    public UserEntity createUser(UserEntity userEntity) {
-        return userRepository.save(userEntity);
+    public UserDto createUser(UserDto userDto) {
+
+        String email = userDto.getEmail();
+        List<UserEntity> usersWithEmail = userRepository.findByEmail(email);
+
+        if (!usersWithEmail.isEmpty()) {
+            throw new RuntimeException("A user with the provided email already exists");
+        }
+
+        UserEntity createdUser = userRepository.save(userMapper.mapFromDto(userDto));
+        return userMapper.mapToDto(createdUser);
     }
 
     @Override
-    public List<UserEntity> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream().map(userMapper::mapToDto).toList();
     }
 
     @Override
@@ -47,12 +74,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity update(UUID id, UserEntity userEntity) {
-        userEntity.setId(id);
+    public UserDto update(UUID id, UserDto userDto) {
+        userDto.setId(id);
         return userRepository.findById(id).map(existingUser -> {
-            Optional.ofNullable(userEntity.getUsername()).ifPresent(existingUser::setUsername);
-            Optional.ofNullable(userEntity.getPassword()).ifPresent(existingUser::setPassword);
-            return userRepository.save(existingUser);
+            Optional.ofNullable(userDto.getUsername()).ifPresent(existingUser::setUsername);
+            Optional.ofNullable(userDto.getPassword()).ifPresent(existingUser::setPassword);
+            userRepository.save(existingUser);
+            return userMapper.mapToDto(existingUser);
         }).orElseThrow(() -> new RuntimeException("User does not exist."));
     }
 
@@ -68,27 +96,29 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<TrainingRoutineEntity> getTrainingRoutinesForUser(UUID id) {
+    public List<TrainingRoutineDto> getTrainingRoutinesForUser(UUID id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, ("No user found for id:" + id)
             );
         }
-        return userEntity.get().getTrainingRoutines();
+//        return userEntity.get().getTrainingRoutines();
+        return userEntity.get().getTrainingRoutines().stream().map(trainingRoutineMapper::mapToDto).toList();
     }
 
     @Override
-    public List<ExerciseTypeEntity> getExerciseTypesForUser(UUID id) {
+    public List<ExerciseTypeDto> getExerciseTypesForUser(UUID id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return userEntity.get().getExerciseTypes();
+//        return userEntity.get().getExerciseTypes();
+        return userEntity.get().getExerciseTypes().stream().map(exerciseTypeMapper::mapToDto).toList();
         }
 
     @Override
-    public List<WorkoutEntity> getWorkoutsForUser(UUID id) {
+    public List<WorkoutDto> getWorkoutsForUser(UUID id) {
         return null;
     }
 }

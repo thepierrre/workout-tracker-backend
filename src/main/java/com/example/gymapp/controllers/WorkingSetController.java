@@ -24,14 +24,13 @@ public class WorkingSetController {
     WorkingSetMapper workingSetMapper;
 
     @GetMapping(path = "/working-sets")
-    public List<WorkingSetEntity> findAll() {
+    public List<WorkingSetDto> findAll() {
         return workingSetService.findAll();
     }
 
     @PostMapping(path = "/working-sets")
     public ResponseEntity<WorkingSetDto> createWorkingSet(@RequestBody WorkingSetDto workingSetDto) {
-        WorkingSetEntity workingSetEntity = workingSetMapper.mapFrom(workingSetDto);
-        WorkingSetEntity createdWorkingSet = workingSetService.createWorkingSet(workingSetEntity);
-        return new ResponseEntity<>(workingSetMapper.mapTo(workingSetEntity), HttpStatus.CREATED);
+        WorkingSetDto createdWorkingSet = workingSetService.createWorkingSet(workingSetDto);
+        return new ResponseEntity<>(createdWorkingSet, HttpStatus.CREATED);
     }
 }

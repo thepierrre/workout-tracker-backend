@@ -15,12 +15,12 @@ public class ExerciseTypeMapper implements Mapper<ExerciseTypeEntity, ExerciseTy
 
 
     @Override
-    public ExerciseTypeDto mapTo(ExerciseTypeEntity exerciseTypeEntity) {
+    public ExerciseTypeDto mapToDto(ExerciseTypeEntity exerciseTypeEntity) {
         return modelMapper.map(exerciseTypeEntity, ExerciseTypeDto.class);
     }
 
     @Override
-    public ExerciseTypeEntity mapFrom(ExerciseTypeDto exerciseTypeDto) {
+    public ExerciseTypeEntity mapFromDto(ExerciseTypeDto exerciseTypeDto) {
         return modelMapper.map(exerciseTypeDto, ExerciseTypeEntity.class);
     }
 

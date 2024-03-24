@@ -14,12 +14,12 @@ public class TrainingRoutineMapper implements Mapper<TrainingRoutineEntity, Trai
     ModelMapper modelMapper;
 
     @Override
-    public TrainingRoutineDto mapTo(TrainingRoutineEntity trainingRoutineEntity) {
+    public TrainingRoutineDto mapToDto(TrainingRoutineEntity trainingRoutineEntity) {
         return modelMapper.map(trainingRoutineEntity, TrainingRoutineDto.class);
     }
 
     @Override
-    public TrainingRoutineEntity mapFrom(TrainingRoutineDto trainingRoutineDto) {
+    public TrainingRoutineEntity mapFromDto(TrainingRoutineDto trainingRoutineDto) {
         return modelMapper.map(trainingRoutineDto, TrainingRoutineEntity.class);
     }
 

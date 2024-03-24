@@ -1,5 +1,6 @@
 package com.example.gymapp.services;
 
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.UUID;
 
 public interface ExerciseTypeService {
 
-    ExerciseTypeEntity createExercise(ExerciseTypeEntity exerciseTypeEntity);
+    ExerciseTypeDto createExercise(ExerciseTypeDto exerciseTypeDto);
 
     List<ExerciseTypeEntity> findAll();
 
@@ -15,7 +16,7 @@ public interface ExerciseTypeService {
 
     void deleteAll();
 
-    ExerciseTypeEntity update(UUID id, ExerciseTypeEntity exerciseTypeEntity);
+    ExerciseTypeDto update(UUID id, ExerciseTypeDto exerciseTypeDto);
 
     boolean isExists(UUID id);
 }

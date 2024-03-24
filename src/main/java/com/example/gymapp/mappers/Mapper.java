@@ -11,7 +11,7 @@ package com.example.gymapp.mappers;
 
 public interface Mapper<Entity, Dto> {
 
-    Dto mapTo(Entity entity);
+    Dto mapToDto(Entity entity);
 
-    Entity mapFrom(Dto dto);
+    Entity mapFromDto(Dto dto);
 }

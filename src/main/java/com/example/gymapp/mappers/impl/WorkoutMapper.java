@@ -14,12 +14,12 @@ public class WorkoutMapper implements Mapper<WorkoutEntity, WorkoutDto> {
     ModelMapper modelMapper;
 
     @Override
-    public WorkoutDto mapTo(WorkoutEntity workoutEntity) {
+    public WorkoutDto mapToDto(WorkoutEntity workoutEntity) {
         return modelMapper.map(workoutEntity, WorkoutDto.class);
     }
 
     @Override
-    public WorkoutEntity mapFrom(WorkoutDto workoutDto) {
+    public WorkoutEntity mapFromDto(WorkoutDto workoutDto) {
         return modelMapper.map(workoutDto, WorkoutEntity.class);
     }
 }

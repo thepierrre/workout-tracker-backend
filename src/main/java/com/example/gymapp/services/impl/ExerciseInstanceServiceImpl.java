@@ -1,5 +1,6 @@
 package com.example.gymapp.services.impl;
 
+import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
 import com.example.gymapp.mappers.impl.ExerciseInstanceMapper;
 import com.example.gymapp.repositories.ExerciseInstanceRepository;
@@ -19,13 +20,15 @@ public class ExerciseInstanceServiceImpl implements ExerciseInstanceService {
     ExerciseInstanceRepository exerciseInstanceRepository;
 
     @Override
-    public List<ExerciseInstanceEntity> findAll() {
-        return exerciseInstanceRepository.findAll();
+    public List<ExerciseInstanceDto> findAll() {
+        return exerciseInstanceRepository.findAll().stream().map(exerciseInstanceMapper::mapToDto).toList();
     }
 
     @Override
-    public ExerciseInstanceEntity createExerciseInstance(ExerciseInstanceEntity exerciseInstanceEntity) {
-        return exerciseInstanceRepository.save(exerciseInstanceEntity);
+    public ExerciseInstanceDto createExerciseInstance(ExerciseInstanceDto exerciseInstanceDto) {
+        ExerciseInstanceEntity exerciseInstanceEntity = exerciseInstanceMapper.mapFromDto(exerciseInstanceDto);
+        exerciseInstanceRepository.save(exerciseInstanceEntity);
+        return exerciseInstanceMapper.mapToDto(exerciseInstanceEntity);
     }
 
     @Override
