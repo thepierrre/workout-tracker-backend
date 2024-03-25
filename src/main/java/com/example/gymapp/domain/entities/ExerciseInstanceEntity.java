@@ -1,7 +1,5 @@
 package com.example.gymapp.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +26,7 @@ public class ExerciseInstanceEntity {
     @JoinColumn(name = "exercise_type_id", referencedColumnName = "id")
     private ExerciseTypeEntity exerciseType;
 
-    @OneToMany(mappedBy = "exerciseInstance", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "exerciseInstance", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<WorkingSetEntity> workingSets;
 
     @ManyToOne(fetch = FetchType.EAGER)

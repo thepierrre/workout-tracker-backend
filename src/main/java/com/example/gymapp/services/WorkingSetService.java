@@ -1,9 +1,9 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.WorkingSetDto;
-import com.example.gymapp.domain.entities.WorkingSetEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface WorkingSetService {
 
@@ -14,5 +14,7 @@ public interface WorkingSetService {
     void deleteById(Short id);
 
     void deleteAll();
+
+    void deleteById(UUID id);
 
 }

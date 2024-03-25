@@ -1,6 +1,5 @@
 package com.example.gymapp.domain.entities;
 
-import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -29,7 +28,7 @@ public class WorkoutEntity {
     @JsonFormat
     private LocalDateTime timestamp;
 
-    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "workout", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<ExerciseInstanceEntity> exerciseInstances;
 
     @ManyToOne(fetch = FetchType.EAGER)

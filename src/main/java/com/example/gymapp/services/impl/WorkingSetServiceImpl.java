@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class WorkingSetServiceImpl implements WorkingSetService {
@@ -37,7 +38,11 @@ public class WorkingSetServiceImpl implements WorkingSetService {
 
     @Override
     public void deleteAll() {
+    }
 
+    @Override
+    public void deleteById(UUID id) {
+        workingSetRepository.deleteById(id);
     }
 }
 

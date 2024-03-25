@@ -4,10 +4,6 @@ import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.TrainingRoutineDto;
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-import com.example.gymapp.domain.entities.TrainingRoutineEntity;
-import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.services.UserService;
 import jakarta.validation.Valid;
@@ -72,11 +68,8 @@ public class UserController {
         }
 
         List<TrainingRoutineDto> foundTrainingRoutines;
-        try {
-            foundTrainingRoutines = new ArrayList<>(userService.getTrainingRoutinesForUser(id));
-        } catch (ResponseStatusException e) {
-            throw e;
-        }
+        foundTrainingRoutines = new ArrayList<>(userService.getTrainingRoutinesForUser(id));
+
         return ResponseEntity.ok(foundTrainingRoutines);
     }
 

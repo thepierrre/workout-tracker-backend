@@ -1,10 +1,9 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
-import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ExerciseInstanceService {
 
@@ -12,4 +11,6 @@ public interface ExerciseInstanceService {
     List<ExerciseInstanceDto> findAll();
 
     void deleteAll();
+
+    void deleteById(UUID id);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 public class ExerciseInstanceController {
@@ -39,6 +40,12 @@ public class ExerciseInstanceController {
     @DeleteMapping(path = "/exercise-instances")
     public ResponseEntity<Void> deleteAll() {
         exerciseInstanceService.deleteAll();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping(path = "/exercise-instances/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
+        exerciseInstanceService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

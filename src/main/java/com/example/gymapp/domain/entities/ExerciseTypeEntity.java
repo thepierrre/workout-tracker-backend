@@ -25,7 +25,7 @@ public class ExerciseTypeEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "exerciseType", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("exerciseType")
     @JsonIgnore
     private List<ExerciseInstanceEntity> exerciseInstances;
