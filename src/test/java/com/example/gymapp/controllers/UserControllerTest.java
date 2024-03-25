@@ -1,4 +1,4 @@
 package com.example.gymapp.controllers;
 
-public class TrainingTypeControllerTest {
+public class UserControllerTest {
 }

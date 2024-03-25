@@ -14,6 +14,7 @@ import com.example.gymapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,6 +23,9 @@ import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -48,6 +52,8 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User with the provided email already exists");
         }
 
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         UserEntity createdUser = userRepository.save(userMapper.mapFromDto(userDto));
         return userMapper.mapToDto(createdUser);
     }
@@ -59,6 +65,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(UUID id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         userRepository.deleteById(id);
     }
 
@@ -119,7 +129,6 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                 body(Map.of("message", e.getMessage()));
     }
-
 
 }
 
