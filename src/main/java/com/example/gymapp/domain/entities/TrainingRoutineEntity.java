@@ -36,4 +36,7 @@ public class TrainingRoutineEntity {
     @JsonIgnoreProperties({"trainingRoutines", "password"})
     private UserEntity user;
 
+    @OneToMany(mappedBy = "trainingRoutine", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private List<WorkoutEntity> workouts;
+
 }

@@ -17,7 +17,7 @@ public class ExerciseInstanceDto {
 
     private UUID id;
 
-    @NotNull(message = "You must specify an exercise type for this exercise instance.")
+    @NotNull(message = "Exercise type cannot be null.")
     private ExerciseTypeDto exerciseType;
 
     private List<WorkingSetDto> workingSets;

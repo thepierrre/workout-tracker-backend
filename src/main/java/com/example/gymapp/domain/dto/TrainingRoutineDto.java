@@ -21,7 +21,9 @@ public class TrainingRoutineDto {
 
     private List<ExerciseTypeDto> exerciseTypes;
 
-    @NotNull(message = "You must specify a user for this training type.")
+    @NotNull(message = "User cannot be null.")
     private UserDto user;
+
+    private List<WorkoutDto> workouts;
 
 }

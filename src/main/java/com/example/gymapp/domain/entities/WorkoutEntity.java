@@ -36,4 +36,7 @@ public class WorkoutEntity {
     @JsonIgnore
     private UserEntity user;
 
+    @ManyToOne
+    private TrainingRoutineEntity trainingRoutine;
+
 }

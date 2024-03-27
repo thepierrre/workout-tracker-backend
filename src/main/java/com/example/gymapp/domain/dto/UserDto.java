@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,13 +18,13 @@ public class UserDto {
 
     private UUID id;
 
-    @NotBlank(message = "You must specify a username.")
+    @NotBlank(message = "Username cannot be blank.")
     private String username;
 
-    @NotBlank(message = "You must specify a password.")
+    @NotBlank(message = "Password cannot be blank.")
     private String password;
 
-    @NotBlank(message = "You must specify an e-mail address.")
+    @NotBlank(message = "Email cannot be blank.")
     private String email;
 
     private List<TrainingRoutineDto> trainingRoutines;
@@ -31,4 +32,5 @@ public class UserDto {
     private List<WorkoutDto> workouts;
 
     private List<ExerciseTypeDto> exerciseTypes;
+
 }

@@ -17,7 +17,7 @@ public class WorkingSetDto {
 
     private UUID id;
 
-    @NotNull(message = "You must specify a training instance for this set.")
+    @NotNull(message = "Training instance cannot be null.")
     private ExerciseInstanceDto exerciseInstance;
 
     private Short reps;
