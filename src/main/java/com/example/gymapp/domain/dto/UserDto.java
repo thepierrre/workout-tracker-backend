@@ -33,4 +33,6 @@ public class UserDto {
 
     private List<ExerciseTypeDto> exerciseTypes;
 
+    private List<CategoryDto> categories;
+
 }

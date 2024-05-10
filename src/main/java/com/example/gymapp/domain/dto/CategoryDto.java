@@ -21,4 +21,9 @@ public class CategoryDto {
     @NotBlank(message = "Category name cannot be blank.")
     private String name;
 
+    @NotBlank(message = "User cannot be blank.")
+    private UserDto user;
+
+    private List<ExerciseTypeDto> exerciseTypes;
+
 }

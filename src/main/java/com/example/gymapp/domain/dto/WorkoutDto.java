@@ -29,6 +29,7 @@ public class WorkoutDto {
     @NotBlank(message = "User cannot be blank.")
     private UserDto user;
 
+
     private TrainingRoutineDto trainingRoutine;
 
 }
