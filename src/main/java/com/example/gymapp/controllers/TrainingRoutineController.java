@@ -31,7 +31,7 @@ public class TrainingRoutineController {
     }
 
     @GetMapping(path = "/training-routines")
-    public List<TrainingRoutineDto> getAll(@PathVariable("userId") String userId) {
+    public List<TrainingRoutineDto> getAll() {
         return trainingRoutineService.findAll();
     }
 

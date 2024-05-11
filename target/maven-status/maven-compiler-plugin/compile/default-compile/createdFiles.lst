@@ -35,7 +35,6 @@ com/example/gymapp/mappers/impl/ExerciseInstanceMapper.class
 com/example/gymapp/domain/entities/UserEntity.class
 com/example/gymapp/services/ExerciseTypeService.class
 com/example/gymapp/domain/dto/UserDto.class
-com/example/gymapp/config/WebConfig.class
 com/example/gymapp/mappers/impl/WorkoutMapper.class
 com/example/gymapp/services/impl/ExerciseInstanceServiceImpl.class
 com/example/gymapp/mappers/impl/ExerciseTypeMapper.class

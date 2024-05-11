@@ -33,6 +33,8 @@ public class UserDto {
 
     private List<ExerciseTypeDto> exerciseTypes;
 
-    private List<CategoryDto> categories;
+    public UserDto(String id) {
+        this.id = UUID.fromString(id);
+    }
 
 }

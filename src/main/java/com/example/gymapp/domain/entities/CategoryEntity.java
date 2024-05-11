@@ -26,11 +26,6 @@ public class CategoryEntity {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
-    private UserEntity user;
-
     @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ExerciseTypeEntity> exerciseTypes;
 

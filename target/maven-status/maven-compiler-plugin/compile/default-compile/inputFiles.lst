@@ -17,7 +17,6 @@
 /Users/piotr/Documents/coding-projects/gym-app/src/main/java/com/example/gymapp/domain/dto/WorkingSetDto.java
 /Users/piotr/Documents/coding-projects/gym-app/src/main/java/com/example/gymapp/repositories/WorkingSetRepository.java
 /Users/piotr/Documents/coding-projects/gym-app/src/main/java/com/example/gymapp/controllers/ExerciseTypeController.java
-/Users/piotr/Documents/coding-projects/gym-app/src/main/java/com/example/gymapp/config/WebConfig.java
 /Users/piotr/Documents/coding-projects/gym-app/src/main/java/com/example/gymapp/repositories/WorkoutRepository.java
 /Users/piotr/Documents/coding-projects/gym-app/src/main/java/com/example/gymapp/services/ExerciseTypeService.java
 /Users/piotr/Documents/coding-projects/gym-app/src/main/java/com/example/gymapp/controllers/ExerciseInstanceController.java
