@@ -2,7 +2,6 @@ package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.helpers.UserTestDataHelper;
-import com.example.gymapp.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

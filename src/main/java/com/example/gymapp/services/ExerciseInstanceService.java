@@ -1,16 +1,39 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
+import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
+import com.example.gymapp.mappers.impl.ExerciseInstanceMapper;
+import com.example.gymapp.repositories.ExerciseInstanceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface ExerciseInstanceService {
+@Service
+public class ExerciseInstanceService {
 
-    ExerciseInstanceDto createExerciseInstance(ExerciseInstanceDto exerciseInstanceDto);
-    List<ExerciseInstanceDto> findAll();
+    @Autowired
+    ExerciseInstanceMapper exerciseInstanceMapper;
 
-    void deleteAll();
+    @Autowired
+    ExerciseInstanceRepository exerciseInstanceRepository;
 
-    void deleteById(UUID id);
+    public List<ExerciseInstanceDto> findAll() {
+        return exerciseInstanceRepository.findAll().stream().map(exerciseInstanceMapper::mapToDto).toList();
+    }
+
+    public ExerciseInstanceDto createExerciseInstance(ExerciseInstanceDto exerciseInstanceDto) {
+        ExerciseInstanceEntity exerciseInstanceEntity = exerciseInstanceMapper.mapFromDto(exerciseInstanceDto);
+        exerciseInstanceRepository.save(exerciseInstanceEntity);
+        return exerciseInstanceMapper.mapToDto(exerciseInstanceEntity);
+    }
+
+    public void deleteAll() {
+        exerciseInstanceRepository.deleteAll();
+    }
+
+    public void deleteById(UUID id) {
+        exerciseInstanceRepository.deleteById(id);
+    }
 }

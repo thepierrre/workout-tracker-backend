@@ -2,18 +2,38 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.entities.WorkoutEntity;
+import com.example.gymapp.mappers.impl.WorkoutMapper;
+import com.example.gymapp.repositories.WorkoutRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface WorkoutService {
+@Service
+public class WorkoutService {
 
 
-    List<WorkoutDto> findAll();
-    WorkoutDto createWorkout(WorkoutDto workoutEntity);
+    @Autowired
+    WorkoutRepository workoutRepository;
 
-    void deleteById(UUID id);
+    @Autowired
+    WorkoutMapper workoutMapper;
 
-    void deleteAll();
+    public List<WorkoutDto> findAll() {
+        return workoutRepository.findAll().stream().map(workoutMapper::mapToDto).toList();
+    }
 
+    public WorkoutDto createWorkout(WorkoutDto workoutDto) {
+        WorkoutEntity createdWorkout = workoutRepository.save(workoutMapper.mapFromDto(workoutDto));
+        return workoutMapper.mapToDto(createdWorkout);
+    }
+
+    public void deleteById(UUID id) {
+        workoutRepository.deleteById(id);
+    }
+
+    public void deleteAll() {
+        workoutRepository.deleteAll();
+    }
 }

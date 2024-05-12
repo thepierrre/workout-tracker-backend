@@ -7,27 +7,123 @@ import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.TrainingRoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.domain.entities.WorkoutEntity;
+import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
+import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
+import com.example.gymapp.mappers.impl.UserMapper;
+import com.example.gymapp.mappers.impl.WorkoutMapper;
+import com.example.gymapp.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface UserService {
+@Service
+public class UserService {
 
-    UserDto createUser(UserDto userDto);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    List<UserDto> findAll();
+    @Autowired
+    private UserRepository userRepository;
 
-    void deleteById(UUID id);
+    @Autowired
+    private UserMapper userMapper;
 
-    void deleteAll();
-    UserDto update(UUID id, UserDto userDto);
-    boolean isExists(UUID id);
+    @Autowired
+    private TrainingRoutineMapper trainingRoutineMapper;
 
-    List<TrainingRoutineDto> getTrainingRoutinesForUser(UUID id);
+    @Autowired
+    private ExerciseTypeMapper exerciseTypeMapper;
 
-    List<ExerciseTypeDto> getExerciseTypesForUser(UUID id);
+    @Autowired
+    private WorkoutMapper workoutMapper;
 
-    List<WorkoutDto> getWorkoutsForUser(UUID id);
+    public UserDto createUser(UserDto userDto) {
+
+        String email = userDto.getEmail();
+        List<UserEntity> usersWithEmail = userRepository.findByEmail(email);
+
+        if (!usersWithEmail.isEmpty()) {
+            throw new IllegalArgumentException("User with the provided email already exists");
+        }
+
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+        UserEntity createdUser = userRepository.save(userMapper.mapFromDto(userDto));
+        return userMapper.mapToDto(createdUser);
+    }
+
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream().map(userMapper::mapToDto).toList();
+    }
+
+    public void deleteById(UUID id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        userRepository.deleteById(id);
+    }
+
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
+
+    public boolean isExists(UUID id) {
+        return userRepository.existsById(id);
+    }
+
+    public UserDto update(UUID id, UserDto userDto) {
+        userDto.setId(id);
+        return userRepository.findById(id).map(existingUser -> {
+            Optional.ofNullable(userDto.getUsername()).ifPresent(existingUser::setUsername);
+            Optional.ofNullable(userDto.getPassword()).ifPresent(existingUser::setPassword);
+            userRepository.save(existingUser);
+            return userMapper.mapToDto(existingUser);
+        }).orElseThrow(() -> new RuntimeException("User does not exist."));
+    }
+
+
+    public List<TrainingRoutineDto> getTrainingRoutinesForUser(UUID id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        return userEntity.get().getTrainingRoutines().stream().map(trainingRoutineMapper::mapToDto).toList();
+    }
+
+    public List<ExerciseTypeDto> getExerciseTypesForUser(UUID id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return userEntity.get().getExerciseTypes().stream().map(exerciseTypeMapper::mapToDto).toList();
+    }
+
+    public List<WorkoutDto> getWorkoutsForUser(UUID id) {
+        return null;
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> NotFoundHandler(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> BadRequestHandler(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                body(Map.of("message", e.getMessage()));
+    }
 
 
 }
