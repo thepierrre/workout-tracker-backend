@@ -20,6 +20,7 @@ import java.util.UUID;
 
 
 @RestController
+@RequestMapping("/api/exercise-types/")
 public class ExerciseTypeController {
 
     @Autowired
@@ -28,33 +29,33 @@ public class ExerciseTypeController {
     @Autowired
     private Mapper<ExerciseTypeEntity, ExerciseTypeDto> exerciseTypeMapper;
 
-    @GetMapping(path = "/exercise-types")
+    @GetMapping
     public List<ExerciseTypeEntity> findAll() {
         return exerciseTypeService.findAll();
     }
 
-    @PostMapping(path = "/exercise-types")
+    @PostMapping
     public ResponseEntity<ExerciseTypeDto> createExercise(@Valid @RequestBody ExerciseTypeDto exerciseTypeDto) {
         ExerciseTypeDto createdExerciseType = exerciseTypeService.createExercise(exerciseTypeDto);
         return new ResponseEntity<>(createdExerciseType, HttpStatus.CREATED);
     }
 
 
-    @DeleteMapping(path = "/exercise-types/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
+    @DeleteMapping(path = "{exerciseTypeId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("exerciseTypeId") UUID id) {
         exerciseTypeService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "/exercise-types")
+    @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
         exerciseTypeService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(path = "/exercises/{id}")
+    @PatchMapping(path = "{exerciseTypeId}")
     public ResponseEntity<ExerciseTypeDto> update(
-            @PathVariable("id") UUID id,
+            @PathVariable("exerciseTypeId") UUID id,
             @RequestBody ExerciseTypeDto exerciseTypeDto
     ) {
         if(!exerciseTypeService.isExists(id)) {

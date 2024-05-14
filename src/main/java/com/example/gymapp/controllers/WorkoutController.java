@@ -13,13 +13,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 @RestController
+@RequestMapping("/api/workouts/")
 public class WorkoutController {
 
     @Autowired
@@ -28,29 +26,41 @@ public class WorkoutController {
     @Autowired
     WorkoutMapper workoutMapper;
 
-    @GetMapping(path = "/workouts")
+    @GetMapping
     public List<WorkoutDto> findAll() {
         return workoutService.findAll();
     }
 
-    @PostMapping(path = "/workouts")
+    @GetMapping(path = "${workoutId}")
+    public ResponseEntity<WorkoutDto> findById(@PathVariable("workoutId") UUID id) {
+        Optional<WorkoutEntity> workout = workoutService.findById(id);
+        if (workout.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            WorkoutDto foundWorkout = workoutMapper.mapToDto(workout.get());
+            return new ResponseEntity<>(foundWorkout, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping
     public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workoutDto) {
         WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto);
         return new ResponseEntity<>(createdWorkout, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/workouts/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
+    @DeleteMapping(path = "{workoutId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("workoutId") UUID id) {
         workoutService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 
-    @DeleteMapping(path = "/workouts")
+    @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
         workoutService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@RequestMapping("/api/routines/")
 public class TrainingRoutineController {
 
     @Autowired
@@ -24,24 +25,24 @@ public class TrainingRoutineController {
     @Autowired
     private Mapper<TrainingRoutineEntity, TrainingRoutineDto> trainingTypeMapper;
 
-    @PostMapping(path = "/training-routines")
+    @PostMapping
     public ResponseEntity<TrainingRoutineDto> createTrainingRoutine(@Valid @RequestBody TrainingRoutineDto trainingRoutineDto) {
         TrainingRoutineDto createdTrainingRoutine = trainingRoutineService.createTrainingType(trainingRoutineDto);
         return new ResponseEntity<>(createdTrainingRoutine, HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/training-routines")
+    @GetMapping
     public List<TrainingRoutineDto> getAll() {
         return trainingRoutineService.findAll();
     }
 
-    @DeleteMapping(path = "/training-routines/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
+    @DeleteMapping(path = "{routineId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("routineId") UUID id) {
         trainingRoutineService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "/training-routines")
+    @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
         trainingRoutineService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

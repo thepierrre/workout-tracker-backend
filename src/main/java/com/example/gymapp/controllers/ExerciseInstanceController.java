@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/api/workouts/{workoutId}/exercise-instances/")
 public class ExerciseInstanceController {
 
     @Autowired
@@ -26,27 +28,29 @@ public class ExerciseInstanceController {
     @Autowired
     private Mapper<ExerciseInstanceEntity, ExerciseInstanceDto> exerciseInstanceMapper;
 
-    @GetMapping(path = "/exercise-instances")
     public List<ExerciseInstanceDto> findAll() {
         return exerciseInstanceService.findAll();
     }
 
-    @PostMapping(path = "/exercise-instances")
     public ResponseEntity<ExerciseInstanceDto> createExerciseInstance(@Valid @RequestBody ExerciseInstanceDto exerciseInstanceDto) {
         ExerciseInstanceDto createdExerciseInstance = exerciseInstanceService.createExerciseInstance(exerciseInstanceDto);
         return new ResponseEntity<>(createdExerciseInstance, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/exercise-instances")
     public ResponseEntity<Void> deleteAll() {
         exerciseInstanceService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "/exercise-instances/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
+    @DeleteMapping(path = "{exerciseInstanceId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("exerciseInstanceId") UUID id) {
         exerciseInstanceService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping(path = "{exerciseInstanceId")
+    public ResponseEntity<ExerciseInstanceDto> patchById(@PathVariable("exerciseInstanceId") UUID id) {
+        return
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

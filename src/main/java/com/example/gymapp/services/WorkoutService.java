@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,6 +23,10 @@ public class WorkoutService {
 
     public List<WorkoutDto> findAll() {
         return workoutRepository.findAll().stream().map(workoutMapper::mapToDto).toList();
+    }
+
+    public Optional<WorkoutEntity> findById(UUID id) {
+        return workoutRepository.findById(id);
     }
 
     public WorkoutDto createWorkout(WorkoutDto workoutDto) {

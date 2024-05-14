@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 
 @RestController
+@RequestMapping("/api/users/")
 public class UserController {
 
     @Autowired
@@ -26,19 +27,19 @@ public class UserController {
     @Autowired
     UserMapper userMapper;
 
-    @GetMapping(path = "/users")
+    @GetMapping
     public List<UserDto> getAll() {
         return userService.findAll();
     }
 
-    @PostMapping(path = "/users")
+    @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         UserDto createdUser = userService.createUser(userDto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/users/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
+    @DeleteMapping(path = "{userId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("userId") UUID id) {
         try {
             userService.deleteById(id);
         } catch (ResponseStatusException e) {
@@ -47,14 +48,14 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "/users")
+    @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
         userService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(path = "/users/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
+    @PatchMapping(path = "{userId}")
+    public ResponseEntity<UserDto> update(@PathVariable("userId") UUID id, @RequestBody UserDto userDto) {
         if (!userService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -62,7 +63,7 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/users/{userId}/training-routines")
+    @GetMapping(path = "{userId}/training-routines")
     public ResponseEntity<List<TrainingRoutineDto>> getTrainingRoutinesForUser(@PathVariable("userId") String userId) {
         UUID id;
         try {
@@ -77,7 +78,7 @@ public class UserController {
         return ResponseEntity.ok(foundTrainingRoutines);
     }
 
-    @GetMapping(path = "/users{userId}/workouts")
+    @GetMapping(path = "{userId}/workouts")
     public ResponseEntity<List<WorkoutDto>> getWorkoutsForUser(@PathVariable("userId") String userId) {
         UUID id;
         try {
@@ -95,7 +96,7 @@ public class UserController {
         return ResponseEntity.ok(foundWorkouts);
     }
 
-    @GetMapping(path = "/users/{userId}/exercise-types")
+    @GetMapping(path = "{userId}/exercise-types")
     public ResponseEntity<List<ExerciseTypeDto>> getExerciseTypesForUser(@PathVariable("userId") String userId) throws Exception {
         UUID id;
         try {
