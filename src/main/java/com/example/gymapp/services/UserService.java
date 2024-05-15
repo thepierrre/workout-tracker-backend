@@ -12,6 +12,7 @@ import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,8 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -55,7 +56,8 @@ public class UserService {
             throw new IllegalArgumentException("User with the provided email already exists");
         }
 
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+//        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userDto.setPassword(userDto.getPassword());
 
         UserEntity createdUser = userRepository.save(userMapper.mapFromDto(userDto));
         return userMapper.mapToDto(createdUser);
@@ -63,6 +65,10 @@ public class UserService {
 
     public List<UserDto> findAll() {
         return userRepository.findAll().stream().map(userMapper::mapToDto).toList();
+    }
+
+    public Optional<UserEntity> findById(UUID id) {
+        return userRepository.findById(id);
     }
 
     public void deleteById(UUID id) {

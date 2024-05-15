@@ -20,7 +20,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/api/exercise-types/")
+@RequestMapping("/api/exercise-types")
 public class ExerciseTypeController {
 
     @Autowired

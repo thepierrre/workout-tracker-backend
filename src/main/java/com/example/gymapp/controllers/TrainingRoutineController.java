@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/routines/")
+@RequestMapping("/api/routines")
 public class TrainingRoutineController {
 
     @Autowired

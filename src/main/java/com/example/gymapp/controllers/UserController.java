@@ -4,6 +4,8 @@ import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.TrainingRoutineDto;
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
+import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.services.UserService;
 import jakarta.validation.Valid;
@@ -18,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/users/")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -30,6 +32,17 @@ public class UserController {
     @GetMapping
     public List<UserDto> getAll() {
         return userService.findAll();
+    }
+
+    @GetMapping(path = "{userId}")
+    public ResponseEntity<UserDto> findById(@PathVariable("userId") UUID id) {
+        Optional<UserEntity> user = userService.findById(id);
+        if (user.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            UserDto foundUser = userMapper.mapToDto(user.get());
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        }
     }
 
     @PostMapping

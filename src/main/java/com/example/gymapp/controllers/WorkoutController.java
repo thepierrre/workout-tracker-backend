@@ -17,7 +17,7 @@ import java.util.*;
 
 
 @RestController
-@RequestMapping("/api/workouts/")
+@RequestMapping("/api/workouts")
 public class WorkoutController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class WorkoutController {
         return workoutService.findAll();
     }
 
-    @GetMapping(path = "${workoutId}")
+    @GetMapping(path = "{workoutId}")
     public ResponseEntity<WorkoutDto> findById(@PathVariable("workoutId") UUID id) {
         Optional<WorkoutEntity> workout = workoutService.findById(id);
         if (workout.isEmpty()) {

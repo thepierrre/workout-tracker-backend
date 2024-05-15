@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/workouts/{workoutId}/exercise-instances/")
+@RequestMapping("/api/workouts/{workoutId}/exercise-instances")
 public class ExerciseInstanceController {
 
     @Autowired
@@ -48,10 +48,10 @@ public class ExerciseInstanceController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(path = "{exerciseInstanceId")
-    public ResponseEntity<ExerciseInstanceDto> patchById(@PathVariable("exerciseInstanceId") UUID id) {
-        return
-    }
+//    @PatchMapping(path = "{exerciseInstanceId")
+//    public ResponseEntity<ExerciseInstanceDto> patchById(@PathVariable("exerciseInstanceId") UUID id) {
+//        return
+//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
