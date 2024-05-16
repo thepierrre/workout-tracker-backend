@@ -1,10 +1,16 @@
-package com.example.gymapp.config;
+package com.example.gymapp.security;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,7 +27,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
+
+    private CustomUserDetailsService userDetailsService;
+
+//    @Autowired
+//    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+//        this.userDetailsService = userDetailsService;
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,35 +44,40 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
 //                                .requestMatchers("/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET).hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET).authenticated()
                                 .anyRequest().authenticated()
                 )
                                 .httpBasic(withDefaults());
         return httpSecurity.build();
     };
 
+//    @Bean
+//    public UserDetailsService users() {
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password("password")
+//                .roles("ADMIN")
+//                .build();
+//
+//        UserDetails user = User.builder()
+//                .username("user1")
+//                .password("123")
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(admin, user);
+//
+//    }
+
     @Bean
-    public UserDetailsService users() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password("password")
-                .roles("ADMIN")
-                .build();
-
-        UserDetails user = User.builder()
-                .username("user1")
-                .password("123")
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, user);
-
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
-//    @Bean
-//    public PasswordEncoder encoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 //    @Bean
 //    public static PasswordEncoder passwordEncoder() {
