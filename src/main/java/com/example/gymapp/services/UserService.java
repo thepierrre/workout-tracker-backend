@@ -3,20 +3,15 @@ import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.TrainingRoutineDto;
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-import com.example.gymapp.domain.entities.TrainingRoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
@@ -132,4 +127,7 @@ public class UserService {
     }
 
 
+    public Optional<UserEntity> findByUsername(String name) {
+        return userRepository.findByUsername(name);
+    }
 }

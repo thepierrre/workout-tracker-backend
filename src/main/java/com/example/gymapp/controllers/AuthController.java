@@ -7,6 +7,9 @@ import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.repositories.RoleRepository;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.security.JWTGenerator;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +40,7 @@ public class AuthController {
     private JWTGenerator jwtGenerator;
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
 
          Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
@@ -44,7 +48,24 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
+
+        // Create HTTP-only cookie
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // Use true if HTTPS
+        cookie.setPath("/"); // Cookie is valid for the entire application
+        cookie.setMaxAge(7 * 24 * 60 * 60); // Cookie expiration in seconds (7 days)
+
+        response.addCookie(cookie);
+
         return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("register")

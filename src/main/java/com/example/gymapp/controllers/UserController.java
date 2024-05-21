@@ -12,11 +12,14 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.*;
 
 @RestController
@@ -43,6 +46,19 @@ public class UserController {
             UserDto foundUser = userMapper.mapToDto(user.get());
             return new ResponseEntity<>(foundUser, HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getUserDetails(@AuthenticationPrincipal UserDetails userDetails) {
+        // Fetch user details based on the authenticated user's username
+        Optional<UserEntity> user = userService.findByUsername(userDetails.getUsername());
+        if (user.isPresent()) {
+            UserDto userDto = userMapper.mapToDto(user.get());
+            return ResponseEntity.ok(userDto);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PostMapping

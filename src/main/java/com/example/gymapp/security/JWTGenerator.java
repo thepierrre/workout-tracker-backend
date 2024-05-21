@@ -1,8 +1,6 @@
 package com.example.gymapp.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -23,13 +21,12 @@ public class JWTGenerator {
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
 
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
                 .expiration(expireDate)
                 .signWith(key)
                 .compact();
-        return token;
     }
 
     public String getUsernameFromJWT(String token) {
@@ -48,8 +45,10 @@ public class JWTGenerator {
                     .build()
                     .parseSignedClaims(token);
             return true;
-        } catch (Exception ex) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect.");
+        } catch (ExpiredJwtException ex) {
+            throw new AuthenticationCredentialsNotFoundException("JWT was expired");
+        } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException ex) {
+            throw new AuthenticationCredentialsNotFoundException("JWT was incorrect");
         }
     }
 }
