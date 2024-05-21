@@ -1,18 +1,19 @@
 package com.example.gymapp.controllers;
 
-import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.dto.TrainingRoutineDto;
-import com.example.gymapp.domain.dto.UserDto;
-import com.example.gymapp.domain.dto.WorkoutDto;
+import com.example.gymapp.domain.dto.*;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.domain.entities.WorkoutEntity;
+import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
+import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.mappers.impl.UserMapper;
+import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -31,6 +33,15 @@ public class UserController {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    TrainingRoutineMapper trainingRoutineMapper;
+
+    @Autowired
+    WorkoutMapper workoutMapper;
+
+    @Autowired
+    ExerciseTypeMapper exerciseTypeMapper;
 
     @GetMapping
     public List<UserDto> getAll() {
@@ -49,22 +60,23 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUserDetails(@AuthenticationPrincipal UserDetails userDetails) {
-        // Fetch user details based on the authenticated user's username
+    public ResponseEntity<UserResponseDto> getUserDetails(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<UserEntity> user = userService.findByUsername(userDetails.getUsername());
         if (user.isPresent()) {
-            UserDto userDto = userMapper.mapToDto(user.get());
-            return ResponseEntity.ok(userDto);
+            UserResponseDto userResponseDto = new UserResponseDto();
+            userResponseDto.setUsername(user.get().getUsername());
+            userResponseDto.setEmail(user.get().getEmail());
+            userResponseDto.setTrainingRoutines(user.get().getTrainingRoutines().stream()
+                    .map(trainingRoutineMapper::mapToDto).toList());
+            userResponseDto.setWorkouts(user.get().getWorkouts().stream()
+                    .map(workoutMapper::mapToDto).toList());
+            userResponseDto.setExerciseTypes(user.get().getExerciseTypes().stream()
+                    .map(exerciseTypeMapper::mapToDto).toList());
+            return ResponseEntity.ok(userResponseDto);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
-        UserDto createdUser = userService.createUser(userDto);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "{userId}")

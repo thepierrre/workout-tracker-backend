@@ -24,9 +24,6 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -41,22 +38,6 @@ public class UserService {
 
     @Autowired
     private WorkoutMapper workoutMapper;
-
-    public UserDto createUser(UserDto userDto) {
-
-        String email = userDto.getEmail();
-        List<UserEntity> usersWithEmail = userRepository.findByEmail(email);
-
-        if (!usersWithEmail.isEmpty()) {
-            throw new IllegalArgumentException("User with the provided email already exists");
-        }
-
-//        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userDto.setPassword(userDto.getPassword());
-
-        UserEntity createdUser = userRepository.save(userMapper.mapFromDto(userDto));
-        return userMapper.mapToDto(createdUser);
-    }
 
     public List<UserDto> findAll() {
         return userRepository.findAll().stream().map(userMapper::mapToDto).toList();

@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +37,8 @@ public class ExerciseTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<ExerciseTypeDto> createExercise(@Valid @RequestBody ExerciseTypeDto exerciseTypeDto) {
-        ExerciseTypeDto createdExerciseType = exerciseTypeService.createExercise(exerciseTypeDto);
+    public ResponseEntity<ExerciseTypeDto> createExercise(@Valid @RequestBody ExerciseTypeDto exerciseTypeDto, @AuthenticationPrincipal UserDetails userDetails) {
+        ExerciseTypeDto createdExerciseType = exerciseTypeService.createExercise(exerciseTypeDto, userDetails.getUsername());
         return new ResponseEntity<>(createdExerciseType, HttpStatus.CREATED);
     }
 
