@@ -2,9 +2,12 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.TrainingRoutineDto;
 import com.example.gymapp.domain.entities.TrainingRoutineEntity;
+import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.repositories.TrainingRoutineRepository;
+import com.example.gymapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,15 +22,32 @@ public class TrainingRoutineService {
     @Autowired
     private TrainingRoutineMapper trainingRoutineMapper;
 
-    public TrainingRoutineDto createTrainingType(TrainingRoutineDto trainingRoutineDto) {
+    @Autowired
+    private UserRepository userRepository;
+
+    public TrainingRoutineDto createTrainingType(TrainingRoutineDto trainingRoutineDto, String username) {
+
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
         TrainingRoutineEntity trainingRoutineEntity = trainingRoutineMapper.mapFromDto(trainingRoutineDto);
-
-        trainingRoutineEntity.setExerciseTypes(trainingRoutineEntity.getExerciseTypes());
+        trainingRoutineEntity.setUser(user);
 
         TrainingRoutineEntity savedTrainingRoutineEntity = trainingRoutineRepository.save(trainingRoutineEntity);
+        user.getTrainingRoutines().add(savedTrainingRoutineEntity);
+        userRepository.save(user);
 
         return trainingRoutineMapper.mapToDto(savedTrainingRoutineEntity);
+
+
+
+//        TrainingRoutineEntity trainingRoutineEntity = trainingRoutineMapper.mapFromDto(trainingRoutineDto);
+//
+//        trainingRoutineEntity.setExerciseTypes(trainingRoutineEntity.getExerciseTypes());
+//
+//        TrainingRoutineEntity savedTrainingRoutineEntity = trainingRoutineRepository.save(trainingRoutineEntity);
+//
+//        return trainingRoutineMapper.mapToDto(savedTrainingRoutineEntity);
     }
 
     public List<TrainingRoutineDto> findAll() {

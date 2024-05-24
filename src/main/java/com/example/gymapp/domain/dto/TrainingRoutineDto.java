@@ -22,7 +22,6 @@ public class TrainingRoutineDto {
 
     private List<ExerciseTypeDto> exerciseTypes;
 
-    @NotNull(message = "User cannot be null.")
     @JsonIgnoreProperties("trainingRoutines")
     private UserDto user;
 
