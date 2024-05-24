@@ -22,7 +22,7 @@ public class WorkoutDto {
 
     @CreationTimestamp
     @NotNull(message = "Timestamp cannot be null.")
-    private LocalDateTime timestamp;
+    private String timestamp;
 
     private List<ExerciseInstanceDto> exerciseInstances;
 

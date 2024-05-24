@@ -35,7 +35,7 @@ public class ExerciseTypeEntity {
     @JsonIgnore
     private UserEntity user;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryEntity> categories;
 

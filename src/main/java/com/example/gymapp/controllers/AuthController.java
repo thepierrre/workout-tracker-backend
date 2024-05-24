@@ -1,16 +1,17 @@
 package com.example.gymapp.controllers;
 
-import com.example.gymapp.domain.dto.AuthResponseDto;
 import com.example.gymapp.domain.dto.LoginDto;
 import com.example.gymapp.domain.dto.RegisterDto;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.repositories.RoleRepository;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.security.JWTGenerator;
+import com.example.gymapp.services.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,58 +34,28 @@ import java.util.Collections;
 @AllArgsConstructor
 public class AuthController {
 
-    private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
-    private JWTGenerator jwtGenerator;
+
+    @Autowired
+    AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
-
-         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
-                        loginDto.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtGenerator.generateToken(authentication);
-
-        // Create HTTP-only cookie
-        Cookie cookie = new Cookie("token", token);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false); // Use true if HTTPS
-        cookie.setPath("/"); // Cookie is valid for the entire application
-        cookie.setMaxAge(7 * 24 * 60 * 60); // Cookie expiration in seconds (7 days)
-
-        response.addCookie(cookie);
-
-        return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+        return authService.login(loginDto, response);
     }
 
     @PostMapping("logout")
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-        logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-        return ResponseEntity.ok().build();
+        ResponseEntity<Void> logoutResponse = authService.logout(request, response);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-        if (userRepository.existsByUsername(registerDto.getUsername())) {
-            return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
-        }
+        return authService.register(registerDto);
 
-        UserEntity user = new UserEntity();
-        user.setUsername(registerDto.getUsername());
-        user.setEmail(registerDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-
-        Role roles = roleRepository.findByName("USER").get();
-        user.setRoles(Collections.singletonList(roles));
-
-        userRepository.save(user);
-
-        return new ResponseEntity<>("User registered!", HttpStatus.OK);
     }
 
 

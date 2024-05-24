@@ -17,9 +17,6 @@ public class WorkingSetController {
     @Autowired
     WorkingSetService workingSetService;
 
-    @Autowired
-    WorkingSetMapper workingSetMapper;
-
     @GetMapping(path = "/working-sets")
     public List<WorkingSetDto> findAll() {
         return workingSetService.findAll();

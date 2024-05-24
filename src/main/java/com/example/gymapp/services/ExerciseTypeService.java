@@ -1,7 +1,6 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.dto.UserResponseDto;
 import com.example.gymapp.domain.entities.CategoryEntity;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.UserEntity;
@@ -10,9 +9,11 @@ import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.repositories.CategoryRepository;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,11 @@ public class ExerciseTypeService {
         return exerciseTypeRepository.findAll();
     }
 
+    @Transactional
     public void deleteById(UUID id) {
+        if (!exerciseTypeRepository.existsById(id)) {
+            throw new EntityNotFoundException("Exercise type not found with ID: " + id);
+        }
         exerciseTypeRepository.deleteById(id);
     }
 

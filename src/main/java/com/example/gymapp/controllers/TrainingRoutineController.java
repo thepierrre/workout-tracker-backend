@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +28,8 @@ public class TrainingRoutineController {
     private Mapper<TrainingRoutineEntity, TrainingRoutineDto> trainingTypeMapper;
 
     @PostMapping
-    public ResponseEntity<TrainingRoutineDto> createTrainingRoutine(@Valid @RequestBody TrainingRoutineDto trainingRoutineDto) {
-        TrainingRoutineDto createdTrainingRoutine = trainingRoutineService.createTrainingType(trainingRoutineDto);
+    public ResponseEntity<TrainingRoutineDto> createTrainingRoutine(@Valid @RequestBody TrainingRoutineDto trainingRoutineDto, @AuthenticationPrincipal UserDetails userDetails) {
+        TrainingRoutineDto createdTrainingRoutine = trainingRoutineService.createTrainingType(trainingRoutineDto, userDetails.getUsername());
         return new ResponseEntity<>(createdTrainingRoutine, HttpStatus.CREATED);
     }
 
