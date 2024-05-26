@@ -22,9 +22,9 @@ public class TrainingRoutineDto {
 
     private List<ExerciseTypeDto> exerciseTypes;
 
-    @JsonIgnoreProperties("trainingRoutines")
+    @JsonIgnoreProperties({"trainingRoutines", "password", "email", "workouts"})
     private UserDto user;
 
-    private List<WorkoutDto> workouts;
+//    private List<WorkoutDto> workouts;
 
 }

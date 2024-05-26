@@ -7,6 +7,8 @@ import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
 import com.example.gymapp.repositories.TrainingRoutineRepository;
 import com.example.gymapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,14 @@ public class TrainingRoutineService {
 
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+
+        boolean routineExists = user.getTrainingRoutines().stream()
+                .anyMatch(routine -> routine.getName().equalsIgnoreCase(trainingRoutineDto.getName()));
+
+        if (routineExists) {
+            throw new IllegalArgumentException(" A training routine with this name already exists.");
+        }
+
 
         TrainingRoutineEntity trainingRoutineEntity = trainingRoutineMapper.mapFromDto(trainingRoutineDto);
         trainingRoutineEntity.setUser(user);

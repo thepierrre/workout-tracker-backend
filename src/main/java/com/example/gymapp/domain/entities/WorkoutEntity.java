@@ -2,13 +2,16 @@ package com.example.gymapp.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -25,18 +28,17 @@ public class WorkoutEntity {
     @UuidGenerator
     private UUID id;
 
-    @JsonFormat
-    private LocalDateTime timestamp;
+    @CreationTimestamp
+    private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "workout", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<ExerciseInstanceEntity> exerciseInstances;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
+    @JsonIgnoreProperties({"trainingRoutines", "password", "email", "workouts"})
     private UserEntity user;
 
-    @ManyToOne
-    private TrainingRoutineEntity trainingRoutine;
+    private String routineName;
 
 }

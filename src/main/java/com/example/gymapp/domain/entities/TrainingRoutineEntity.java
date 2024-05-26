@@ -34,10 +34,10 @@ public class TrainingRoutineEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"trainingRoutines", "password", "email"})
+    @JsonIgnoreProperties({"trainingRoutines", "password", "email", "workouts"})
     private UserEntity user;
 
-    @OneToMany(mappedBy = "trainingRoutine", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    private List<WorkoutEntity> workouts;
+//    @OneToMany(mappedBy = "trainingRoutine", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+//    private List<WorkoutEntity> workouts;
 
 }

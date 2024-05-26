@@ -4,11 +4,14 @@ import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
+import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.services.WorkoutService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,9 @@ public class WorkoutController {
 
     @Autowired
     WorkoutMapper workoutMapper;
+
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping
     public List<WorkoutDto> findAll() {
@@ -43,16 +49,25 @@ public class WorkoutController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workoutDto) {
-        WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto);
+    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workoutDto, @AuthenticationPrincipal UserDetails userDetails) {
+
+
+
+
+        WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto, userDetails.getUsername());
         return new ResponseEntity<>(createdWorkout, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "{workoutId}")
+    @DeleteMapping("/{workoutId}")
     public ResponseEntity<Void> deleteById(@PathVariable("workoutId") UUID id) {
-        workoutService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
+        try {
+            workoutService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping

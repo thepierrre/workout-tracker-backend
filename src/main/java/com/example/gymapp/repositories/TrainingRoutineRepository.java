@@ -9,4 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface TrainingRoutineRepository extends JpaRepository<TrainingRoutineEntity, UUID> {
+
+    boolean existsByName(String name);
 }
