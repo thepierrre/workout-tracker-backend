@@ -1,10 +1,7 @@
 package com.example.gymapp.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
@@ -15,6 +12,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
+@Getter
+@Setter
 @Table(name = "exercise_instances")
 public class ExerciseInstanceEntity {
 
