@@ -2,6 +2,7 @@ package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
+import com.example.gymapp.domain.dto.WorkoutRequestDto;
 import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.UserRepository;
@@ -49,12 +50,9 @@ public class WorkoutController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workoutDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutRequestDto workoutRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
 
-
-
-
-        WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto, userDetails.getUsername());
+        WorkoutDto createdWorkout = workoutService.createWorkout(workoutRequestDto, userDetails.getUsername());
         return new ResponseEntity<>(createdWorkout, HttpStatus.CREATED);
     }
 

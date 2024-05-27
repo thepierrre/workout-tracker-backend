@@ -32,6 +32,7 @@ public class WorkoutEntity {
     private LocalDate creationDate;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonIgnoreProperties({"exerciseType", "workout"})
     private List<ExerciseInstanceEntity> exerciseInstances;
 
     @ManyToOne(fetch = FetchType.EAGER)

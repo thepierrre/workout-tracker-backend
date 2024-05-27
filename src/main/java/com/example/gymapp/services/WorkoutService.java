@@ -1,22 +1,24 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.WorkoutDto;
+import com.example.gymapp.domain.dto.WorkoutRequestDto;
 import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
-import com.example.gymapp.repositories.TrainingRoutineRepository;
-import com.example.gymapp.repositories.UserRepository;
-import com.example.gymapp.repositories.WorkoutRepository;
+import com.example.gymapp.repositories.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Service
 public class WorkoutService {
@@ -32,6 +34,12 @@ public class WorkoutService {
     TrainingRoutineRepository trainingRoutineRepository;
 
     @Autowired
+    ExerciseInstanceRepository exerciseInstanceRepository;
+
+    @Autowired
+    WorkingSetRepository workingSetRepository;
+
+    @Autowired
     WorkoutMapper workoutMapper;
 
     public List<WorkoutDto> findAll() {
@@ -42,29 +50,33 @@ public class WorkoutService {
         return workoutRepository.findById(id);
     }
 
-    public WorkoutDto createWorkout(WorkoutDto workoutDto, String username) {
+    @Transactional
+    public WorkoutDto createWorkout(WorkoutRequestDto workoutRequestDto, String username) {
 
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
-        TrainingRoutineEntity trainingRoutine = trainingRoutineRepository.findByName(workoutDto.getRoutineName())
+        TrainingRoutineEntity trainingRoutine = trainingRoutineRepository.findByName(workoutRequestDto.getRoutineName())
                 .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
 //        WorkoutEntity workoutEntity = workoutMapper.mapFromDto(workoutDto);
         WorkoutEntity workoutEntity = new WorkoutEntity();
-        workoutEntity.setCreationDate(workoutDto.getCreationDate());
+        workoutEntity.setCreationDate(LocalDate.now());
         workoutEntity.setUser(user);
+        workoutEntity.setRoutineName(workoutRequestDto.getRoutineName());
 
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
         for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
             ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
+            System.out.println("initial exerciseInstance" + exerciseInstance);
             exerciseInstance.setExerciseType(exerciseType);
             exerciseInstance.setWorkout(workoutEntity);
 
             List<WorkingSetEntity> workingSets = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 WorkingSetEntity workingSet = new WorkingSetEntity();
+                System.out.println("initial workingSet" + workingSet);
                 workingSet.setReps((short) 0);
                 workingSet.setWeight((short) 0);
                 workingSet.setExerciseInstance(exerciseInstance);
@@ -73,6 +85,7 @@ public class WorkoutService {
 
             exerciseInstance.setWorkingSets(workingSets);
             exerciseInstances.add(exerciseInstance);
+            System.out.println("exercise instances" + exerciseInstances);
         }
 
         workoutEntity.setExerciseInstances(exerciseInstances);

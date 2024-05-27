@@ -22,6 +22,7 @@ public class ExerciseTypeDto {
 
     private String name;
 
+    @JsonIgnore
     private List<ExerciseInstanceDto> exerciseInstances;
 
     @JsonIgnore
@@ -29,5 +30,9 @@ public class ExerciseTypeDto {
 
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryDto> categories = new ArrayList<>();
+
+    public ExerciseTypeDto(String id) {
+        this.id = UUID.fromString(id);
+    }
 
 }

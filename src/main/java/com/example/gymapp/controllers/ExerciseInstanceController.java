@@ -12,6 +12,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.service.annotation.DeleteExchange;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,15 +29,18 @@ public class ExerciseInstanceController {
     @Autowired
     private Mapper<ExerciseInstanceEntity, ExerciseInstanceDto> exerciseInstanceMapper;
 
+    @GetMapping
     public List<ExerciseInstanceDto> findAll() {
         return exerciseInstanceService.findAll();
     }
 
+    @PostMapping
     public ResponseEntity<ExerciseInstanceDto> createExerciseInstance(@Valid @RequestBody ExerciseInstanceDto exerciseInstanceDto) {
         ExerciseInstanceDto createdExerciseInstance = exerciseInstanceService.createExerciseInstance(exerciseInstanceDto);
         return new ResponseEntity<>(createdExerciseInstance, HttpStatus.CREATED);
     }
 
+    @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
         exerciseInstanceService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -47,11 +51,6 @@ public class ExerciseInstanceController {
         exerciseInstanceService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-//    @PatchMapping(path = "{exerciseInstanceId")
-//    public ResponseEntity<ExerciseInstanceDto> patchById(@PathVariable("exerciseInstanceId") UUID id) {
-//        return
-//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
