@@ -1,14 +1,12 @@
 package com.example.gymapp.services;
 
-import com.example.gymapp.domain.dto.TrainingRoutineDto;
-import com.example.gymapp.domain.entities.TrainingRoutineEntity;
+import com.example.gymapp.domain.dto.RoutineDto;
+import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
-import com.example.gymapp.repositories.TrainingRoutineRepository;
+import com.example.gymapp.mappers.impl.RoutineMapper;
+import com.example.gymapp.repositories.RoutineRepository;
 import com.example.gymapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +14,23 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class TrainingRoutineService {
+public class RoutineService {
 
     @Autowired
-    private TrainingRoutineRepository trainingRoutineRepository;
+    private RoutineRepository routineRepository;
 
     @Autowired
-    private TrainingRoutineMapper trainingRoutineMapper;
+    private RoutineMapper routineMapper;
 
     @Autowired
     private UserRepository userRepository;
 
-    public TrainingRoutineDto createTrainingType(TrainingRoutineDto trainingRoutineDto, String username) {
+    public RoutineDto createRoutine(RoutineDto trainingRoutineDto, String username) {
 
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
-        boolean routineExists = user.getTrainingRoutines().stream()
+        boolean routineExists = user.getRoutines().stream()
                 .anyMatch(routine -> routine.getName().equalsIgnoreCase(trainingRoutineDto.getName()));
 
         if (routineExists) {
@@ -40,14 +38,14 @@ public class TrainingRoutineService {
         }
 
 
-        TrainingRoutineEntity trainingRoutineEntity = trainingRoutineMapper.mapFromDto(trainingRoutineDto);
-        trainingRoutineEntity.setUser(user);
+        RoutineEntity routineEntity = routineMapper.mapFromDto(trainingRoutineDto);
+        routineEntity.setUser(user);
 
-        TrainingRoutineEntity savedTrainingRoutineEntity = trainingRoutineRepository.save(trainingRoutineEntity);
-        user.getTrainingRoutines().add(savedTrainingRoutineEntity);
+        RoutineEntity savedRoutineEntity = routineRepository.save(routineEntity);
+        user.getRoutines().add(savedRoutineEntity);
         userRepository.save(user);
 
-        return trainingRoutineMapper.mapToDto(savedTrainingRoutineEntity);
+        return routineMapper.mapToDto(savedRoutineEntity);
 
 
 
@@ -60,16 +58,16 @@ public class TrainingRoutineService {
 //        return trainingRoutineMapper.mapToDto(savedTrainingRoutineEntity);
     }
 
-    public List<TrainingRoutineDto> findAll() {
-        return trainingRoutineRepository.
-                findAll().stream().map(trainingRoutineMapper::mapToDto).
+    public List<RoutineDto> findAll() {
+        return routineRepository.
+                findAll().stream().map(routineMapper::mapToDto).
                 toList(); }
 
     public void deleteById(UUID id) {
-        trainingRoutineRepository.deleteById(id);
+        routineRepository.deleteById(id);
     }
 
     public void deleteAll() {
-        trainingRoutineRepository.deleteAll();
+        routineRepository.deleteAll();
     }
 }

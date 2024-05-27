@@ -5,7 +5,7 @@ import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
-import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
+import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.UserRepository;
@@ -31,7 +31,7 @@ public class UserService {
     private UserMapper userMapper;
 
     @Autowired
-    private TrainingRoutineMapper trainingRoutineMapper;
+    private RoutineMapper routineMapper;
 
     @Autowired
     private ExerciseTypeMapper exerciseTypeMapper;
@@ -81,7 +81,7 @@ public class UserService {
                     HttpStatus.NOT_FOUND
             );
         }
-        return userEntity.get().getTrainingRoutines().stream().map(trainingRoutineMapper::mapToDto).toList();
+        return userEntity.get().getTrainingRoutines().stream().map(routineMapper::mapToDto).toList();
     }
 
     public List<ExerciseTypeDto> getExerciseTypesForUser(UUID id) {

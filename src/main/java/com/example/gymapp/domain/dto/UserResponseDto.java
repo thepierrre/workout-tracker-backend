@@ -17,7 +17,7 @@ public class UserResponseDto {
 
     private String email;
 
-    private List<TrainingRoutineDto> trainingRoutines;
+    private List<RoutineDto> routines;
 
     private List<WorkoutDto> workouts;
 

@@ -1,7 +1,6 @@
 package com.example.gymapp.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,16 +16,13 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "training_types")
-public class TrainingRoutineEntity {
+public class RoutineEntity {
 
     @Id
     @UuidGenerator
     private UUID id;
 
     private String name;
-
-//    @OneToMany(mappedBy = "trainingType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<ExerciseTypeEntity> exercises;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("exerciseInstances")

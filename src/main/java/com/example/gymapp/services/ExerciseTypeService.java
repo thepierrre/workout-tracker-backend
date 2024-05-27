@@ -5,7 +5,7 @@ import com.example.gymapp.domain.entities.CategoryEntity;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
-import com.example.gymapp.mappers.impl.TrainingRoutineMapper;
+import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.repositories.CategoryRepository;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.UserRepository;
@@ -30,7 +30,7 @@ public class ExerciseTypeService {
     ExerciseTypeMapper exerciseTypeMapper;
 
     @Autowired
-    TrainingRoutineMapper trainingRoutineMapper;
+    RoutineMapper routineMapper;
 
     @Autowired
     UserRepository userRepository;

@@ -27,7 +27,7 @@ public class UserDto {
     @NotBlank(message = "Email cannot be blank.")
     private String email;
 
-    private List<TrainingRoutineDto> trainingRoutines;
+    private List<RoutineDto> routines;
 
     private List<WorkoutDto> workouts;
 

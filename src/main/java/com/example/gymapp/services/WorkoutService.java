@@ -6,9 +6,7 @@ import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.*;
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 @Service
 public class WorkoutService {
@@ -31,7 +28,7 @@ public class WorkoutService {
     UserRepository userRepository;
 
     @Autowired
-    TrainingRoutineRepository trainingRoutineRepository;
+    RoutineRepository routineRepository;
 
     @Autowired
     ExerciseInstanceRepository exerciseInstanceRepository;
@@ -56,7 +53,7 @@ public class WorkoutService {
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
-        TrainingRoutineEntity trainingRoutine = trainingRoutineRepository.findByName(workoutRequestDto.getRoutineName())
+        RoutineEntity trainingRoutine = routineRepository.findByName(workoutRequestDto.getRoutineName())
                 .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
 //        WorkoutEntity workoutEntity = workoutMapper.mapFromDto(workoutDto);
