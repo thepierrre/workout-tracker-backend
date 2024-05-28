@@ -1,6 +1,6 @@
 package com.example.gymapp.controllers;
 
-import com.example.gymapp.domain.dto.TrainingRoutineDto;
+import com.example.gymapp.domain.dto.RoutineDto;
 import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.mappers.Mapper;
 
@@ -25,16 +25,16 @@ public class RoutineController {
     private RoutineService routineService;
 
     @Autowired
-    private Mapper<RoutineEntity, TrainingRoutineDto> trainingTypeMapper;
+    private Mapper<RoutineEntity, RoutineDto> trainingTypeMapper;
 
     @PostMapping
-    public ResponseEntity<TrainingRoutineDto> createTrainingRoutine(@Valid @RequestBody TrainingRoutineDto trainingRoutineDto, @AuthenticationPrincipal UserDetails userDetails) {
-        TrainingRoutineDto createdTrainingRoutine = routineService.createTrainingType(trainingRoutineDto, userDetails.getUsername());
+    public ResponseEntity<RoutineDto> createTrainingRoutine(@Valid @RequestBody RoutineDto trainingRoutineDto, @AuthenticationPrincipal UserDetails userDetails) {
+        RoutineDto createdTrainingRoutine = routineService.createRoutine(trainingRoutineDto, userDetails.getUsername());
         return new ResponseEntity<>(createdTrainingRoutine, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<TrainingRoutineDto> getAll() {
+    public List<RoutineDto> getAll() {
         return routineService.findAll();
     }
 

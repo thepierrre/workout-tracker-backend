@@ -18,7 +18,7 @@ public class WorkoutRequestDto {
 
     private UUID id;
 
-    @JsonIgnoreProperties({"trainingRoutines", "password", "email", "workouts"})
+    @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     private UserDto user;
 
     private String routineName;

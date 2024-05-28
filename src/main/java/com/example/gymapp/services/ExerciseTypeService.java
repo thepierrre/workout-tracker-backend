@@ -51,13 +51,13 @@ public class ExerciseTypeService {
         exerciseTypeEntity.setUser(user);
 
         if (exerciseTypeDto.getCategories() != null && !exerciseTypeDto.getCategories().isEmpty()) {
-            List<CategoryEntity> managedCategories = exerciseTypeDto.getCategories().stream()
+            List<CategoryEntity> categories = exerciseTypeDto.getCategories().stream()
                     .map(categoryDto -> categoryRepository.findById(categoryDto.getId())
                             .orElseThrow(() -> new IllegalArgumentException("Category not found: " + categoryDto.getId())))
                     .collect(Collectors.toList());
-            exerciseTypeEntity.setCategories(managedCategories);
+            exerciseTypeEntity.setCategories(categories);
         } else {
-            exerciseTypeEntity.setCategories(new ArrayList<>()); // Initialize empty list if null or empty
+            exerciseTypeEntity.setCategories(new ArrayList<>());
         }
 
         ExerciseTypeEntity savedEntity = exerciseTypeRepository.save(exerciseTypeEntity);

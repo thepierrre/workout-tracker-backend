@@ -37,7 +37,7 @@ public class WorkoutEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"trainingRoutines", "password", "email", "workouts"})
+    @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     private UserEntity user;
 
     private String routineName;

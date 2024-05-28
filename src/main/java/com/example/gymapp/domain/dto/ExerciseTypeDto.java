@@ -25,11 +25,14 @@ public class ExerciseTypeDto {
     @JsonIgnore
     private List<ExerciseInstanceDto> exerciseInstances;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
     private UserDto user;
 
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryDto> categories = new ArrayList<>();
+
+    @JsonIgnore
+    private List<RoutineDto> routines;
 
     public ExerciseTypeDto(String id) {
         this.id = UUID.fromString(id);

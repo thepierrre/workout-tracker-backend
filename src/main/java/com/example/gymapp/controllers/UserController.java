@@ -61,7 +61,7 @@ public class UserController {
             UserResponseDto userResponseDto = new UserResponseDto();
             userResponseDto.setUsername(user.get().getUsername());
             userResponseDto.setEmail(user.get().getEmail());
-            userResponseDto.setTrainingRoutines(user.get().getTrainingRoutines().stream()
+            userResponseDto.setRoutines(user.get().getRoutines().stream()
                     .map(routineMapper::mapToDto).toList());
             userResponseDto.setWorkouts(user.get().getWorkouts().stream()
                     .map(workoutMapper::mapToDto).toList());
@@ -99,8 +99,8 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @GetMapping(path = "{userId}/training-routines")
-    public ResponseEntity<List<TrainingRoutineDto>> getTrainingRoutinesForUser(@PathVariable("userId") String userId) {
+    @GetMapping(path = "{userId}/routines")
+    public ResponseEntity<List<RoutineDto>> getTrainingRoutinesForUser(@PathVariable("userId") String userId) {
         UUID id;
         try {
             id = UUID.fromString(userId);
@@ -108,7 +108,7 @@ public class UserController {
             throw new IllegalArgumentException("Provided user ID cannot be converted to a valid UUID");
         }
 
-        List<TrainingRoutineDto> foundTrainingRoutines;
+        List<RoutineDto> foundTrainingRoutines;
         foundTrainingRoutines = new ArrayList<>(userService.getTrainingRoutinesForUser(id));
 
         return ResponseEntity.ok(foundTrainingRoutines);

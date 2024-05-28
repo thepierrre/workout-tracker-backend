@@ -31,12 +31,6 @@ public class WorkoutService {
     RoutineRepository routineRepository;
 
     @Autowired
-    ExerciseInstanceRepository exerciseInstanceRepository;
-
-    @Autowired
-    WorkingSetRepository workingSetRepository;
-
-    @Autowired
     WorkoutMapper workoutMapper;
 
     public List<WorkoutDto> findAll() {
@@ -56,17 +50,20 @@ public class WorkoutService {
         RoutineEntity trainingRoutine = routineRepository.findByName(workoutRequestDto.getRoutineName())
                 .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
-//        WorkoutEntity workoutEntity = workoutMapper.mapFromDto(workoutDto);
         WorkoutEntity workoutEntity = new WorkoutEntity();
         workoutEntity.setCreationDate(LocalDate.now());
         workoutEntity.setUser(user);
         workoutEntity.setRoutineName(workoutRequestDto.getRoutineName());
+        System.out.println(workoutEntity);
 
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
+        List<ExerciseTypeEntity> exerciseTypes = trainingRoutine.getExerciseTypes();
+//        System.out.println(exerciseTypes.size());
+
+        // the for loop isn't entered at all
         for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
             ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
-            System.out.println("initial exerciseInstance" + exerciseInstance);
             exerciseInstance.setExerciseType(exerciseType);
             exerciseInstance.setWorkout(workoutEntity);
 
@@ -82,7 +79,6 @@ public class WorkoutService {
 
             exerciseInstance.setWorkingSets(workingSets);
             exerciseInstances.add(exerciseInstance);
-            System.out.println("exercise instances" + exerciseInstances);
         }
 
         workoutEntity.setExerciseInstances(exerciseInstances);

@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "working_sets")
+@Table(name = "sets")
 public class WorkingSetEntity {
 
     @Id

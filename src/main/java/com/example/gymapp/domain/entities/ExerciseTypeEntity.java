@@ -25,17 +25,21 @@ public class ExerciseTypeEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "exerciseType", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<ExerciseInstanceEntity> exerciseInstances;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
+    @JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
     private UserEntity user;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryEntity> categories;
+
+    @ManyToMany(mappedBy = "exerciseTypes")
+    @JsonIgnore
+    private List<RoutineEntity> routines;
 
 }

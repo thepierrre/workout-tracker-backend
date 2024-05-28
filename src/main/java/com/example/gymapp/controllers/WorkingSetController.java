@@ -12,23 +12,22 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/api/workouts/{workoutId}/exercise-instances/{exerciseInstanceId}/sets")
 public class WorkingSetController {
 
     @Autowired
     WorkingSetService workingSetService;
 
-    @GetMapping(path = "/working-sets")
     public List<WorkingSetDto> findAll() {
         return workingSetService.findAll();
     }
 
-    @PostMapping(path = "/working-sets")
     public ResponseEntity<WorkingSetDto> createWorkingSet(@RequestBody WorkingSetDto workingSetDto) {
         WorkingSetDto createdWorkingSet = workingSetService.createWorkingSet(workingSetDto);
         return new ResponseEntity<>(createdWorkingSet, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/working-sets/{id}")
+    @DeleteMapping(path = "{setId}")
     public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
         workingSetService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

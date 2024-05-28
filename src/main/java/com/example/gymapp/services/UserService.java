@@ -1,6 +1,6 @@
 package com.example.gymapp.services;
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.dto.TrainingRoutineDto;
+import com.example.gymapp.domain.dto.RoutineDto;
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.entities.UserEntity;
@@ -74,14 +74,14 @@ public class UserService {
     }
 
 
-    public List<TrainingRoutineDto> getTrainingRoutinesForUser(UUID id) {
+    public List<RoutineDto> getTrainingRoutinesForUser(UUID id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND
             );
         }
-        return userEntity.get().getTrainingRoutines().stream().map(routineMapper::mapToDto).toList();
+        return userEntity.get().getRoutines().stream().map(routineMapper::mapToDto).toList();
     }
 
     public List<ExerciseTypeDto> getExerciseTypesForUser(UUID id) {

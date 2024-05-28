@@ -15,7 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "training_types")
+@Table(name = "routines")
 public class RoutineEntity {
 
     @Id
@@ -30,7 +30,7 @@ public class RoutineEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"trainingRoutines", "password", "email", "workouts"})
+    @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     private UserEntity user;
 
 //    @OneToMany(mappedBy = "trainingRoutine", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
