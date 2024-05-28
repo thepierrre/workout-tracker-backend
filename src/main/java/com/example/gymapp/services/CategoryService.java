@@ -3,8 +3,11 @@ package com.example.gymapp.services;
 import com.example.gymapp.domain.dto.CategoryDto;
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.entities.CategoryEntity;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.mappers.impl.CategoryMapper;
 import com.example.gymapp.repositories.CategoryRepository;
+import com.example.gymapp.repositories.ExerciseTypeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,9 @@ public class CategoryService {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    ExerciseTypeRepository exerciseTypeRepository;
 
     public CategoryDto createCategory(CategoryDto categoryDto) {
         CategoryEntity createdCategory = categoryRepository.save(categoryMapper.mapFromDto(categoryDto));
@@ -35,6 +41,15 @@ public class CategoryService {
     }
 
     public void deleteById(UUID id) {
+
+        CategoryEntity category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+
+        for (ExerciseTypeEntity exerciseType : category.getExerciseTypes()) {
+            exerciseType.getCategories().remove(category);
+            exerciseTypeRepository.save(exerciseType);
+        }
+
         categoryRepository.deleteById(id);
     }
 }

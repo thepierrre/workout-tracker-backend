@@ -26,8 +26,18 @@ public class CategoryEntity {
 
     private String name;
 
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<ExerciseTypeEntity> exerciseTypes;
+
+    public void addExerciseType(ExerciseTypeEntity exerciseType) {
+        this.exerciseTypes.add(exerciseType);
+        exerciseType.getCategories().add(this);
+    }
+
+    public void removeExerciseType(ExerciseTypeEntity exerciseType) {
+        this.exerciseTypes.remove(exerciseType);
+        exerciseType.getCategories().remove(this);
+    }
 
 }

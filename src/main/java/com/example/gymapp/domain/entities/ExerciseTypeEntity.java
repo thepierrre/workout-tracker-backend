@@ -34,7 +34,12 @@ public class ExerciseTypeEntity {
     @JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
     private UserEntity user;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "exercise_type_category",
+            joinColumns = @JoinColumn(name = "exercise_type_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryEntity> categories;
 
