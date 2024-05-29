@@ -74,9 +74,20 @@ public class ExerciseTypeService {
 
     @Transactional
     public void deleteById(UUID id) {
-        if (!exerciseTypeRepository.existsById(id)) {
-            throw new EntityNotFoundException("Exercise type not found with ID: " + id);
+        ExerciseTypeEntity exerciseType= exerciseTypeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Exercise type not found."));
+
+        for (CategoryEntity category : exerciseType.getCategories()) {
+            category.getExerciseTypes().remove(exerciseType);
+            categoryRepository.save(category);
         }
+
+        UserEntity user = exerciseType.getUser();
+        if (user != null) {
+            user.getExerciseTypes().remove(exerciseType);
+            userRepository.save(user);
+        }
+
         exerciseTypeRepository.deleteById(id);
     }
 

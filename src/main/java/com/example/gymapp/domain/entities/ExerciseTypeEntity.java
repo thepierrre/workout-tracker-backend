@@ -35,16 +35,26 @@ public class ExerciseTypeEntity {
     private UserEntity user;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "exercise_type_category",
-            joinColumns = @JoinColumn(name = "exercise_type_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+//    @JoinTable(
+//            name = "exercise_type_category",
+//            joinColumns = @JoinColumn(name = "exercise_type_id"),
+//            inverseJoinColumns = @JoinColumn(name = "category_id")
+//    )
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryEntity> categories;
 
     @ManyToMany(mappedBy = "exerciseTypes")
     @JsonIgnore
     private List<RoutineEntity> routines;
+
+    public void addCategory(CategoryEntity category) {
+        this.categories.add(category);
+        category.getExerciseTypes().add(this);
+    }
+
+    public void removeCategory(CategoryEntity category) {
+        this.categories.remove(category);
+        category.getExerciseTypes().remove(this);
+    }
 
 }

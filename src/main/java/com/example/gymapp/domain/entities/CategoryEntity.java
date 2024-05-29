@@ -27,7 +27,6 @@ public class CategoryEntity {
     private String name;
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
-    @JsonIgnore
     private List<ExerciseTypeEntity> exerciseTypes;
 
     public void addExerciseType(ExerciseTypeEntity exerciseType) {

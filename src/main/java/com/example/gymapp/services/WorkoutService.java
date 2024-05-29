@@ -59,7 +59,6 @@ public class WorkoutService {
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
         List<ExerciseTypeEntity> exerciseTypes = trainingRoutine.getExerciseTypes();
-//        System.out.println(exerciseTypes.size());
 
         // the for loop isn't entered at all
         for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
