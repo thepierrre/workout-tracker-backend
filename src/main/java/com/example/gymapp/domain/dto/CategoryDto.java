@@ -20,7 +20,7 @@ public class CategoryDto {
 
     private UUID id;
 
-    @NotBlank(message = "Category name cannot be blank.")
+    @NotBlank(message = "Category name cannot be empty.")
     private String name;
 
     @JsonIgnoreProperties("categories")

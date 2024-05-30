@@ -24,6 +24,4 @@ public class RoutineDto {
     @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     private UserDto user;
 
-//    private List<WorkoutDto> workouts;
-
 }

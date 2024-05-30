@@ -33,7 +33,9 @@ public class RoutineEntity {
     @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     private UserEntity user;
 
-//    @OneToMany(mappedBy = "trainingRoutine", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-//    private List<WorkoutEntity> workouts;
+    public void removeExerciseType(ExerciseTypeEntity exerciseType) {
+        this.exerciseTypes.remove(exerciseType);
+        exerciseType.getRoutines().remove(this);
+    }
 
 }

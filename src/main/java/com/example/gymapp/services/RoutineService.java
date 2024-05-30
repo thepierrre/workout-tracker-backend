@@ -9,6 +9,7 @@ import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.RoutineRepository;
 import com.example.gymapp.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,22 @@ public class RoutineService {
                 toList(); }
 
     public void deleteById(UUID id) {
+
+        RoutineEntity routine = routineRepository.findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException("Routine not found."));
+
+        for (ExerciseTypeEntity exerciseType : routine.getExerciseTypes()) {
+            exerciseType.getRoutines().remove(routine);
+            exerciseTypeRepository.save(exerciseType);
+        }
+
+        UserEntity user = routine.getUser();
+        if (user != null) {
+            user.getRoutines().remove(routine);
+            userRepository.save(user);
+        }
+
+
         routineRepository.deleteById(id);
     }
 
