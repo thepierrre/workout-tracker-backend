@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -26,6 +27,7 @@ public class ExerciseInstanceEntity {
     private ExerciseTypeEntity exerciseType;
 
     @OneToMany(mappedBy = "exerciseInstance", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonIgnoreProperties("exerciseInstance")
     private List<WorkingSetEntity> workingSets;
 
     @ManyToOne(fetch = FetchType.EAGER)

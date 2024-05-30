@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class ExerciseInstanceDto {
     @NotNull(message = "Exercise type cannot be null.")
     private ExerciseTypeDto exerciseType;
 
+    @JsonIgnoreProperties("exerciseInstance")
     private List<WorkingSetDto> workingSets;
 
     private WorkoutDto workout;

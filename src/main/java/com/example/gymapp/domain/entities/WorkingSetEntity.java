@@ -24,7 +24,6 @@ public class WorkingSetEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_instance_id", referencedColumnName = "id")
-    @JsonIgnore
     private ExerciseInstanceEntity exerciseInstance;
 
     private Short reps;

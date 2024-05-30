@@ -41,19 +41,19 @@ public class WorkoutService {
     }
 
     @Transactional
-    public WorkoutDto createWorkout(WorkoutRequestDto workoutRequestDto, String username) {
+    public WorkoutDto createWorkout(WorkoutDto workoutDto, String username) {
 
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
-        RoutineEntity trainingRoutine = routineRepository.findByName(workoutRequestDto.getRoutineName())
+        RoutineEntity trainingRoutine = routineRepository.findByName(workoutDto.getRoutineName())
                 .orElseThrow(() -> new EntityNotFoundException("User not found."));
 
-        WorkoutEntity workoutEntity = new WorkoutEntity();
+        WorkoutEntity workoutEntity = workoutMapper.mapFromDto(workoutDto);
         workoutEntity.setCreationDate(LocalDate.now());
         workoutEntity.setUser(user);
-        workoutEntity.setRoutineName(workoutRequestDto.getRoutineName());
-        System.out.println(workoutEntity);
+        workoutEntity.setRoutineName(workoutDto.getRoutineName());
+//        System.out.println(workoutEntity);
 
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
@@ -61,14 +61,15 @@ public class WorkoutService {
 
         // the for loop isn't entered at all
         for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
+//            System.out.println("inside the loop");
             ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
             exerciseInstance.setExerciseType(exerciseType);
             exerciseInstance.setWorkout(workoutEntity);
 
+
             List<WorkingSetEntity> workingSets = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 WorkingSetEntity workingSet = new WorkingSetEntity();
-                System.out.println("initial workingSet" + workingSet);
                 workingSet.setReps((short) 0);
                 workingSet.setWeight((short) 0);
                 workingSet.setExerciseInstance(exerciseInstance);
@@ -80,18 +81,12 @@ public class WorkoutService {
         }
 
         workoutEntity.setExerciseInstances(exerciseInstances);
-        
+
         WorkoutEntity savedWorkoutEntity = workoutRepository.save(workoutEntity);
 
         return workoutMapper.mapToDto(savedWorkoutEntity);
-    }
 
-//    boolean routineExists = user.getTrainingRoutines().stream()
-//            .anyMatch(routine -> routine.getName().equalsIgnoreCase(trainingRoutineDto.getName()));
-//
-//        if (routineExists) {
-//        throw new IllegalArgumentException(" A training routine with this name already exists.");
-//    }
+    }
 
     public void deleteById(UUID id) {
         if (!workoutRepository.existsById(id)) {

@@ -50,9 +50,9 @@ public class WorkoutController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutRequestDto workoutRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workoutDto, @AuthenticationPrincipal UserDetails userDetails) {
 
-        WorkoutDto createdWorkout = workoutService.createWorkout(workoutRequestDto, userDetails.getUsername());
+        WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto, userDetails.getUsername());
         return new ResponseEntity<>(createdWorkout, HttpStatus.CREATED);
     }
 
