@@ -63,16 +63,6 @@ public class UserService {
         return userRepository.existsById(id);
     }
 
-    public UserDto update(UUID id, UserDto userDto) {
-        userDto.setId(id);
-        return userRepository.findById(id).map(existingUser -> {
-            Optional.ofNullable(userDto.getUsername()).ifPresent(existingUser::setUsername);
-            Optional.ofNullable(userDto.getPassword()).ifPresent(existingUser::setPassword);
-            userRepository.save(existingUser);
-            return userMapper.mapToDto(existingUser);
-        }).orElseThrow(() -> new RuntimeException("User does not exist."));
-    }
-
 
     public List<RoutineDto> getTrainingRoutinesForUser(UUID id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);

@@ -29,14 +29,4 @@ public class CategoryEntity {
     @ManyToMany(mappedBy = "categories")
     private List<ExerciseTypeEntity> exerciseTypes;
 
-    public void addExerciseType(ExerciseTypeEntity exerciseType) {
-        this.exerciseTypes.add(exerciseType);
-        exerciseType.getCategories().add(this);
-    }
-
-    public void removeExerciseType(ExerciseTypeEntity exerciseType) {
-        this.exerciseTypes.remove(exerciseType);
-        exerciseType.getCategories().remove(this);
-    }
-
 }

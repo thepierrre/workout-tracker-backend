@@ -42,14 +42,5 @@ public class ExerciseTypeEntity {
     @JsonIgnore
     private List<RoutineEntity> routines;
 
-    public void addCategory(CategoryEntity category) {
-        this.categories.add(category);
-        category.getExerciseTypes().add(this);
-    }
-
-    public void removeCategory(CategoryEntity category) {
-        this.categories.remove(category);
-        category.getExerciseTypes().remove(this);
-    }
 
 }

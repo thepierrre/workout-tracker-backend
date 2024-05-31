@@ -55,10 +55,12 @@ public class WorkoutService {
     public WorkoutDto createWorkout(WorkoutDto workoutDto, String username) {
 
         UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
 
         RoutineEntity trainingRoutine = routineRepository.findByName(workoutDto.getRoutineName())
-                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "User with the name \"%s\" not found.", workoutDto.getRoutineName())));
 
         WorkoutEntity workoutEntity = workoutMapper.mapFromDto(workoutDto);
         workoutEntity.setCreationDate(LocalDate.now());
@@ -96,23 +98,12 @@ public class WorkoutService {
 
     }
 
-    public void deleteById(UUID id) {
+    public void deleteById(UUID workoutId) {
 
-        WorkoutEntity workout = workoutRepository.findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("Workout not found."));
+        WorkoutEntity workout = workoutRepository.findById(workoutId)
+                        .orElseThrow(() -> new EntityNotFoundException(String.format("Workout with the ID %s not found.", workoutId.toString())));
 
-        for (ExerciseInstanceEntity exerciseInstance : workout.getExerciseInstances()) {
-            exerciseInstance.setWorkout(null);
-            exerciseInstanceRepository.delete(exerciseInstance);
-        }
-
-        UserEntity user = workout.getUser();
-        if (user != null) {
-            user.getWorkouts().remove(workout);
-            userRepository.save(user);
-        }
-
-        workoutRepository.deleteById(id);
+        workoutRepository.deleteById(workoutId);
 
     }
 

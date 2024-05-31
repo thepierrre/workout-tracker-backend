@@ -92,15 +92,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(path = "{userId}")
-    public ResponseEntity<UserDto> update(@PathVariable("userId") UUID id, @RequestBody UserDto userDto) {
-        if (!userService.isExists(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        UserDto updatedUser = userService.update(id, userDto);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-    }
-
     @GetMapping(path = "{userId}/routines")
     public ResponseEntity<List<RoutineDto>> getTrainingRoutinesForUser(@PathVariable("userId") String userId) {
         UUID id;

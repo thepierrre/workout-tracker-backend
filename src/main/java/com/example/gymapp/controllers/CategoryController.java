@@ -34,9 +34,9 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
-        categoryService.deleteById(id);
+    @DeleteMapping(path = "{categoryId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("categoryId") UUID categoryId) {
+        categoryService.deleteById(categoryId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

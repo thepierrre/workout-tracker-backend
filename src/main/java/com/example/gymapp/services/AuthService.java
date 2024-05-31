@@ -59,7 +59,7 @@ public class AuthService {
 
             response.addCookie(cookie);
 
-            return new ResponseEntity<>("User logged in.", HttpStatus.OK);
+            return new ResponseEntity<>("User " + loginDto.getUsername() + " logged in.", HttpStatus.OK);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid username or password.", HttpStatus.UNAUTHORIZED);
         }
@@ -79,7 +79,7 @@ public class AuthService {
     public ResponseEntity<String> register(RegisterDto registerDto) {
 
         if (userRepository.existsByUsername(registerDto.getUsername())) {
-            return new ResponseEntity<>("This username is already taken.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("The username " + registerDto.getUsername() + " is already taken.", HttpStatus.BAD_REQUEST);
         }
 
         try {

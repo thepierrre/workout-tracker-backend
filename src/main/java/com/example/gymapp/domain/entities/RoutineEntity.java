@@ -33,9 +33,4 @@ public class RoutineEntity {
     @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     private UserEntity user;
 
-    public void removeExerciseType(ExerciseTypeEntity exerciseType) {
-        this.exerciseTypes.remove(exerciseType);
-        exerciseType.getRoutines().remove(this);
-    }
-
 }

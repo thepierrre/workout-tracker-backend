@@ -31,14 +31,21 @@ public class WorkingSetController {
         return new ResponseEntity<>(sets, HttpStatus.OK);
     }
 
+    @PostMapping(path = "sets")
     public ResponseEntity<WorkingSetDto> createWorkingSet(@RequestBody WorkingSetDto workingSetDto) {
         WorkingSetDto createdWorkingSet = workingSetService.createWorkingSet(workingSetDto);
         return new ResponseEntity<>(createdWorkingSet, HttpStatus.CREATED);
     }
 
+    @PatchMapping(path = "sets/{setId}")
+    public ResponseEntity<WorkingSetDto> patchById(@PathVariable("setId") UUID setId, WorkingSetDto workingSetDto) {
+        WorkingSetDto patchedWorkingSet = workingSetService.patchById(setId, workingSetDto);
+        return new ResponseEntity<>(patchedWorkingSet, HttpStatus.OK);
+    }
+
     @DeleteMapping(path = "sets/{setId}")
-    public ResponseEntity<Void> deleteById(@PathVariable("setId") UUID id) {
-        workingSetService.deleteById(id);
+    public ResponseEntity<Void> deleteById(@PathVariable("setId") UUID setId) {
+        workingSetService.deleteById(setId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

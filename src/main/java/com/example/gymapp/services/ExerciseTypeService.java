@@ -47,7 +47,8 @@ public class ExerciseTypeService {
     public ExerciseTypeDto createExercise(ExerciseTypeDto exerciseTypeDto, String username) {
 
         UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
 
         ExerciseTypeEntity exerciseTypeEntity = exerciseTypeMapper.mapFromDto(exerciseTypeDto);
         exerciseTypeEntity.setUser(user);
@@ -55,7 +56,8 @@ public class ExerciseTypeService {
         if (exerciseTypeDto.getCategories() != null && !exerciseTypeDto.getCategories().isEmpty()) {
             List<CategoryEntity> categories = exerciseTypeDto.getCategories().stream()
                     .map(categoryDto -> categoryRepository.findById(categoryDto.getId())
-                            .orElseThrow(() -> new IllegalArgumentException("Category not found: " + categoryDto.getId())))
+                            .orElseThrow(() -> new EntityNotFoundException(String.format(
+                                    "Category with the ID %s not found.", categoryDto.getId().toString()))))
                     .collect(Collectors.toList());
             exerciseTypeEntity.setCategories(categories);
         } else {
@@ -77,8 +79,10 @@ public class ExerciseTypeService {
     }
 
     public List<ExerciseTypeDto> findAllForUser(String username) {
+
         UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
 
         return user.getExerciseTypes().stream()
                 .map(exerciseType -> exerciseTypeMapper.mapToDto(exerciseType)).toList();
@@ -86,32 +90,12 @@ public class ExerciseTypeService {
     }
 
     @Transactional
-    public void deleteById(UUID id) {
-        ExerciseTypeEntity exerciseType= exerciseTypeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Exercise type not found."));
+    public void deleteById(UUID exerciseTypeId) {
+        ExerciseTypeEntity exerciseType= exerciseTypeRepository.findById(exerciseTypeId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Exercise type with the ID %s not found.", exerciseTypeId.toString())));
 
-        for (CategoryEntity category : exerciseType.getCategories()) {
-            category.getExerciseTypes().remove(exerciseType);
-            categoryRepository.save(category);
-        }
-
-        for (RoutineEntity routine : exerciseType.getRoutines()) {
-            routine.getExerciseTypes().remove(exerciseType);
-            routineRepository.save(routine);
-        }
-
-        for (ExerciseInstanceEntity exerciseInstance : exerciseType.getExerciseInstances()) {
-            exerciseInstance.setExerciseType(null);
-            exerciseInstanceRepository.save(exerciseInstance);
-        }
-
-        UserEntity user = exerciseType.getUser();
-        if (user != null) {
-            user.getExerciseTypes().remove(exerciseType);
-            userRepository.save(user);
-        }
-
-        exerciseTypeRepository.deleteById(id);
+        exerciseTypeRepository.deleteById(exerciseTypeId);
     }
 
     public void deleteAll() {

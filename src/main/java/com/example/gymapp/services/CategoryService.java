@@ -40,16 +40,12 @@ public class CategoryService {
         categoryRepository.deleteAll();
     }
 
-    public void deleteById(UUID id) {
+    public void deleteById(UUID categoryId) {
 
-        CategoryEntity category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        CategoryEntity category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Category with the ID %s not found.", categoryId.toString())));
 
-        for (ExerciseTypeEntity exerciseType : category.getExerciseTypes()) {
-            exerciseType.getCategories().remove(category);
-            exerciseTypeRepository.save(exerciseType);
-        }
-
-        categoryRepository.deleteById(id);
+        categoryRepository.deleteById(categoryId);
     }
 }

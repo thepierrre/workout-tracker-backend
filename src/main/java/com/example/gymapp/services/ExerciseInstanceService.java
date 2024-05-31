@@ -32,7 +32,8 @@ public class ExerciseInstanceService {
 
     public List<ExerciseInstanceDto> findAllForWorkout(UUID workoutId) {
         WorkoutEntity workout = workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new EntityNotFoundException("Workout not found."));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Workout with the ID %s not found.", workoutId.toString())));
 
         return workout.getExerciseInstances().stream()
                 .map(exerciseInstanceEntity -> exerciseInstanceMapper.mapToDto(exerciseInstanceEntity)).toList();
@@ -44,11 +45,25 @@ public class ExerciseInstanceService {
         return exerciseInstanceMapper.mapToDto(exerciseInstanceEntity);
     }
 
+//    public ExerciseInstanceDto patchById(UUID exerciseInstanceId) {
+//        ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
+//                .orElseThrow(() -> new EntityNotFoundException(String.format(
+//                        "Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
+//
+//
+//
+//    }
+
     public void deleteAll() {
         exerciseInstanceRepository.deleteAll();
     }
 
-    public void deleteById(UUID id) {
-        exerciseInstanceRepository.deleteById(id);
+    public void deleteById(UUID exerciseInstanceId) {
+
+        ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
+
+        exerciseInstanceRepository.deleteById(exerciseInstanceId);
     }
 }

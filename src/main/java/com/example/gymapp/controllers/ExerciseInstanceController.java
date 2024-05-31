@@ -62,10 +62,16 @@ public class ExerciseInstanceController {
     }
 
     @DeleteMapping(path = "exercise-instances/{exerciseInstanceId}")
-    public ResponseEntity<Void> deleteById(@PathVariable("exerciseInstanceId") UUID id) {
-        exerciseInstanceService.deleteById(id);
+    public ResponseEntity<Void> deleteById(@PathVariable("exerciseInstanceId") UUID exerciseInstanceId) {
+        exerciseInstanceService.deleteById(exerciseInstanceId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+//    @PatchMapping(path = "exercise-instances/{exerciseInstanceId}")
+//    public ResponseEntity<ExerciseInstanceDto> patchById(@PathVariable("exerciseInstanceId") UUID exerciseInstanceId) {
+//        ExerciseInstanceDto patchedExerciseInstance = exerciseInstanceService.patchById(exerciseInstanceId);
+//        return new ResponseEntity<>(patchedExerciseInstance, HttpStatus.OK);
+//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

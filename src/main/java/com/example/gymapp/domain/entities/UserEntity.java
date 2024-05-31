@@ -48,15 +48,4 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ExerciseTypeEntity> exerciseTypes;
 
-    public void addExerciseType(ExerciseTypeEntity exerciseType) {
-        this.exerciseTypes.add(exerciseType);
-        exerciseType.setUser(this);
-    }
-
-    public void removeExerciseType(ExerciseTypeEntity exerciseType) {
-        this.exerciseTypes.remove(exerciseType);
-        exerciseType.setUser(null);
-    }
-
-
 }
