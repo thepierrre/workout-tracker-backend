@@ -31,11 +31,11 @@ public class WorkoutEntity {
     @CreationTimestamp
     private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"exerciseType", "workout"})
     private List<ExerciseInstanceEntity> exerciseInstances;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     private UserEntity user;

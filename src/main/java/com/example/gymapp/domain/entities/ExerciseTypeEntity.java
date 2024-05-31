@@ -25,21 +25,16 @@ public class ExerciseTypeEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ExerciseInstanceEntity> exerciseInstances;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
     private UserEntity user;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "exercise_type_category",
-//            joinColumns = @JoinColumn(name = "exercise_type_id"),
-//            inverseJoinColumns = @JoinColumn(name = "category_id")
-//    )
+    @ManyToMany
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryEntity> categories;
 

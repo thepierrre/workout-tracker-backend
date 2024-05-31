@@ -36,8 +36,8 @@ public class WorkingSetController {
         return new ResponseEntity<>(createdWorkingSet, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "{setId}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
+    @DeleteMapping(path = "sets/{setId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("setId") UUID id) {
         workingSetService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

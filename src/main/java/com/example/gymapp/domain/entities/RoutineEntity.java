@@ -28,7 +28,7 @@ public class RoutineEntity {
     @JsonIgnoreProperties("exerciseInstances")
     private List<ExerciseTypeEntity> exerciseTypes;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     private UserEntity user;

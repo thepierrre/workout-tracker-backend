@@ -26,7 +26,7 @@ public class CategoryEntity {
 
     private String name;
 
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "categories")
     private List<ExerciseTypeEntity> exerciseTypes;
 
     public void addExerciseType(ExerciseTypeEntity exerciseType) {

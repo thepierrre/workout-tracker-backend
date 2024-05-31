@@ -61,7 +61,7 @@ public class ExerciseInstanceController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "workouts/{workoutId}/exercise-instances/{exerciseInstanceId}")
+    @DeleteMapping(path = "exercise-instances/{exerciseInstanceId}")
     public ResponseEntity<Void> deleteById(@PathVariable("exerciseInstanceId") UUID id) {
         exerciseInstanceService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

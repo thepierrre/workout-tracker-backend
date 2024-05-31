@@ -22,7 +22,7 @@ public class WorkingSetEntity {
     @UuidGenerator
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "exercise_instance_id", referencedColumnName = "id")
     private ExerciseInstanceEntity exerciseInstance;
 
