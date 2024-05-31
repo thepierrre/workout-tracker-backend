@@ -34,6 +34,11 @@ public class WorkingSetService {
         return workingSetMapper.mapToDto(createdWorkingSet);
     }
 
+    public List<WorkingSetDto> findAll() {
+        return workingSetRepository.findAll().stream()
+                .map(set -> workingSetMapper.mapToDto(set)).toList();
+    }
+
     public List<WorkingSetDto> findAllForExerciseInstance(UUID exerciseInstanceId) {
 
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)

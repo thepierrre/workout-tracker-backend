@@ -30,6 +30,9 @@ public class WorkoutService {
     RoutineRepository routineRepository;
 
     @Autowired
+    ExerciseInstanceRepository exerciseInstanceRepository;
+
+    @Autowired
     WorkoutMapper workoutMapper;
 
     public List<WorkoutDto> findAll() {
@@ -61,15 +64,12 @@ public class WorkoutService {
         workoutEntity.setCreationDate(LocalDate.now());
         workoutEntity.setUser(user);
         workoutEntity.setRoutineName(workoutDto.getRoutineName());
-//        System.out.println(workoutEntity);
 
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
         List<ExerciseTypeEntity> exerciseTypes = trainingRoutine.getExerciseTypes();
-
-        // the for loop isn't entered at all
+        
         for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
-//            System.out.println("inside the loop");
             ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
             exerciseInstance.setExerciseType(exerciseType);
             exerciseInstance.setWorkout(workoutEntity);
@@ -97,19 +97,23 @@ public class WorkoutService {
     }
 
     public void deleteById(UUID id) {
-        if (!workoutRepository.existsById(id)) {
-            throw new IllegalArgumentException("Workout not found");
+
+        WorkoutEntity workout = workoutRepository.findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException("Workout not found."));
+
+        for (ExerciseInstanceEntity exerciseInstance : workout.getExerciseInstances()) {
+            exerciseInstance.setWorkout(null);
+            exerciseInstanceRepository.delete(exerciseInstance);
         }
 
-        try {
-            workoutRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to delete workout");
+        UserEntity user = workout.getUser();
+        if (user != null) {
+            user.getWorkouts().remove(workout);
+            userRepository.save(user);
         }
 
-        if (workoutRepository.existsById(id)) {
-            throw new RuntimeException("Workout was not deleted");
-        }
+        workoutRepository.deleteById(id);
+
     }
 
     public void deleteAll() {

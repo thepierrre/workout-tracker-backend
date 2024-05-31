@@ -42,4 +42,9 @@ public class WorkoutEntity {
 
     private String routineName;
 
+    public void removeExerciseInstance(ExerciseInstanceEntity exerciseInstance) {
+        this.exerciseInstances.remove(exerciseInstance);
+        exerciseInstance.setWorkout(null);
+    }
+
 }

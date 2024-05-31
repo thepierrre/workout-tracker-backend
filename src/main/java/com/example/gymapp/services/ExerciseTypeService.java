@@ -1,16 +1,10 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.entities.CategoryEntity;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-import com.example.gymapp.domain.entities.RoutineEntity;
-import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
-import com.example.gymapp.repositories.CategoryRepository;
-import com.example.gymapp.repositories.ExerciseTypeRepository;
-import com.example.gymapp.repositories.RoutineRepository;
-import com.example.gymapp.repositories.UserRepository;
+import com.example.gymapp.repositories.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,6 +36,9 @@ public class ExerciseTypeService {
 
     @Autowired
     RoutineRepository routineRepository;
+
+    @Autowired
+    ExerciseInstanceRepository exerciseInstanceRepository;
 
     public ExerciseTypeService(ExerciseTypeRepository exerciseTypeRepository) {
         this.exerciseTypeRepository = exerciseTypeRepository;
@@ -101,6 +98,11 @@ public class ExerciseTypeService {
         for (RoutineEntity routine : exerciseType.getRoutines()) {
             routine.getExerciseTypes().remove(exerciseType);
             routineRepository.save(routine);
+        }
+
+        for (ExerciseInstanceEntity exerciseInstance : exerciseType.getExerciseInstances()) {
+            exerciseInstance.setExerciseType(null);
+            exerciseInstanceRepository.save(exerciseInstance);
         }
 
         UserEntity user = exerciseType.getUser();

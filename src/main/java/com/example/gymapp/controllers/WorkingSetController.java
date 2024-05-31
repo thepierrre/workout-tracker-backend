@@ -12,10 +12,17 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/api")
 public class WorkingSetController {
 
     @Autowired
     WorkingSetService workingSetService;
+
+    @GetMapping(path = "sets")
+    public ResponseEntity<List<WorkingSetDto>> findAll() {
+        List<WorkingSetDto> sets = workingSetService.findAll();
+        return new ResponseEntity<>(sets, HttpStatus.OK);
+    }
 
     @GetMapping(path = "{exerciseInstanceId}/sets")
     public ResponseEntity<List<WorkingSetDto>> findAllForExerciseInstance(@PathVariable("exerciseInstanceId") UUID exerciseInstanceId) {
