@@ -39,8 +39,10 @@ public class UserController {
     ExerciseTypeMapper exerciseTypeMapper;
 
     @GetMapping
-    public List<UserDto> getAll() {
-        return userService.findAll();
+    public ResponseEntity<List<UserDto>> findAll() {
+
+        List<UserDto> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping(path = "{userId}")

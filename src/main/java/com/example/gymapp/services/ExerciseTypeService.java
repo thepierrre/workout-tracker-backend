@@ -73,8 +73,19 @@ public class ExerciseTypeService {
 
     }
 
-    public List<ExerciseTypeEntity> findAll() {
-        return exerciseTypeRepository.findAll();
+    public List<ExerciseTypeDto> findAll() {
+
+        return exerciseTypeRepository.findAll().stream()
+                .map(exerciseType -> exerciseTypeMapper.mapToDto(exerciseType)).toList();
+    }
+
+    public List<ExerciseTypeDto> findAllForUser(String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+
+        return user.getExerciseTypes().stream()
+                .map(exerciseType -> exerciseTypeMapper.mapToDto(exerciseType)).toList();
+
     }
 
     @Transactional

@@ -12,14 +12,16 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/workouts/{workoutId}/exercise-instances/{exerciseInstanceId}/sets")
 public class WorkingSetController {
 
     @Autowired
     WorkingSetService workingSetService;
 
-    public List<WorkingSetDto> findAll() {
-        return workingSetService.findAll();
+    @GetMapping(path = "{exerciseInstanceId}/sets")
+    public ResponseEntity<List<WorkingSetDto>> findAllForExerciseInstance(@PathVariable("exerciseInstanceId") UUID exerciseInstanceId) {
+
+        List<WorkingSetDto> sets = workingSetService.findAllForExerciseInstance(exerciseInstanceId);
+        return new ResponseEntity<>(sets, HttpStatus.OK);
     }
 
     public ResponseEntity<WorkingSetDto> createWorkingSet(@RequestBody WorkingSetDto workingSetDto) {

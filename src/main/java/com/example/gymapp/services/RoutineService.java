@@ -81,6 +81,16 @@ public class RoutineService {
                 findAll().stream().map(routineMapper::mapToDto).
                 toList(); }
 
+    public List<RoutineDto> findAllForUser(String username) {
+
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+
+        return user.getRoutines().stream()
+                .map(routineEntity -> routineMapper.mapToDto(routineEntity)).toList();
+
+    }
+
     public void deleteById(UUID id) {
 
         RoutineEntity routine = routineRepository.findById(id)

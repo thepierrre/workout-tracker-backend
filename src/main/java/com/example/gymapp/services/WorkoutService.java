@@ -36,6 +36,14 @@ public class WorkoutService {
         return workoutRepository.findAll().stream().map(workoutMapper::mapToDto).toList();
     }
 
+    public List<WorkoutDto> findAllForUser(String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+
+        return user.getWorkouts().stream()
+                .map(workoutEntity -> workoutMapper.mapToDto(workoutEntity)).toList();
+    }
+
     public Optional<WorkoutEntity> findById(UUID id) {
         return workoutRepository.findById(id);
     }

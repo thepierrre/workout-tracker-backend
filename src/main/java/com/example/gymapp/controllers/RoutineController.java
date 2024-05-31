@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/routines")
+@RequestMapping("/api")
 public class RoutineController {
 
     @Autowired
@@ -27,24 +27,33 @@ public class RoutineController {
     @Autowired
     private Mapper<RoutineEntity, RoutineDto> trainingTypeMapper;
 
-    @PostMapping
+    @PostMapping(path = "routines")
     public ResponseEntity<RoutineDto> createTrainingRoutine(@Valid @RequestBody RoutineDto trainingRoutineDto, @AuthenticationPrincipal UserDetails userDetails) {
         RoutineDto createdTrainingRoutine = routineService.createRoutine(trainingRoutineDto, userDetails.getUsername());
         return new ResponseEntity<>(createdTrainingRoutine, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public List<RoutineDto> getAll() {
-        return routineService.findAll();
+    @GetMapping(path = "routines")
+    public ResponseEntity<List<RoutineDto>> findAll() {
+
+        List<RoutineDto> routines = routineService.findAll();
+        return new ResponseEntity<>(routines, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "{routineId}")
+    @GetMapping(path = "user-routines")
+    public ResponseEntity<List<RoutineDto>> findAllForUser(@AuthenticationPrincipal UserDetails userDetails) {
+        List<RoutineDto> routines = routineService.findAllForUser(userDetails.getUsername());
+        return new ResponseEntity<>(routines, HttpStatus.OK);
+    }
+
+
+    @DeleteMapping(path = "routines/{routineId}")
     public ResponseEntity<Void> deleteById(@PathVariable("routineId") UUID id) {
         routineService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping
+    @DeleteMapping(path = "routines")
     public ResponseEntity<Void> deleteAll() {
         routineService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

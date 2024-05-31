@@ -2,8 +2,11 @@ package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
+import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.Mapper;
+import com.example.gymapp.repositories.WorkoutRepository;
 import com.example.gymapp.services.ExerciseInstanceService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/workouts/{workoutId}/exercise-instances")
+@RequestMapping("/api")
 public class ExerciseInstanceController {
 
     @Autowired
@@ -29,24 +32,36 @@ public class ExerciseInstanceController {
     @Autowired
     private Mapper<ExerciseInstanceEntity, ExerciseInstanceDto> exerciseInstanceMapper;
 
-    @GetMapping
-    public List<ExerciseInstanceDto> findAll() {
-        return exerciseInstanceService.findAll();
+
+    @GetMapping(path = "exercise-instances")
+    public ResponseEntity<List<ExerciseInstanceDto>> findAll() {
+
+        List<ExerciseInstanceDto> exerciseInstances = exerciseInstanceService.findAll();
+        return new ResponseEntity<>(exerciseInstances, HttpStatus.OK);
     }
 
-    @PostMapping
+    @GetMapping(path = "workouts/{workoutId}/exercise-instances")
+    public ResponseEntity<List<ExerciseInstanceDto>> findAllForWorkout(@PathVariable("workoutId") UUID workoutId) {
+
+        List<ExerciseInstanceDto> exerciseInstances = exerciseInstanceService.findAllForWorkout(workoutId);
+
+        return new ResponseEntity<>(exerciseInstances, HttpStatus.OK);
+
+    }
+
+    @PostMapping(path = "exercise-instances")
     public ResponseEntity<ExerciseInstanceDto> createExerciseInstance(@Valid @RequestBody ExerciseInstanceDto exerciseInstanceDto) {
         ExerciseInstanceDto createdExerciseInstance = exerciseInstanceService.createExerciseInstance(exerciseInstanceDto);
         return new ResponseEntity<>(createdExerciseInstance, HttpStatus.CREATED);
     }
 
-    @DeleteMapping
+    @DeleteMapping(path = "exercise-instances")
     public ResponseEntity<Void> deleteAll() {
         exerciseInstanceService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "{exerciseInstanceId}")
+    @DeleteMapping(path = "workouts/{workoutId}/exercise-instances/{exerciseInstanceId")
     public ResponseEntity<Void> deleteById(@PathVariable("exerciseInstanceId") UUID id) {
         exerciseInstanceService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -3,6 +3,7 @@ package com.example.gymapp.controllers;
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.dto.WorkoutRequestDto;
+import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,7 @@ import java.util.*;
 
 
 @RestController
-@RequestMapping("/api/workouts")
+@RequestMapping("/api")
 public class WorkoutController {
 
     @Autowired
@@ -33,12 +35,22 @@ public class WorkoutController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping
-    public List<WorkoutDto> findAll() {
-        return workoutService.findAll();
+    @GetMapping(path = "workouts")
+    public ResponseEntity<List<WorkoutDto>> findAll() {
+
+        List<WorkoutDto> workouts = workoutService.findAll();
+        return new ResponseEntity<>(workouts, HttpStatus.OK);
     }
 
-    @GetMapping(path = "{workoutId}")
+    @GetMapping(path = "user-workouts")
+    public ResponseEntity<List<WorkoutDto>> findAllForUser(@AuthenticationPrincipal UserDetails userDetails) {
+
+        List<WorkoutDto> workouts = workoutService.findAllForUser(userDetails.getUsername());
+        return new ResponseEntity<>(workouts, HttpStatus.OK);
+
+    }
+
+    @GetMapping(path = "workouts/{workoutId}")
     public ResponseEntity<WorkoutDto> findById(@PathVariable("workoutId") UUID id) {
         Optional<WorkoutEntity> workout = workoutService.findById(id);
         if (workout.isEmpty()) {
@@ -49,14 +61,14 @@ public class WorkoutController {
         }
     }
 
-    @PostMapping
+    @PostMapping(path = "workouts")
     public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workoutDto, @AuthenticationPrincipal UserDetails userDetails) {
 
         WorkoutDto createdWorkout = workoutService.createWorkout(workoutDto, userDetails.getUsername());
         return new ResponseEntity<>(createdWorkout, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{workoutId}")
+    @DeleteMapping("workouts/{workoutId}")
     public ResponseEntity<Void> deleteById(@PathVariable("workoutId") UUID id) {
         try {
             workoutService.deleteById(id);
@@ -68,7 +80,7 @@ public class WorkoutController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping(path = "workouts")
     public ResponseEntity<Void> deleteAll() {
         workoutService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
