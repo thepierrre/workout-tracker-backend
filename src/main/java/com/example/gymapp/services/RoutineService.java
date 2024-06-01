@@ -1,10 +1,12 @@
 package com.example.gymapp.services;
 
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.RoutineDto;
 import com.example.gymapp.domain.entities.CategoryEntity;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.RoutineRepository;
@@ -28,6 +30,9 @@ public class RoutineService {
 
     @Autowired
     private RoutineMapper routineMapper;
+
+    @Autowired
+    ExerciseTypeMapper exerciseTypeMapper;
 
     @Autowired
     private UserRepository userRepository;
@@ -85,6 +90,30 @@ public class RoutineService {
 
         return user.getRoutines().stream()
                 .map(routineEntity -> routineMapper.mapToDto(routineEntity)).toList();
+
+    }
+
+    public RoutineDto updateById(UUID id, RoutineDto routineDto) {
+
+        RoutineEntity existingRoutine = routineRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Routine type with the ID %s not found.", id.toString())));
+
+        existingRoutine.setId(routineDto.getId());
+        existingRoutine.setName(routineDto.getName());
+
+        existingRoutine.setUser(existingRoutine.getUser());
+
+        List<ExerciseTypeEntity> newExercises = routineDto.getExerciseTypes().stream()
+                .map(exerciseTypeDto -> exerciseTypeMapper.mapFromDto(exerciseTypeDto)).toList();
+
+        existingRoutine.getExerciseTypes().clear();
+        existingRoutine.getExerciseTypes().addAll(newExercises);
+
+        RoutineEntity updatedRoutine = routineRepository.save(existingRoutine);
+
+        return routineMapper.mapToDto(updatedRoutine);
+
 
     }
 

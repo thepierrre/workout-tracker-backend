@@ -1,5 +1,6 @@
 package com.example.gymapp.controllers;
 
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.RoutineDto;
 import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.mappers.Mapper;
@@ -44,6 +45,15 @@ public class RoutineController {
     public ResponseEntity<List<RoutineDto>> findAllForUser(@AuthenticationPrincipal UserDetails userDetails) {
         List<RoutineDto> routines = routineService.findAllForUser(userDetails.getUsername());
         return new ResponseEntity<>(routines, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "routines/{routineId}")
+    public ResponseEntity<RoutineDto> updateById(
+            @PathVariable("routineId") UUID routineId,
+            @RequestBody RoutineDto routineDto
+    ) {
+        RoutineDto patchedRoutine = routineService.updateById(routineId, routineDto);
+        return new ResponseEntity<>(patchedRoutine, HttpStatus.OK);
     }
 
 
