@@ -2,6 +2,7 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.entities.*;
+import com.example.gymapp.mappers.impl.CategoryMapper;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.repositories.*;
@@ -27,6 +28,9 @@ public class ExerciseTypeService {
 
     @Autowired
     RoutineMapper routineMapper;
+
+    @Autowired
+    CategoryMapper categoryMapper;
 
     @Autowired
     UserRepository userRepository;
@@ -112,16 +116,28 @@ public class ExerciseTypeService {
         exerciseTypeRepository.deleteAll();
     }
 
-    public boolean isExists(UUID id) {
-        return exerciseTypeRepository.existsById(id);
-    }
 
-    public ExerciseTypeDto update(UUID id, ExerciseTypeDto exerciseTypeDto) {
-        exerciseTypeDto.setId(id);
-        return exerciseTypeRepository.findById(id).map(existingExercise -> {
-            Optional.ofNullable(exerciseTypeDto.getName()).ifPresent(existingExercise::setName);
-            exerciseTypeRepository.save(existingExercise);
-            return exerciseTypeMapper.mapToDto(existingExercise);
-        }).orElseThrow(() -> new RuntimeException("Exercise does not exist"));
+    public ExerciseTypeDto updateById(UUID id, ExerciseTypeDto exerciseTypeDto) {
+
+        ExerciseTypeEntity existingExercise = exerciseTypeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Exercise type with the ID %s not found.", id.toString())));
+
+        existingExercise.setName(exerciseTypeDto.getName());
+        existingExercise.setId(exerciseTypeDto.getId());
+        existingExercise.setUser(existingExercise.getUser());
+        existingExercise.setRoutines(existingExercise.getRoutines());
+
+        List<CategoryEntity> newCategories = exerciseTypeDto.getCategories().stream()
+                .map(categoryDto -> categoryMapper.mapFromDto(categoryDto)).toList();
+
+        existingExercise.getCategories().clear();
+        existingExercise.getCategories().addAll(newCategories);
+
+        ExerciseTypeEntity updatedExercise = exerciseTypeRepository.save(existingExercise);
+
+        return exerciseTypeMapper.mapToDto(updatedExercise);
+
+
     }
 }

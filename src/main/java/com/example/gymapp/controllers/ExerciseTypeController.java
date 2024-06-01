@@ -64,16 +64,13 @@ public class ExerciseTypeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(path = "exercise-types/{exerciseTypeId}")
-    public ResponseEntity<ExerciseTypeDto> update(
-            @PathVariable("exerciseTypeId") UUID id,
+    @PutMapping(path = "exercise-types/{exerciseTypeId}")
+    public ResponseEntity<ExerciseTypeDto> updateById(
+            @PathVariable("exerciseTypeId") UUID exerciseTypeId,
             @RequestBody ExerciseTypeDto exerciseTypeDto
     ) {
-        if(!exerciseTypeService.isExists(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        ExerciseTypeDto updatedExerciseType = exerciseTypeService.update(id, exerciseTypeDto);
-        return new ResponseEntity<>(updatedExerciseType, HttpStatus.OK);
+        ExerciseTypeDto patchedExerciseType = exerciseTypeService.updateById(exerciseTypeId, exerciseTypeDto);
+        return new ResponseEntity<>(patchedExerciseType, HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
