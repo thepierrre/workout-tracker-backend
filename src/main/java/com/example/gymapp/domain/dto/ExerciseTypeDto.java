@@ -2,6 +2,7 @@ package com.example.gymapp.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +21,8 @@ public class ExerciseTypeDto {
 
     private UUID id;
 
+    @NotBlank(message = "Exercise name cannot be empty.")
     private String name;
-
-//    @JsonIgnore
-//    private List<ExerciseInstanceDto> exerciseInstances;
 
     @JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
     private UserDto user;

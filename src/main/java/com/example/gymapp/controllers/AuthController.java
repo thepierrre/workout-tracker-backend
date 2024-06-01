@@ -10,6 +10,7 @@ import com.example.gymapp.services.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,18 +43,18 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
         return authService.login(loginDto, response);
     }
 
     @PostMapping("logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        ResponseEntity<Void> logoutResponse = authService.logout(request, response);
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        ResponseEntity<String> logoutResponse = authService.logout(request, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterDto registerDto) {
         return authService.register(registerDto);
 
     }

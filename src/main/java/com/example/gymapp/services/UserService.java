@@ -3,6 +3,9 @@ import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.RoutineDto;
 import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
+import com.example.gymapp.domain.entities.Role;
+import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
@@ -12,6 +15,7 @@ import com.example.gymapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
@@ -48,14 +52,21 @@ public class UserService {
     }
 
     public void deleteById(UUID id) {
-        Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+//        UserEntity user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+//                        "User with the username \"%s\" not found.", username)));
+
+//        for (ExerciseTypeEntity exerciseType : category.getExerciseTypes()) {
+//            exerciseType.getCategories().remove(category);
+//            exerciseTypeRepository.save(exerciseType);
+//        }
+
+
         userRepository.deleteById(id);
     }
 
     public void deleteAll() {
+
         userRepository.deleteAll();
     }
 

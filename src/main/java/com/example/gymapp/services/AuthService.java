@@ -7,6 +7,7 @@ import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.repositories.RoleRepository;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.security.JWTGenerator;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,16 @@ public class AuthService {
 
     public ResponseEntity<String> login(LoginDto loginDto, HttpServletResponse response) {
         try {
+
+            UserEntity user = userRepository.findByUsername(loginDto.getUsername())
+                    .orElseThrow(() -> new AuthenticationException(
+                            "Invalid username or password.") {
+                    });
+
+            if (!passwordEncoder.encode(loginDto.getPassword()).equals(user.getPassword())) {
+                return new ResponseEntity<>("Invalid username or password.", HttpStatus.UNAUTHORIZED);
+            }
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
                             loginDto.getPassword()));
@@ -59,19 +71,21 @@ public class AuthService {
 
             response.addCookie(cookie);
 
-            return new ResponseEntity<>("User " + loginDto.getUsername() + " logged in.", HttpStatus.OK);
+            return new ResponseEntity<>("User \"" + loginDto.getUsername() + "\" logged in.", HttpStatus.OK);
         } catch (AuthenticationException e) {
-            return new ResponseEntity<>("Invalid username or password.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Logging in failed due to an unexpected error.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         try {
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Logging out successful.", HttpStatus.OK);
         } catch (AuthenticationException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Logging out failed due to an unexpected error.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -79,7 +93,10 @@ public class AuthService {
     public ResponseEntity<String> register(RegisterDto registerDto) {
 
         if (userRepository.existsByUsername(registerDto.getUsername())) {
-            return new ResponseEntity<>("The username " + registerDto.getUsername() + " is already taken.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User with the username \"" + registerDto.getUsername() + "\" already exists.", HttpStatus.CONFLICT);
+        }
+        if (userRepository.existsByEmail(registerDto.getEmail())) {
+            return new ResponseEntity<>("User with the e-mail \"" + registerDto.getEmail() + "\" already exists.", HttpStatus.CONFLICT);
         }
 
         try {
@@ -88,15 +105,18 @@ public class AuthService {
             user.setEmail(registerDto.getEmail());
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
-            Role roles = roleRepository.findByName("USER").get();
-            user.setRoles(Collections.singletonList(roles));
+            Role role = roleRepository.findByName("USER")
+                            .orElseThrow(
+                                    () -> new EntityNotFoundException(
+                                            "Cannot register a new user because the \"USER\" role hasn't been set."));
+            user.setRoles(Collections.singletonList(role));
 
             userRepository.save(user);
 
-            return new ResponseEntity<>("User registered!", HttpStatus.OK);
+            return new ResponseEntity<>("User \"" + registerDto.getUsername() + "\" registered.", HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Registration failed due to an unexpected error",
+            return new ResponseEntity<>("Registration failed due to an unexpected error.",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
