@@ -25,9 +25,9 @@ public class ExerciseTypeEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<ExerciseInstanceEntity> exerciseInstances;
+//    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private List<ExerciseInstanceEntity> exerciseInstances;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -35,6 +35,11 @@ public class ExerciseTypeEntity {
     private UserEntity user;
 
     @ManyToMany
+    @JoinTable(
+            name = "exercise_type_categories",
+            joinColumns = @JoinColumn(name = "exercise_type_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryEntity> categories;
 

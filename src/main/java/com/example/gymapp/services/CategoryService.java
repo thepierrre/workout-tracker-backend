@@ -46,6 +46,11 @@ public class CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
                         "Category with the ID %s not found.", categoryId.toString())));
 
+        for (ExerciseTypeEntity exerciseType : category.getExerciseTypes()) {
+            exerciseType.getCategories().remove(category);
+            exerciseTypeRepository.save(exerciseType);
+        }
+
         categoryRepository.deleteById(categoryId);
     }
 }

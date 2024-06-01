@@ -28,7 +28,6 @@ public class WorkoutEntity {
     @UuidGenerator
     private UUID id;
 
-    @CreationTimestamp
     private LocalDate creationDate;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)

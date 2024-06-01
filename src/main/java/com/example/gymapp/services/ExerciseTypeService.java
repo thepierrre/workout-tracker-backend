@@ -95,6 +95,16 @@ public class ExerciseTypeService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
                         "Exercise type with the ID %s not found.", exerciseTypeId.toString())));
 
+        for (RoutineEntity routine : exerciseType.getRoutines()) {
+            routine.getExerciseTypes().remove(exerciseType);
+            routineRepository.save(routine);
+        }
+
+        for (CategoryEntity category : exerciseType.getCategories()) {
+            category.getExerciseTypes().remove(exerciseType);
+            categoryRepository.save(category);
+        }
+
         exerciseTypeRepository.deleteById(exerciseTypeId);
     }
 

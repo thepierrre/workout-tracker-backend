@@ -25,6 +25,11 @@ public class RoutineEntity {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "routines_exercise_types",
+            joinColumns = @JoinColumn(name = "routine_id"),
+            inverseJoinColumns = @JoinColumn(name = "exercise_type_id")
+    )
     @JsonIgnoreProperties("exerciseInstances")
     private List<ExerciseTypeEntity> exerciseTypes;
 

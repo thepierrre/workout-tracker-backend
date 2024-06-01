@@ -22,8 +22,8 @@ public class ExerciseTypeDto {
 
     private String name;
 
-    @JsonIgnore
-    private List<ExerciseInstanceDto> exerciseInstances;
+//    @JsonIgnore
+//    private List<ExerciseInstanceDto> exerciseInstances;
 
     @JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
     private UserDto user;

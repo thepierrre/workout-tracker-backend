@@ -63,17 +63,15 @@ public class WorkoutService {
                         "User with the name \"%s\" not found.", workoutDto.getRoutineName())));
 
         WorkoutEntity workoutEntity = workoutMapper.mapFromDto(workoutDto);
-        workoutEntity.setCreationDate(LocalDate.now());
+        workoutEntity.setCreationDate(workoutDto.getCreationDate());
         workoutEntity.setUser(user);
         workoutEntity.setRoutineName(workoutDto.getRoutineName());
 
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
-
-        List<ExerciseTypeEntity> exerciseTypes = trainingRoutine.getExerciseTypes();
         
         for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
             ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
-            exerciseInstance.setExerciseType(exerciseType);
+            exerciseInstance.setExerciseTypeName(exerciseType.getName());
             exerciseInstance.setWorkout(workoutEntity);
 
 
