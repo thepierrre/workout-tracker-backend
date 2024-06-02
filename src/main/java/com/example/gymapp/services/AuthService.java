@@ -52,7 +52,7 @@ public class AuthService {
                             "Invalid username or password.") {
                     });
 
-            if (!passwordEncoder.encode(loginDto.getPassword()).equals(user.getPassword())) {
+            if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
                 return new ResponseEntity<>("Invalid username or password.", HttpStatus.UNAUTHORIZED);
             }
 

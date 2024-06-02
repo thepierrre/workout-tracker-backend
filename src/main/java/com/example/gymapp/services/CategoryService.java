@@ -27,6 +27,12 @@ public class CategoryService {
     ExerciseTypeRepository exerciseTypeRepository;
 
     public CategoryDto createCategory(CategoryDto categoryDto) {
+
+        if (categoryRepository.existsByName(categoryDto.getName())) {
+            throw new IllegalArgumentException(
+                    "Category with the name " + categoryDto.getName() + " already exists.");
+        }
+
         CategoryEntity createdCategory = categoryRepository.save(categoryMapper.mapFromDto(categoryDto));
         return categoryMapper.mapToDto(createdCategory);
     }
