@@ -24,8 +24,10 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
+
         CategoryDto createdCategory = categoryService.createCategory(categoryDto);
         return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
+
     }
 
     @DeleteMapping
@@ -36,6 +38,11 @@ public class CategoryController {
 
     @DeleteMapping(path = "{categoryId}")
     public ResponseEntity<Void> deleteById(@PathVariable("categoryId") UUID categoryId) {
+
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Category ID cannot be null.");
+        }
+
         categoryService.deleteById(categoryId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
