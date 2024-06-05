@@ -93,7 +93,8 @@ public class ExerciseTypeService {
             throw e;
         }
         catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Couldn't create a new exercise due to an unexpected error.", e);
         }
 
 
@@ -131,6 +132,8 @@ public class ExerciseTypeService {
             category.getExerciseTypes().remove(exerciseType);
             categoryRepository.save(category);
         }
+
+        exerciseType.getUser().getExerciseTypes().remove(exerciseType);
 
         exerciseTypeRepository.deleteById(exerciseTypeId);
     }
