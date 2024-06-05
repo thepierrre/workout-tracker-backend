@@ -3,11 +3,14 @@ package com.example.gymapp.services;
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.errorHandling.CustomServiceException;
+import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.mappers.impl.CategoryMapper;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.repositories.*;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.java.Log;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,7 +57,6 @@ public class ExerciseTypeService {
     }
 
     public ExerciseTypeDto createExercise(ExerciseTypeDto exerciseTypeDto, String username) {
-
         try {
             UserEntity user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException(String.format(
@@ -61,6 +64,14 @@ public class ExerciseTypeService {
 
             ExerciseTypeEntity exerciseTypeEntity = exerciseTypeMapper.mapFromDto(exerciseTypeDto);
             exerciseTypeEntity.setUser(user);
+
+            boolean exerciseExists = user.getExerciseTypes().stream()
+                    .anyMatch(exercise -> exercise.getName().equals(exerciseTypeDto.getName()));
+
+            if (exerciseExists) {
+                throw new ConflictException(
+                        "Exercise with the name '" + exerciseTypeDto.getName() + "' already exists.");
+            }
 
             if (exerciseTypeDto.getCategories() != null && !exerciseTypeDto.getCategories().isEmpty()) {
                 List<CategoryEntity> categories = exerciseTypeDto.getCategories().stream()
@@ -78,13 +89,12 @@ public class ExerciseTypeService {
             userRepository.save(user);
 
             return exerciseTypeMapper.mapToDto(savedEntity);
+        } catch (UsernameNotFoundException | ConflictException e) {
+            throw e;
         }
         catch (RuntimeException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
         }
-
 
 
     }

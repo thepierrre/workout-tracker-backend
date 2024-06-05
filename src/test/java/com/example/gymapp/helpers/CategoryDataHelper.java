@@ -6,8 +6,7 @@ import java.util.UUID;
 
 public class CategoryDataHelper {
 
-    public static CategoryEntity createCategoryEntity(String name) {
-        UUID id = UUID.randomUUID();
+    public static CategoryEntity createCategoryEntity(String name, UUID id) {
         return CategoryEntity.builder()
                 .name(name)
                 .id(id)
