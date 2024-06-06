@@ -11,7 +11,6 @@ import com.example.gymapp.repositories.CategoryRepository;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.RoleRepository;
 import com.example.gymapp.repositories.UserRepository;
-import com.example.gymapp.services.CategoryService;
 import com.example.gymapp.services.ExerciseTypeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -35,7 +34,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;

@@ -1,20 +1,15 @@
 package com.example.gymapp.services;
 
-import com.example.gymapp.domain.dto.CategoryDto;
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.entities.CategoryEntity;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
-import com.example.gymapp.repositories.CategoryRepository;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,10 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-import static org.postgresql.hostchooser.HostRequirement.any;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ExerciseTypeServiceTest {
@@ -165,9 +157,8 @@ class ExerciseTypeServiceTest {
         exerciseTypeRepository.save(exerciseTypeEntity2);
         user.setExerciseTypes(List.of(exerciseTypeEntity2));
         when(userRepository.findByUsername("user1")).thenReturn(Optional.ofNullable(user));
-        assertEquals(user.getExerciseTypes().stream()
-                .map(exerciseType -> exerciseTypeMapper.mapToDto(exerciseType)).toList().size(), 1);
-
+        List<ExerciseTypeDto> result = exerciseTypeService.findAllForUser("user1");
+        assertEquals(result.size(), 1);
     }
 
     @Test
@@ -179,6 +170,7 @@ class ExerciseTypeServiceTest {
 
         exerciseTypeService.deleteById(id);
 
+        verify(exerciseTypeRepository, times(1)).deleteById(id);
         assertTrue(user.getExerciseTypes().isEmpty());
 
     }

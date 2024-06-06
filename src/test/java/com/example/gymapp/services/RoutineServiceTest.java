@@ -6,6 +6,7 @@ import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.domain.entities.WorkoutEntity;
+import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.helpers.UserDataHelper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
@@ -24,7 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class RoutineServiceTest {
@@ -140,14 +141,31 @@ class RoutineServiceTest {
 
     @Test
     void testCreateRoutine_RoutineAlreadyExists() {
+        user.getRoutines().add(routineEntity2);
+
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(user));
+        when(routineMapper.mapFromDto(routineDto2)).thenReturn(routineEntity2);
+
+        ConflictException exception = assertThrows(ConflictException.class, () ->
+                routineService.createRoutine(routineDto2, "user1"));
+
+        assertEquals("Routine with the name 'routine2' already exists.", exception.getMessage());
+
     }
 
     @Test
     void testFindAll() {
+        when(routineRepository.findAll()).thenReturn((List.of(routineEntity1, routineEntity2)));
+
+        List<RoutineDto> result = routineService.findAll();
+        assertEquals(2, result.size());
     }
 
     @Test
     void testFindAllForUser() {
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(user));
+        List<RoutineDto> result = routineService.findAllForUser("user1");
+        assertEquals(result.size(), 1);
     }
 
     @Test
@@ -156,6 +174,18 @@ class RoutineServiceTest {
 
     @Test
     void testDeleteById() {
+        UUID id = routineEntity1.getId();
+        when(routineRepository.findById(id)).thenReturn(Optional.ofNullable(routineEntity1));
+
+        doAnswer(invocation -> {
+            user.getRoutines().remove(routineEntity1);
+            return null;
+        }).when(routineRepository).deleteById(id);
+
+        routineService.deleteById(id);
+        verify(routineRepository, times(1)).deleteById(id);
+        assertTrue(user.getRoutines().isEmpty());
+
     }
 
     @Test
