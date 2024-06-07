@@ -9,54 +9,44 @@ import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class ExerciseTypeDataHelper {
 
-    public static ExerciseTypeEntity createExerciseTypeEntity(String name, UUID id) {
-        return ExerciseTypeEntity.builder()
-                .id(id)
-                .name(name)
-                .build();
-    }
-
    public static ExerciseTypeEntity createExerciseTypeEntity(
-           String name,
-           UserEntity user,
-           List<CategoryEntity> categories,
-           List<RoutineEntity> routines) {
+           String name
+           ) {
 
         UUID id = UUID.randomUUID();
         return ExerciseTypeEntity.builder()
                 .id(id)
                 .name(name)
-                .user(user)
-                .categories(categories)
-                .routines(routines)
+                .user(null)
+                .categories(new ArrayList<>())
+                .routines(new ArrayList<>())
                 .build();
    }
 
-   public static ExerciseTypeDto createExerciseTypeRequestDto(String name, List<CategoryDto> categories) {
+   public static ExerciseTypeDto createExerciseTypeRequestDto(String name) {
         return ExerciseTypeDto.builder()
                 .name(name)
-                .categories(categories)
+                .categories(new ArrayList<>())
                 .build();
 
    }
 
    public static ExerciseTypeDto createExerciseTypeResponseDto(
-           String name,
-           UserDto user,
-           List<CategoryDto> categories,
-           List<RoutineDto> routines) {
+           String name
+          ) {
 
         UUID id = UUID.randomUUID();
         return ExerciseTypeDto.builder()
                 .name(name)
-                .user(user)
-                .categories(categories)
-                .routines(routines)
+                .user(null)
+                .categories(new ArrayList<>())
+                .routines(new ArrayList<>())
                 .build();
 
    }

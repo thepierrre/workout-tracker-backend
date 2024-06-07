@@ -22,26 +22,8 @@ public class UserDataHelper {
                 .email(email)
                 .password(password)
                 .exerciseTypes(new ArrayList<>())
-                .build();
-    }
-
-    public static UserEntity createUserEntity(
-            String username,
-            String email,
-            String password,
-            List<ExerciseTypeEntity> exercises,
-            List<RoutineEntity> routines,
-            List<WorkoutEntity> workouts
-    ) {
-        UUID id = UUID.randomUUID();
-        return UserEntity.builder()
-                .id(id)
-                .username(username)
-                .email(email)
-                .password(password)
-                .exerciseTypes(exercises)
-                .routines(routines)
-                .workouts(workouts)
+                .workouts(new ArrayList<>())
+                .routines(new ArrayList<>())
                 .build();
     }
 
