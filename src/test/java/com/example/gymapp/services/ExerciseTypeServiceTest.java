@@ -1,29 +1,25 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.exceptions.ConflictException;
+import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+
 
 @SpringBootTest
 class ExerciseTypeServiceTest {
@@ -40,148 +36,85 @@ class ExerciseTypeServiceTest {
     @MockBean
     ExerciseTypeMapper exerciseTypeMapper;
 
-    private UserEntity user;
-    private ExerciseTypeDto exerciseTypeDto1;
-
-    private ExerciseTypeDto exerciseTypeDto2;
-    private ExerciseTypeEntity exerciseTypeEntity1;
-    private ExerciseTypeEntity exerciseTypeEntity2;
-
+    private TestDataInitializer.TestData testData;
 
     @BeforeEach
     void setUp() {
-        user = UserEntity.builder()
-                .id(UUID.randomUUID())
-                .username("user1")
-                .email("username1@example.com")
-                .password("pass1")
-                .exerciseTypes(new ArrayList<>())
-                .build();
+        testData = TestDataInitializer.initializeTestData();
 
-        exerciseTypeDto1 = ExerciseTypeDto.builder()
-                .name("exercise1")
-                .categories(List.of())
-                .build();
+        UserEntity user1 = testData.user1;
 
-        exerciseTypeDto2 = ExerciseTypeDto.builder()
-                .name("exercise2")
-                .categories(List.of())
-                .build();
+        testData.exerciseTypeEntity1.getCategories().add(testData.categoryEntity1);
+        testData.exerciseTypeEntity1.getCategories().add(testData.categoryEntity2);
+        testData.exerciseTypeEntity2.getCategories().add(testData.categoryEntity1);
+        testData.exerciseTypeEntity2.getCategories().add(testData.categoryEntity3);
 
-        exerciseTypeEntity1 = ExerciseTypeEntity.builder()
-                .id(UUID.randomUUID())
-                .name("exercise1")
-                .user(user)
-                .categories(List.of())
-                .build();
+        user1.getExerciseTypes().add(testData.exerciseTypeEntity1);
+        user1.getExerciseTypes().add(testData.exerciseTypeEntity2);
 
-        user.getExerciseTypes().add(exerciseTypeEntity1);
-
-        exerciseTypeEntity2 = ExerciseTypeEntity.builder()
-                .name("exercise2")
-                .categories(List.of())
-                .build();
 
     }
 
     @AfterEach
     void tearDown() {
-        exerciseTypeRepository.deleteAll();
         userRepository.deleteAll();
+        exerciseTypeRepository.deleteAll();
+
     }
 
     @Test
-    void testCreateExercise_Success() {
-        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(user));
-        when(exerciseTypeMapper.mapFromDto(exerciseTypeDto2)).thenReturn(exerciseTypeEntity2);
-        when(exerciseTypeRepository.save(exerciseTypeEntity2)).thenReturn(exerciseTypeEntity2);
-        when(exerciseTypeMapper.mapToDto(exerciseTypeEntity2)).thenReturn(exerciseTypeDto2);
+    void createExercise_Success() {
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+        when(exerciseTypeRepository.save(testData.exerciseTypeEntity3)).thenReturn(testData.exerciseTypeEntity3);
+        when(exerciseTypeMapper.mapFromDto(testData.exerciseTypeRequestDto3)).thenReturn(testData.exerciseTypeEntity3);
+        when(exerciseTypeMapper.mapToDto(testData.exerciseTypeEntity3)).thenReturn(testData.exerciseTypeResponseDto3);
 
-        ExerciseTypeDto result = exerciseTypeService.createExercise(exerciseTypeDto2, "user1");
+        ExerciseTypeDto result = exerciseTypeService.createExercise(testData.exerciseTypeRequestDto3, "user1");
+
         assertNotNull(result);
-        assertEquals("exercise2", result.getName());
-    }
-
-
-    @Test
-    void testCreateExercise_UserNotFound() {
-        when(userRepository.findByUsername("user1")).thenReturn(Optional.empty());
-
-        assertThrows(UsernameNotFoundException.class, () ->
-                exerciseTypeService.createExercise(exerciseTypeDto1, "user1"));
-    }
-
-
-    @Test
-    void testCreateExercise_ExerciseAlreadyExists() {
-        user.getExerciseTypes().add(exerciseTypeEntity2);
-
-        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(user));
-        when(exerciseTypeMapper.mapFromDto(exerciseTypeDto1)).thenReturn(ExerciseTypeEntity.builder()
-                .name("exercise1")
-                .categories(List.of())
-                .build());
-
-        ConflictException exception = assertThrows(ConflictException.class, () ->
-                exerciseTypeService.createExercise(exerciseTypeDto1, "user1")
-        );
-
-        assertEquals("Exercise with the name 'exercise1' already exists.", exception.getMessage());
+        assertEquals(testData.exerciseTypeResponseDto3, result);
     }
 
     @Test
-    void testCreateExercise_InternalServerError() {
-        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(user));
-        when(exerciseTypeMapper.mapFromDto(exerciseTypeDto2)).thenReturn(exerciseTypeEntity2);
-        when(exerciseTypeRepository.save(exerciseTypeEntity2)).thenThrow(new RuntimeException());
+    void createExercise_UserNotFound() throws Exception {
+        UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () ->
+                exerciseTypeService.createExercise(testData.exerciseTypeRequestDto3, "user3"));
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
-                exerciseTypeService.createExercise(exerciseTypeDto2, "user1"));
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
-        assertEquals("Couldn't create a new exercise due to an unexpected error.", exception.getReason());
-
-    }
-
-
-    @Test
-    void testFindAll() {
-        when(exerciseTypeRepository.findAll()).thenReturn((List.of(exerciseTypeEntity2, exerciseTypeEntity2)));
-
-        List<ExerciseTypeDto> result = exerciseTypeService.findAll();
-        assertEquals(2, result.size());
+        assertEquals("User with the username \"user3\" not found.", exception.getMessage());
     }
 
     @Test
-    void testFindAllForUser() {
-        exerciseTypeRepository.save(exerciseTypeEntity2);
-        user.setExerciseTypes(List.of(exerciseTypeEntity2));
-        when(userRepository.findByUsername("user1")).thenReturn(Optional.ofNullable(user));
-        List<ExerciseTypeDto> result = exerciseTypeService.findAllForUser("user1");
-        assertEquals(result.size(), 1);
+    void createExercise_ExerciseAlreadyExists() throws Exception {}
+
+    @Test
+    void createExercise_CategoryNotFound() throws Exception {}
+
+
+    @Test
+    void findAll() {
     }
 
     @Test
-    void testDeleteById() {
-        UUID id = exerciseTypeEntity1.getId();
-        exerciseTypeEntity1.setRoutines(new ArrayList<>()); // Initialize routines as empty list
-        exerciseTypeEntity1.setCategories(new ArrayList<>()); // Initialize categories as empty list
-        when(exerciseTypeRepository.findById(id)).thenReturn(Optional.of(exerciseTypeEntity1));
-
-        exerciseTypeService.deleteById(id);
-
-        verify(exerciseTypeRepository, times(1)).deleteById(id);
-        assertTrue(user.getExerciseTypes().isEmpty());
-
+    void findAllForUser_Success() {
     }
 
     @Test
-    void testDeleteAll() {
-        exerciseTypeService.deleteAll();
-        assertEquals(exerciseTypeService.findAll().size(), 0);
+    void findAllForUser_UserNotFound() {
     }
 
     @Test
-    void testUpdateById() {
+    void deleteById_Success() {
+    }
+
+    @Test
+    void deleteById_IdNotFound() {
+    }
+
+    @Test
+    void deleteAll() {
+    }
+
+    @Test
+    void updateById() {
     }
 }

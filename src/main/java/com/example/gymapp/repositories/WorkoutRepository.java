@@ -10,5 +10,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface WorkoutRepository extends JpaRepository<WorkoutEntity, UUID> {
-    Optional<List<WorkoutEntity>> findByUsername(String username);
+    Optional<List<WorkoutEntity>> findByUserUsername(String username);
 }

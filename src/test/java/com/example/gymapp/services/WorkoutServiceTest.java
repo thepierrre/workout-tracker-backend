@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class WorkoutServiceTest {
@@ -43,7 +43,6 @@ class WorkoutServiceTest {
     WorkoutMapper workoutMapper;
 
     private TestDataInitializer.TestData testData;
-
 
     @BeforeEach
     void setUp() {
@@ -70,14 +69,13 @@ class WorkoutServiceTest {
 
     @AfterEach
     void tearDown() {
-
         userRepository.deleteAll();
         workoutRepository.deleteAll();
     }
 
     @Test
     void findAllForUser_Success() {
-        when(workoutRepository.findByUsername("user1")).thenReturn(Optional.of(List.of(testData.workoutEntity1, testData.workoutEntity2)));
+        when(workoutRepository.findByUserUsername("user1")).thenReturn(Optional.of(List.of(testData.workoutEntity1, testData.workoutEntity2)));
         when(workoutMapper.mapToDto(testData.workoutEntity1)).thenReturn(testData.workoutResponseDto1);
         when(workoutMapper.mapToDto(testData.workoutEntity2)).thenReturn(testData.workoutResponseDto2);
 
@@ -126,7 +124,10 @@ class WorkoutServiceTest {
     void createWorkout_Success() {
         testData.workoutResponseDto1.setUser(testData.userDto1);
         testData.workoutResponseDto1.setExerciseInstances(List.of(testData.exerciseInstanceResponseDto1));
+
         when(userRepository.findByUsername("user1")).thenReturn(Optional.ofNullable(testData.user1));
+        when(routineRepository.findByUserAndName(testData.user1, testData.workoutRequestDto1.getRoutineName()))
+                .thenReturn(Optional.ofNullable(testData.routineEntity1));
         when(workoutMapper.mapFromDto(testData.workoutRequestDto1)).thenReturn(testData.workoutEntity1);
         when(workoutRepository.save(testData.workoutEntity1)).thenReturn(testData.workoutEntity1);
         when(workoutMapper.mapToDto(testData.workoutEntity1)).thenReturn(testData.workoutResponseDto1);
@@ -166,8 +167,18 @@ class WorkoutServiceTest {
 
     @Test
     void deleteById_Success() {
+        UUID workoutId = testData.workoutEntity1.getId();
+        when(workoutRepository.findById(workoutId)).thenReturn(Optional.of(testData.workoutEntity1));
+
+        workoutService.deleteById(workoutId);
+
+        verify(workoutRepository, times(1)).deleteById(workoutId);
     }
 
     @Test
-    void deleteById_WorkoutNotFound() {}
+    void deleteById_WorkoutNotFound() {
+        UUID workoutId = UUID.randomUUID();
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
+                workoutService.deleteById(workoutId));
+    }
 }

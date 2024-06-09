@@ -45,7 +45,7 @@ public class WorkoutService {
 
     public List<WorkoutDto> findAllForUser(String username) {
         try {
-            List<WorkoutEntity> workoutEntities = workoutRepository.findByUsername(username)
+            List<WorkoutEntity> workoutEntities = workoutRepository.findByUserUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException(String.format("User with the username \"%s\" not found.", username)));
 
             if (!workoutEntities.isEmpty()) {
@@ -129,12 +129,12 @@ public class WorkoutService {
 
     }
 
-    public void deleteById(UUID workoutId) {
+    public void deleteById(UUID id) {
+        WorkoutEntity workoutEntity = workoutRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Workout with the ID \"%s\" not found.", id)));
 
-        WorkoutEntity workout = workoutRepository.findById(workoutId)
-                        .orElseThrow(() -> new EntityNotFoundException(String.format("Workout with the ID %s not found.", workoutId.toString())));
-
-        workoutRepository.deleteById(workoutId);
+        workoutRepository.deleteById(id);
 
     }
 

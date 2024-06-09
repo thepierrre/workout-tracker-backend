@@ -45,15 +45,6 @@ public class ExerciseInstanceService {
         return exerciseInstanceMapper.mapToDto(exerciseInstanceEntity);
     }
 
-//    public ExerciseInstanceDto patchById(UUID exerciseInstanceId) {
-//        ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format(
-//                        "Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
-//
-//
-//
-//    }
-
     public void deleteAll() {
         exerciseInstanceRepository.deleteAll();
     }
