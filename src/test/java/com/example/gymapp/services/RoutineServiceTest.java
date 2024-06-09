@@ -46,16 +46,6 @@ class RoutineServiceTest {
     @MockBean
     RoutineMapper routineMapper;
 
-//    private UserEntity user;
-//    private RoutineDto routineDto1;
-//    private RoutineDto routineDto2;
-//    private RoutineEntity routineEntity1;
-//    private RoutineEntity routineEntity2;
-//    private ExerciseTypeDto exerciseTypeDto1;
-//    private ExerciseTypeDto exerciseTypeDto2;
-//    private ExerciseTypeEntity exerciseTypeEntity1;
-//    private ExerciseTypeEntity exerciseTypeEntity2;
-
     private TestDataInitializer.TestData testData;
 
     @BeforeEach
@@ -63,58 +53,8 @@ class RoutineServiceTest {
 
         testData = TestDataInitializer.initializeTestData();
 
-//        user = UserDataHelper.createUserEntity(
-//                "user1",
-//                "user1@example.com",
-//                "pass1",
-//                exercises,
-//                routines,
-//                workouts);
-//
-//        exerciseTypeDto1 = ExerciseTypeDto.builder()
-//                .name("exercise1")
-//                .categories(List.of())
-//                .build();
-//
-//        exerciseTypeDto2 = ExerciseTypeDto.builder()
-//                .name("exercise2")
-//                .categories(List.of())
-//                .build();
-//
-//        exerciseTypeEntity1 = ExerciseTypeEntity.builder()
-//                .id(UUID.randomUUID())
-//                .name("exercise1")
-//                .user(user)
-//                .categories(List.of())
-//                .build();
-
-//        exerciseTypeEntity2 = ExerciseTypeEntity.builder()
-//                .name("exercise2")
-//                .categories(List.of())
-//                .build();
-
         testData.user1.getExerciseTypes().add(testData.exerciseTypeEntity1);
         testData.user1.getExerciseTypes().add(testData.exerciseTypeEntity2);
-
-//        routineDto1 = RoutineDto.builder()
-//                .id(UUID.randomUUID())
-//                .name("routine1")
-//                .build();
-//
-//        routineDto2 = RoutineDto.builder()
-//                .id(UUID.randomUUID())
-//                .name("routine2")
-//                .build();
-//
-//        routineEntity1 = RoutineEntity.builder()
-//                .id(UUID.randomUUID())
-//                .name("routine1")
-//                .build();
-//
-//        routineEntity2 = RoutineEntity.builder()
-//                .id(UUID.randomUUID())
-//                .name("routine2")
-//                .build();
 
         testData.user1.getRoutines().add(testData.routineEntity1);
     }

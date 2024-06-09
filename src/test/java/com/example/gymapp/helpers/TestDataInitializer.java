@@ -11,6 +11,9 @@ public class TestDataInitializer {
 
         public UserEntity user1;
         public UserEntity user2;
+
+        public UserDto userDto1;
+        public UserDto userDto2;
         public CategoryEntity categoryEntity1;
         public CategoryEntity categoryEntity2;
         public CategoryEntity categoryEntity3;
@@ -55,6 +58,7 @@ public class TestDataInitializer {
         public WorkoutDto workoutRequestDto1;
         public WorkoutDto workoutRequestDto2;
         public WorkoutDto workoutRequestDto3;
+        public WorkoutDto workoutRequestDto4;
         public WorkoutDto workoutResponseDto1;
         public WorkoutDto workoutResponseDto2;
         public WorkoutDto workoutResponseDto3;
@@ -66,6 +70,8 @@ public class TestDataInitializer {
 
         testData.user1 = UserDataHelper.createUserEntity("user1", "user1@example.com", "pass1");
         testData.user2 = UserDataHelper.createUserEntity("user2", "user2@example.com", "pass2");
+        testData.userDto1 = UserDataHelper.createUserResponseDto("user1", "user1@example.com", "pass1");
+        testData.userDto2 = UserDataHelper.createUserResponseDto("user2", "user2@example.com", "pass2");
         testData.categoryEntity1 = CategoryDataHelper.createCategoryEntity("category1");
         testData.categoryEntity2 = CategoryDataHelper.createCategoryEntity("category2");
         testData.categoryEntity3 = CategoryDataHelper.createCategoryEntity("category3");
@@ -108,6 +114,7 @@ public class TestDataInitializer {
         testData.workoutRequestDto1 = WorkoutDataHelper.createWorkoutRequestDto(LocalDate.of(2024, 4, 30), "routine1");
         testData.workoutRequestDto2 = WorkoutDataHelper.createWorkoutRequestDto(LocalDate.of(2024, 6, 15), "routine2");
         testData.workoutRequestDto3 = WorkoutDataHelper.createWorkoutRequestDto(LocalDate.of(2024, 6, 15), "routine3");
+        testData.workoutRequestDto4 = WorkoutDataHelper.createWorkoutRequestDto(LocalDate.of(2024, 6, 15), "routine4");
         testData.workoutResponseDto1 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 4, 30), "routine1");
         testData.workoutResponseDto2 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 6, 15), "routine2");
         testData.workoutResponseDto3 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 6, 15), "routine3");

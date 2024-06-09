@@ -1,10 +1,6 @@
 package com.example.gymapp.controllers;
 
-import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
-import com.example.gymapp.domain.dto.WorkoutRequestDto;
-import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.services.WorkoutService;
@@ -14,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -51,14 +46,8 @@ public class WorkoutController {
     }
 
     @GetMapping(path = "workouts/{workoutId}")
-    public ResponseEntity<WorkoutDto> findById(@PathVariable("workoutId") UUID id) {
-        Optional<WorkoutEntity> workout = workoutService.findById(id);
-        if (workout.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            WorkoutDto foundWorkout = workoutMapper.mapToDto(workout.get());
-            return new ResponseEntity<>(foundWorkout, HttpStatus.OK);
-        }
+    public Optional<WorkoutDto> findById(@PathVariable("workoutId") UUID id) {
+        return workoutService.findById(id);
     }
 
     @PostMapping(path = "workouts")

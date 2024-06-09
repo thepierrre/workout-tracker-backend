@@ -27,4 +27,18 @@ public class UserDataHelper {
                 .build();
     }
 
+    public static UserDto createUserResponseDto(String username, String email, String password) {
+        UUID id = UUID.randomUUID();
+
+        return UserDto.builder()
+                .id(id)
+                .username(username)
+                .email(email)
+                .password(password)
+                .exerciseTypes(new ArrayList<>())
+                .workouts(new ArrayList<>())
+                .routines(new ArrayList<>())
+                .build();
+    }
+
 }
