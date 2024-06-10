@@ -62,6 +62,12 @@ public class TestDataInitializer {
         public WorkoutDto workoutResponseDto1;
         public WorkoutDto workoutResponseDto2;
         public WorkoutDto workoutResponseDto3;
+        public WorkingSetEntity workingSetEntity1;
+        public WorkingSetEntity workingSetEntity2;
+        public WorkingSetEntity workingSetEntity3;
+        public WorkingSetDto workingSetResponseDto1;
+        public WorkingSetDto workingSetResponseDto2;
+        public WorkingSetDto workingSetResponseDto3;
 
     }
 
@@ -93,9 +99,9 @@ public class TestDataInitializer {
         testData.exerciseInstanceEntity1 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType1");
         testData.exerciseInstanceEntity2 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType2");
         testData.exerciseInstanceEntity3 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType3");
-//        testData.exerciseInstanceRequestDto1;
-//        testData.exerciseInstanceRequestDto2;
-//        testData.exerciseInstanceRequestDto3;
+        testData.exerciseInstanceRequestDto1 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType1");
+        testData.exerciseInstanceRequestDto2 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType2");
+        testData.exerciseInstanceRequestDto3 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType3");
         testData.exerciseInstanceResponseDto1 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType1");
         testData.exerciseInstanceResponseDto2 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType2");
         testData.exerciseInstanceResponseDto3 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType3");

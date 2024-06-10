@@ -41,4 +41,17 @@ public class WorkingSetDataHelper {
                 .build();
     };
 
+    public static WorkingSetDto createWorkingSetRequestDto(
+            ExerciseInstanceDto exercise,
+            Short reps,
+            Short weight
+    ) {
+
+        return WorkingSetDto.builder()
+                .exerciseInstance(exercise)
+                .reps(reps)
+                .weight(weight)
+                .build();
+    };
+
 }

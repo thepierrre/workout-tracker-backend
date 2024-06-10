@@ -31,4 +31,14 @@ public class ExerciseInstanceDataHelper {
                 .workingSets(null)
                 .build();
     }
+
+    public static ExerciseInstanceDto createExerciseInstanceRequestDto(
+            String exercise
+    ) {
+        return ExerciseInstanceDto.builder()
+                .exerciseTypeName(exercise)
+                .workout(null)
+                .workingSets(null)
+                .build();
+    }
 }
