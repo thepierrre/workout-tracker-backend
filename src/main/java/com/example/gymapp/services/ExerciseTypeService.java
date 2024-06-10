@@ -123,24 +123,7 @@ public class ExerciseTypeService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Couldn't create a new routine due to an unexpected error.", e);
         }
-
-
-
-
     }
-
-
-    try {
-        List<WorkoutEntity> workoutEntities = workoutRepository.findByUserUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with the username \"%s\" not found.", username)));
-
-        if (!workoutEntities.isEmpty()) {
-            return workoutEntities.stream()
-                    .map(workoutMapper::mapToDto)
-                    .collect(Collectors.toList());
-        }
-        return List.of();
-
 
 
     @Transactional
