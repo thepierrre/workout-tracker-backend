@@ -19,9 +19,7 @@ public class CategoryDataHelper {
     }
 
     public static CategoryDto createCategoryRequestDto(String name) {
-        UUID id = UUID.randomUUID();
         return CategoryDto.builder()
-                .id(id)
                 .name(name)
                 .build();
     }

@@ -62,16 +62,15 @@ public class ExerciseTypeService {
                     .orElseThrow(() -> new UsernameNotFoundException(String.format(
                             "User with the username \"%s\" not found.", username)));
 
-            ExerciseTypeEntity exerciseTypeEntity = exerciseTypeMapper.mapFromDto(exerciseTypeDto);
-            exerciseTypeEntity.setUser(user);
+            Optional<ExerciseTypeEntity> existingExerciseType = exerciseTypeRepository.findByUserAndName(user, exerciseTypeDto.getName());
 
-            boolean exerciseExists = user.getExerciseTypes().stream()
-                    .anyMatch(exercise -> exercise.getName().equals(exerciseTypeDto.getName()));
-
-            if (exerciseExists) {
+            if (existingExerciseType.isPresent()) {
                 throw new ConflictException(
                         "Exercise with the name '" + exerciseTypeDto.getName() + "' already exists.");
             }
+
+            ExerciseTypeEntity exerciseTypeEntity = exerciseTypeMapper.mapFromDto(exerciseTypeDto);
+            exerciseTypeEntity.setUser(user);
 
             if (exerciseTypeDto.getCategories() != null && !exerciseTypeDto.getCategories().isEmpty()) {
                 List<CategoryEntity> categories = exerciseTypeDto.getCategories().stream()
@@ -89,7 +88,7 @@ public class ExerciseTypeService {
             userRepository.save(user);
 
             return exerciseTypeMapper.mapToDto(savedEntity);
-        } catch (UsernameNotFoundException | ConflictException e) {
+        } catch (UsernameNotFoundException | ConflictException | EntityNotFoundException e) {
             throw e;
         }
         catch (RuntimeException e) {

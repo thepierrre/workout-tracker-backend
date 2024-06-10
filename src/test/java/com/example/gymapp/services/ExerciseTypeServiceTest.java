@@ -2,10 +2,13 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
+import com.example.gymapp.repositories.CategoryRepository;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -32,6 +36,9 @@ class ExerciseTypeServiceTest {
 
     @MockBean
     UserRepository userRepository;
+
+    @MockBean
+    CategoryRepository categoryRepository;
 
     @MockBean
     ExerciseTypeMapper exerciseTypeMapper;
@@ -51,7 +58,6 @@ class ExerciseTypeServiceTest {
 
         user1.getExerciseTypes().add(testData.exerciseTypeEntity1);
         user1.getExerciseTypes().add(testData.exerciseTypeEntity2);
-
 
     }
 
@@ -84,18 +90,42 @@ class ExerciseTypeServiceTest {
     }
 
     @Test
-    void createExercise_ExerciseAlreadyExists() throws Exception {}
+    void createExercise_ExerciseAlreadyExists() throws Exception {
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+        when(exerciseTypeMapper.mapFromDto(testData.exerciseTypeRequestDto1)).thenReturn(testData.exerciseTypeEntity1);
+        when(exerciseTypeRepository.findByUserAndName(testData.user1, testData.exerciseTypeEntity1.getName()))
+                .thenReturn(Optional.of(testData.exerciseTypeEntity1));
 
-    @Test
-    void createExercise_CategoryNotFound() throws Exception {}
+        ConflictException exception = assertThrows(ConflictException.class,
+                () -> exerciseTypeService.createExercise(testData.exerciseTypeRequestDto1, "user1"));
+
+        assertEquals("Exercise with the name 'exerciseType1' already exists.", exception.getMessage());
 
 
-    @Test
-    void findAll() {
     }
 
     @Test
+    void createExercise_CategoryNotFound() {
+        testData.categoryRequestDto1.setId(UUID.randomUUID());
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryRequestDto1);
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+        when(categoryRepository.findById(testData.categoryEntity1.getId())).thenReturn(Optional.empty());
+        when(exerciseTypeMapper.mapFromDto(testData.exerciseTypeRequestDto1)).thenReturn(testData.exerciseTypeEntity1);
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> exerciseTypeService.createExercise(testData.exerciseTypeRequestDto1, "user1"));
+
+        assertEquals("Category with the ID " + testData.categoryRequestDto1.getId() + " not found.", exception.getMessage());
+    }
+
+
+//    @Test
+//    void findAll() {
+//    }
+
+    @Test
     void findAllForUser_Success() {
+
     }
 
     @Test
@@ -110,9 +140,9 @@ class ExerciseTypeServiceTest {
     void deleteById_IdNotFound() {
     }
 
-    @Test
-    void deleteAll() {
-    }
+//    @Test
+//    void deleteAll() {
+//    }
 
     @Test
     void updateById() {

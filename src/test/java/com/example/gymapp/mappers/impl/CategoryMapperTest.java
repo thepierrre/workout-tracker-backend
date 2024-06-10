@@ -27,19 +27,19 @@ class CategoryMapperTest {
 
     @Test
     void mapToDto() {
-        CategoryEntity result = categoryMapper.mapFromDto(testData.categoryRequestDto1);
-        assertNotNull(result);
-        assertNotNull(result.getId());
-        assertEquals(result.getName(), "category1");
-        assertNull(result.getExerciseTypes());
-    }
-
-    @Test
-    void mapFromDto() {
         CategoryDto result = categoryMapper.mapToDto(testData.categoryEntity2);
         assertNotNull(result);
         assertNotNull(result.getId());
         assertEquals(result.getName(), "category2");
         assertEquals(result.getExerciseTypes(), List.of());
+    }
+
+    @Test
+    void mapFromDto() {
+
+        CategoryEntity result = categoryMapper.mapFromDto(testData.categoryRequestDto1);
+        assertNotNull(result);
+        assertEquals(result.getName(), "category1");
+        assertNull(result.getExerciseTypes());
     }
 }

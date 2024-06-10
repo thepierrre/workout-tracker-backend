@@ -43,6 +43,7 @@ public class ExerciseTypeDataHelper {
 
         UUID id = UUID.randomUUID();
         return ExerciseTypeDto.builder()
+                .id(id)
                 .name(name)
                 .user(null)
                 .categories(new ArrayList<>())
