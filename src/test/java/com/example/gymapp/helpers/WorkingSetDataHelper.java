@@ -10,7 +10,6 @@ import java.util.UUID;
 public class WorkingSetDataHelper {
 
     public static WorkingSetEntity createWorkingSetEntity(
-            ExerciseInstanceEntity exercise,
             Short reps,
             Short weight
     ) {
@@ -19,7 +18,6 @@ public class WorkingSetDataHelper {
 
         return WorkingSetEntity.builder()
                 .id(id)
-                .exerciseInstance(exercise)
                 .reps(reps)
                 .weight(weight)
                 .build();
@@ -27,7 +25,6 @@ public class WorkingSetDataHelper {
     };
 
     public static WorkingSetDto createWorkingSetResponseDto(
-            ExerciseInstanceDto exercise,
             Short reps,
             Short weight
     ) {
@@ -35,20 +32,17 @@ public class WorkingSetDataHelper {
 
         return WorkingSetDto.builder()
                 .id(id)
-                .exerciseInstance(exercise)
                 .reps(reps)
                 .weight(weight)
                 .build();
     };
 
     public static WorkingSetDto createWorkingSetRequestDto(
-            ExerciseInstanceDto exercise,
             Short reps,
             Short weight
     ) {
 
         return WorkingSetDto.builder()
-                .exerciseInstance(exercise)
                 .reps(reps)
                 .weight(weight)
                 .build();

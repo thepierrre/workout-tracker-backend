@@ -122,11 +122,8 @@ public class WorkoutService {
         }
             catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Couldn't create a new routine due to an unexpected error.", e);
+                    "Couldn't create a new workout due to an unexpected error.", e);
         }
-
-
-
     }
 
     public void deleteById(UUID id) {

@@ -11,7 +11,6 @@ public class TestDataInitializer {
 
         public UserEntity user1;
         public UserEntity user2;
-
         public UserDto userDto1;
         public UserDto userDto2;
         public CategoryEntity categoryEntity1;
@@ -23,7 +22,6 @@ public class TestDataInitializer {
         public CategoryDto categoryResponseDto1;
         public CategoryDto categoryResponseDto2;
         public CategoryDto categoryResponseDto3;
-
         public ExerciseTypeEntity exerciseTypeEntity1;
         public ExerciseTypeEntity exerciseTypeEntity2;
         public ExerciseTypeEntity exerciseTypeEntity3;
@@ -51,7 +49,6 @@ public class TestDataInitializer {
         public RoutineDto routineResponseDto1;
         public RoutineDto routineResponseDto2;
         public RoutineDto routineResponseDto3;
-
         public WorkoutEntity workoutEntity1;
         public WorkoutEntity workoutEntity2;
         public WorkoutEntity workoutEntity3;
@@ -68,14 +65,16 @@ public class TestDataInitializer {
         public WorkingSetDto workingSetResponseDto1;
         public WorkingSetDto workingSetResponseDto2;
         public WorkingSetDto workingSetResponseDto3;
+        public LoginDto loginDto1;
+        public RegisterDto registerDto1;
 
     }
 
     public static TestData initializeTestData() {
         TestData testData = new TestData();
 
-        testData.user1 = UserDataHelper.createUserEntity("user1", "user1@example.com", "pass1");
-        testData.user2 = UserDataHelper.createUserEntity("user2", "user2@example.com", "pass2");
+        testData.user1 = UserDataHelper.createUserEntity("user1", "user1@example.com", "encoded1");
+        testData.user2 = UserDataHelper.createUserEntity("user2", "user2@example.com", "encoded2");
         testData.userDto1 = UserDataHelper.createUserResponseDto("user1", "user1@example.com", "pass1");
         testData.userDto2 = UserDataHelper.createUserResponseDto("user2", "user2@example.com", "pass2");
         testData.categoryEntity1 = CategoryDataHelper.createCategoryEntity("category1");
@@ -124,6 +123,14 @@ public class TestDataInitializer {
         testData.workoutResponseDto1 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 4, 30), "routine1");
         testData.workoutResponseDto2 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 6, 15), "routine2");
         testData.workoutResponseDto3 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 6, 15), "routine3");
+        testData.workingSetEntity1 = WorkingSetDataHelper.createWorkingSetEntity((short) 10, (short) 50);
+        testData.workingSetEntity2 = WorkingSetDataHelper.createWorkingSetEntity((short) 9, (short) 40);
+        testData.workingSetEntity3 = WorkingSetDataHelper.createWorkingSetEntity((short) 8, (short) 30);
+        testData.workingSetResponseDto1 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 10, (short) 50);
+        testData.workingSetResponseDto2 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 9, (short) 40);
+        testData.workingSetResponseDto3 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 8, (short) 30);
+        testData.loginDto1 = AuthDataHelper.createLoginDto("user1", "pass1");
+        testData.registerDto1 = AuthDataHelper.createRegisterDto("user1", "user1@example.com", "pass1");
 
         return testData;
 

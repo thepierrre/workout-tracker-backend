@@ -136,13 +136,6 @@ class CategoryControllerTest {
 
         resultActions.andDo(result -> System.out.println(testCase));
 
-//        mvc.perform(post("/api/categories").with(user("user1"))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(input))
-//                .andExpect(status().is(errorCode))
-//                .andExpect(content().string(containsString(message)))
-//                .andDo(result -> System.out.println(testCase));
-
     }
 
     @Test

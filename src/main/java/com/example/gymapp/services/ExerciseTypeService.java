@@ -2,7 +2,6 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.entities.*;
-import com.example.gymapp.errorHandling.CustomServiceException;
 import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.mappers.impl.CategoryMapper;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;

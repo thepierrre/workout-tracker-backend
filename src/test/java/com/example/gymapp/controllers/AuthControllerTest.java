@@ -4,6 +4,7 @@ import com.example.gymapp.domain.dto.LoginDto;
 import com.example.gymapp.domain.dto.RegisterDto;
 import com.example.gymapp.domain.entities.Role;
 import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.repositories.RoleRepository;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.services.AuthService;
@@ -54,44 +55,11 @@ class AuthControllerTest {
     @MockBean
     UserRepository userRepository;
 
-    private static UserEntity user1;
-
-    private static UserEntity user2;
-
-    @BeforeAll
-    static void setUpUsers() {
-        UserEntity user1 = UserEntity.builder()
-                .username("user1")
-                .email("user1@example.com")
-                .password("password1")
-                .build();
-
-        UserEntity user2 = UserEntity.builder()
-                .username("user2")
-                .email("user2@example.com")
-                .password("password2")
-                .build();
-    }
+    TestDataInitializer.TestData testData;
 
     @BeforeEach
     void setUp() {
-
-        // Mock the repository to return the existing users by username and email.
-        when(userRepository.existsByUsername("user1")).thenReturn(true);
-        when(userRepository.existsByEmail("user2@example.com")).thenReturn(true);
-
-        // Save the users to the repository.
-        when(userRepository.save(user1)).thenReturn(user1);
-        when(userRepository.save(user2)).thenReturn(user2);
-        userRepository.save(user1);
-        userRepository.save(user2);
-
-
-        if (!roleRepository.existsByName("USER")) {
-            Role userRole = new Role();
-            userRole.setName("USER");
-            roleRepository.save(userRole);
-        }
+        testData = TestDataInitializer.initializeTestData();
     }
 
     @AfterEach

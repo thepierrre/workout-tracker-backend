@@ -107,8 +107,6 @@ class ExerciseTypeServiceTest {
                 () -> exerciseTypeService.createExercise(testData.exerciseTypeRequestDto1, "user1"));
 
         assertEquals("Exercise with the name 'exerciseType1' already exists.", exception.getMessage());
-
-
     }
 
     @Test
@@ -172,10 +170,6 @@ class ExerciseTypeServiceTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> exerciseTypeService.deleteById(id));
     }
-
-//    @Test
-//    void deleteAll() {
-//    }
 
     @Test
     void updateById() {
