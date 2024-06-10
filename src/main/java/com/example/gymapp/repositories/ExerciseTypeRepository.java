@@ -1,9 +1,6 @@
 package com.example.gymapp.repositories;
 
-import com.example.gymapp.domain.entities.CategoryEntity;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-import com.example.gymapp.domain.entities.RoutineEntity;
-import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.domain.entities.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +14,7 @@ public interface ExerciseTypeRepository extends JpaRepository<ExerciseTypeEntity
     List<ExerciseTypeEntity> findAllByCategoriesContaining(CategoryEntity categoryEntity);
 
     Optional<ExerciseTypeEntity> findByUserAndName(UserEntity user, String name);
+
+    Optional<List<ExerciseTypeEntity>> findByUserUsername(String username);
 
 }

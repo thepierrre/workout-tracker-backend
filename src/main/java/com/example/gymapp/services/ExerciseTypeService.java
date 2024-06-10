@@ -106,15 +106,42 @@ public class ExerciseTypeService {
     }
 
     public List<ExerciseTypeDto> findAllForUser(String username) {
+        try {
+            List<ExerciseTypeEntity> exerciseTypes = exerciseTypeRepository.findByUserUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException(String.format("User with the username \"%s\" not found.", username)));
 
-        UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(
-                        "User with the username \"%s\" not found.", username)));
+            if (!exerciseTypes.isEmpty()) {
+                return exerciseTypes.stream()
+                        .map(exerciseTypeMapper::mapToDto)
+                        .collect(Collectors.toList());
+            }
+            return List.of();
 
-        return user.getExerciseTypes().stream()
-                .map(exerciseType -> exerciseTypeMapper.mapToDto(exerciseType)).toList();
+        } catch (UsernameNotFoundException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Couldn't create a new routine due to an unexpected error.", e);
+        }
+
+
+
 
     }
+
+
+    try {
+        List<WorkoutEntity> workoutEntities = workoutRepository.findByUserUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with the username \"%s\" not found.", username)));
+
+        if (!workoutEntities.isEmpty()) {
+            return workoutEntities.stream()
+                    .map(workoutMapper::mapToDto)
+                    .collect(Collectors.toList());
+        }
+        return List.of();
+
+
 
     @Transactional
     public void deleteById(UUID exerciseTypeId) {

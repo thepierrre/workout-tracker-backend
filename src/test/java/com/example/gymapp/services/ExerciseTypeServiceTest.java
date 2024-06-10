@@ -125,6 +125,8 @@ class ExerciseTypeServiceTest {
 
     @Test
     void findAllForUser_Success() {
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+
 
     }
 
