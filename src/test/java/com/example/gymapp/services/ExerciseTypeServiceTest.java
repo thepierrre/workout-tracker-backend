@@ -2,8 +2,10 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.exceptions.ConflictException;
+import com.example.gymapp.helpers.ExerciseTypeDataHelper;
 import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.repositories.CategoryRepository;
@@ -172,6 +174,34 @@ class ExerciseTypeServiceTest {
     }
 
     @Test
-    void updateById() {
+    void updateById_Success() {
+
+        UUID id = testData.exerciseTypeEntity1.getId();
+
+        ExerciseTypeEntity editedEntity = ExerciseTypeDataHelper.createExerciseTypeEntity("edited");
+        editedEntity.setCategories(List.of(testData.categoryEntity3));
+        editedEntity.setId(id);
+
+        ExerciseTypeDto editedResponseDto = ExerciseTypeDataHelper.createExerciseTypeResponseDto("edited");
+        editedResponseDto.setCategories(List.of(testData.categoryResponseDto3));
+        editedResponseDto.setId(id);
+
+        ExerciseTypeDto editedRequestDto = ExerciseTypeDataHelper.createExerciseTypeRequestDto("edited");
+        editedRequestDto.setCategories(List.of(testData.categoryRequestDto3));
+        editedRequestDto.setId(id);
+
+        when(exerciseTypeRepository.findById(id)).thenReturn(Optional.ofNullable(testData.exerciseTypeEntity1));
+        when(exerciseTypeMapper.mapFromDto(editedRequestDto)).thenReturn(editedEntity);
+        when(exerciseTypeMapper.mapToDto(editedEntity)).thenReturn(editedResponseDto);
+        when(exerciseTypeRepository.save(any(ExerciseTypeEntity.class))).thenReturn(editedEntity);
+
+
+        ExerciseTypeDto result = exerciseTypeService.updateById(id, editedRequestDto);
+
+        assertNotNull(result);
+        assertEquals(testData.exerciseTypeEntity1.getId(), editedResponseDto.getId());
+        assertEquals(editedResponseDto.getName(), "edited");
+        assertEquals(editedResponseDto.getCategories(), List.of(testData.categoryResponseDto3));
     }
+
 }
