@@ -109,7 +109,7 @@ public class RoutineService {
 
         RoutineEntity existingRoutine = routineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
-                        "Routine type with the ID %s not found.", id.toString())));
+                        "Routine with the ID %s not found.", id.toString())));
 
         existingRoutine.setId(routineDto.getId());
         existingRoutine.setName(routineDto.getName());

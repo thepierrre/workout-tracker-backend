@@ -7,12 +7,15 @@ import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.exceptions.ConflictException;
+import com.example.gymapp.helpers.ExerciseTypeDataHelper;
+import com.example.gymapp.helpers.RoutineDataHelper;
 import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.helpers.UserDataHelper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.RoutineRepository;
 import com.example.gymapp.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -110,11 +113,38 @@ class RoutineServiceTest {
     }
 
     @Test
-    void testUpdateById() {
+    void updateById_Success() {
+
+        UUID id = testData.routineEntity1.getId();
+
+        RoutineEntity editedEntity = RoutineDataHelper.createRoutineEntity("edited");
+        editedEntity.setExerciseTypes(List.of(testData.exerciseTypeEntity2, testData.exerciseTypeEntity3));
+        editedEntity.setId(id);
+
+        RoutineDto editedResponseDto = RoutineDataHelper.createRoutineResponseDto("edited");
+        editedResponseDto.setExerciseTypes(List.of(testData.exerciseTypeResponseDto2, testData.exerciseTypeResponseDto3));
+        editedResponseDto.setId(id);
+
+        RoutineDto editedRequestDto = RoutineDataHelper.createRoutineRequestDto("edited");
+        editedRequestDto.setExerciseTypes(List.of(testData.exerciseTypeRequestDto2, testData.exerciseTypeRequestDto3));
+        editedRequestDto.setId(id);
+
+        when(routineRepository.findById(id)).thenReturn(Optional.ofNullable(testData.routineEntity1));
+        when(routineMapper.mapFromDto(editedRequestDto)).thenReturn(editedEntity);
+        when(routineMapper.mapToDto(editedEntity)).thenReturn(editedResponseDto);
+        when(routineRepository.save(any(RoutineEntity.class))).thenReturn(editedEntity);
+
+
+        RoutineDto result = routineService.updateById(id, editedRequestDto);
+
+        assertNotNull(result);
+        assertEquals(testData.routineEntity1.getId(), editedResponseDto.getId());
+        assertEquals(editedResponseDto.getName(), "edited");
+        assertEquals(editedResponseDto.getExerciseTypes(), List.of(testData.exerciseTypeResponseDto2, testData.exerciseTypeResponseDto3));
     }
 
     @Test
-    void testDeleteById() {
+    void testDeleteById_Success() {
         UUID id = testData.routineEntity1.getId();
         when(routineRepository.findById(id)).thenReturn(Optional.ofNullable(testData.routineEntity1));
 
@@ -127,6 +157,25 @@ class RoutineServiceTest {
         verify(routineRepository, times(1)).deleteById(id);
         assertTrue(testData.user1.getRoutines().isEmpty());
 
+    }
+
+    @Test
+    void deleteById_IdNotFound() {
+        UUID id = UUID.randomUUID();
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> routineService.deleteById(id));
+
+        assertEquals("Routine with the ID " + id + " not found.", exception.getMessage());
+    }
+
+    @Test
+    void updateById_IdNotFound() {
+        UUID id = UUID.randomUUID();
+        RoutineDto editedRequestDto = RoutineDataHelper.createRoutineRequestDto("edited");
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> routineService.updateById(id, editedRequestDto));
+
+        assertEquals("Routine with the ID " + id + " not found.", exception.getMessage());
     }
 
     @Test

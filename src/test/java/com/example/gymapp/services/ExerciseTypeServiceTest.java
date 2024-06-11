@@ -171,6 +171,8 @@ class ExerciseTypeServiceTest {
         UUID id = UUID.randomUUID();
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> exerciseTypeService.deleteById(id));
+
+        assertEquals("Exercise type with the ID " + id + " not found.", exception.getMessage());
     }
 
     @Test
@@ -202,6 +204,16 @@ class ExerciseTypeServiceTest {
         assertEquals(testData.exerciseTypeEntity1.getId(), editedResponseDto.getId());
         assertEquals(editedResponseDto.getName(), "edited");
         assertEquals(editedResponseDto.getCategories(), List.of(testData.categoryResponseDto3));
+    }
+
+    @Test
+    void updateById_IdNotFound() {
+        UUID id = UUID.randomUUID();
+        ExerciseTypeDto editedRequestDto = ExerciseTypeDataHelper.createExerciseTypeRequestDto("edited");
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> exerciseTypeService.updateById(id, editedRequestDto));
+
+        assertEquals("Exercise type with the ID " + id + " not found.", exception.getMessage());
     }
 
 }

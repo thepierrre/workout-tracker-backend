@@ -101,7 +101,6 @@ class AuthControllerTest {
     @MethodSource("provideRegisterUserPayloadAndExpectedResults")
     void testRegisterUser(String testCase, String input, String message, int errorCode) throws Exception {
 
-
         RegisterDto registerDto = objectMapper.readValue(input, RegisterDto.class);
         when(authService.register(any(RegisterDto.class)))
                 .thenReturn(new ResponseEntity<>(message, errorCode == 200 ? HttpStatus.OK : HttpStatus.CONFLICT));
