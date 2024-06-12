@@ -1,8 +1,6 @@
 package com.example.gymapp.services;
 
-import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.RoutineDto;
-import com.example.gymapp.domain.entities.CategoryEntity;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
@@ -21,7 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -106,7 +103,6 @@ public class RoutineService {
     }
 
     public RoutineDto updateById(UUID id, RoutineDto routineDto) {
-
         RoutineEntity existingRoutine = routineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
                         "Routine with the ID %s not found.", id.toString())));
@@ -125,12 +121,9 @@ public class RoutineService {
         RoutineEntity updatedRoutine = routineRepository.save(existingRoutine);
 
         return routineMapper.mapToDto(updatedRoutine);
-
-
     }
 
     public void deleteById(UUID routineId) {
-
         RoutineEntity routine = routineRepository.findById(routineId)
                         .orElseThrow(() -> new EntityNotFoundException(String.format(
                                 "Routine with the ID %s not found.", routineId.toString())));

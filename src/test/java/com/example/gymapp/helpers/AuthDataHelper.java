@@ -2,10 +2,6 @@ package com.example.gymapp.helpers;
 
 import com.example.gymapp.domain.dto.LoginDto;
 import com.example.gymapp.domain.dto.RegisterDto;
-import com.example.gymapp.domain.entities.CategoryEntity;
-
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class AuthDataHelper {
 

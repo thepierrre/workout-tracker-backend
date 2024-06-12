@@ -1,14 +1,9 @@
 package com.example.gymapp.helpers;
 
 import com.example.gymapp.domain.dto.UserDto;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.domain.entities.WorkoutEntity;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class UserDataHelper {

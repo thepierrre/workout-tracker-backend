@@ -3,11 +3,9 @@ package com.example.gymapp.services;
 import com.example.gymapp.domain.dto.WorkingSetDto;
 import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
 import com.example.gymapp.domain.entities.WorkingSetEntity;
-import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.WorkingSetMapper;
 import com.example.gymapp.repositories.ExerciseInstanceRepository;
 import com.example.gymapp.repositories.WorkingSetRepository;
-import com.example.gymapp.repositories.WorkoutRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +26,6 @@ public class WorkingSetService {
     WorkingSetMapper workingSetMapper;
 
     public WorkingSetDto createWorkingSet(WorkingSetDto workingSetDto) {
-
         WorkingSetEntity createdWorkingSet = workingSetRepository.save(workingSetMapper.mapFromDto(workingSetDto));
         return workingSetMapper.mapToDto(createdWorkingSet);
     }
@@ -39,17 +36,14 @@ public class WorkingSetService {
     }
 
     public List<WorkingSetDto> findAllForExerciseInstance(UUID exerciseInstanceId) {
-
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
 
         return exerciseInstance.getWorkingSets().stream()
                 .map(set -> workingSetMapper.mapToDto(set)).toList();
-
     }
 
     public WorkingSetDto patchById(UUID setId, WorkingSetDto workingSetDto) {
-
         WorkingSetEntity workingSet = workingSetRepository.findById(setId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Set with the ID %s not found.", setId.toString())));
 
@@ -64,11 +58,9 @@ public class WorkingSetService {
         workingSetRepository.save(workingSet);
 
         return workingSetMapper.mapToDto(workingSet);
-
     }
 
     public void deleteById(UUID setId) {
-
         WorkingSetEntity set = workingSetRepository.findById(setId)
                         .orElseThrow(() -> new EntityNotFoundException(String.format("Set with the ID %s not found.", setId.toString())));
 

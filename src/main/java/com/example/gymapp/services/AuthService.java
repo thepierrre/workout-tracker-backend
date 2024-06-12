@@ -19,15 +19,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.Collections;
 
@@ -48,7 +44,6 @@ public class AuthService {
     private RoleRepository roleRepository;
 
     public ResponseEntity<String> login(LoginDto loginDto, HttpServletResponse response) {
-        try {
 
             UserEntity user = userRepository.findByUsername(loginDto.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password."));
@@ -73,22 +68,12 @@ public class AuthService {
             response.addCookie(cookie);
 
             return new ResponseEntity<>("User \"" + loginDto.getUsername() + "\" logged in.", HttpStatus.OK);
-        } catch (UsernameNotFoundException | BadCredentialsException e) {
-            throw e;
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>("Logging in failed due to an unexpected error.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        try {
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
             return new ResponseEntity<>("Logging out successful.", HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>("Logging out failed due to an unexpected error.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
     }
 
     public ResponseEntity<String> register(RegisterDto registerDto) {
@@ -100,27 +85,21 @@ public class AuthService {
             throw new ConflictException("User with the email \"" + registerDto.getEmail() + "\" already exists.");
         }
 
-        try {
-            UserEntity user = new UserEntity();
-            user.setUsername(registerDto.getUsername());
-            user.setEmail(registerDto.getEmail());
-            user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        UserEntity user = new UserEntity();
+        user.setUsername(registerDto.getUsername());
+        user.setEmail(registerDto.getEmail());
+        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
-            Role role = roleRepository.findByName("USER")
-                            .orElseThrow(
-                                    () -> new EntityNotFoundException(
-                                            "Cannot register a new user because the \"USER\" role hasn't been set."));
-            user.setRoles(Collections.singletonList(role));
+        Role role = roleRepository.findByName("USER")
+                        .orElseThrow(
+                                () -> new EntityNotFoundException(
+                                        "Cannot register a new user because the \"USER\" role hasn't been set."));
+        user.setRoles(Collections.singletonList(role));
 
-            userRepository.save(user);
+        userRepository.save(user);
 
-            return new ResponseEntity<>("User \"" + registerDto.getUsername() + "\" registered.", HttpStatus.OK);
-        } catch (ConflictException | EntityNotFoundException e ) {
-            throw  e;
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>("Registration failed due to an unexpected error.",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>("User \"" + registerDto.getUsername() + "\" registered.", HttpStatus.OK);
+
     }
 }
 

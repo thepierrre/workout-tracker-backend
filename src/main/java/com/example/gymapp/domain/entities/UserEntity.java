@@ -23,7 +23,6 @@ public class UserEntity {
 
     @Id
     @UuidGenerator
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     private String username;

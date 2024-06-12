@@ -2,20 +2,15 @@ package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
-import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.Mapper;
-import com.example.gymapp.repositories.WorkoutRepository;
 import com.example.gymapp.services.ExerciseInstanceService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.service.annotation.DeleteExchange;
 
 import java.util.HashMap;
 import java.util.List;

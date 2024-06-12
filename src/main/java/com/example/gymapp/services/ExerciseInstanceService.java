@@ -8,7 +8,6 @@ import com.example.gymapp.repositories.ExerciseInstanceRepository;
 import com.example.gymapp.repositories.WorkoutRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,7 +49,6 @@ public class ExerciseInstanceService {
     }
 
     public void deleteById(UUID exerciseInstanceId) {
-
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
                         "Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));

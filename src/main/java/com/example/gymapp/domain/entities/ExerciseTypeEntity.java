@@ -1,6 +1,7 @@
 package com.example.gymapp.domain.entities;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,10 +25,6 @@ public class ExerciseTypeEntity {
     private UUID id;
 
     private String name;
-
-//    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<ExerciseInstanceEntity> exerciseInstances;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

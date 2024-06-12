@@ -1,7 +1,6 @@
 package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.WorkingSetDto;
-import com.example.gymapp.mappers.impl.WorkingSetMapper;
 import com.example.gymapp.services.WorkingSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

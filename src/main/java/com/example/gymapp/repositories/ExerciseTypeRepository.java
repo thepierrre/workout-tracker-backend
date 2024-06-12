@@ -1,6 +1,8 @@
 package com.example.gymapp.repositories;
 
-import com.example.gymapp.domain.entities.*;
+import com.example.gymapp.domain.entities.CategoryEntity;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
+import com.example.gymapp.domain.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

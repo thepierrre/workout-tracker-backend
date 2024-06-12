@@ -1,8 +1,6 @@
 package com.example.gymapp.helpers;
 
-import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.dto.WorkingSetDto;
-import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
 import com.example.gymapp.domain.entities.WorkingSetEntity;
 
 import java.util.UUID;
