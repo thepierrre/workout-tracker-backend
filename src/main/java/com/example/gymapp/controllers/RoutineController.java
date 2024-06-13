@@ -53,8 +53,8 @@ public class RoutineController {
             @PathVariable("routineId") UUID routineId,
             @RequestBody RoutineDto routineDto
     ) {
-        RoutineDto patchedRoutine = routineService.updateById(routineId, routineDto);
-        return new ResponseEntity<>(patchedRoutine, HttpStatus.OK);
+        RoutineDto updatedRoutine = routineService.updateById(routineId, routineDto);
+        return new ResponseEntity<>(updatedRoutine, HttpStatus.OK);
     }
 
 

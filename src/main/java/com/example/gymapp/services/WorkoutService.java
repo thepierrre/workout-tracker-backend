@@ -1,5 +1,7 @@
 package com.example.gymapp.services;
 
+import com.example.gymapp.domain.dto.ExerciseInstanceDto;
+import com.example.gymapp.domain.dto.WorkingSetDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
@@ -8,6 +10,7 @@ import com.example.gymapp.repositories.RoutineRepository;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.repositories.WorkoutRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -102,6 +105,61 @@ public class WorkoutService {
         WorkoutEntity savedWorkoutEntity = workoutRepository.save(workoutEntity);
 
         return workoutMapper.mapToDto(savedWorkoutEntity);
+    }
+
+//    public WorkoutDto updateById(UUID id, WorkoutDto workoutDto) {
+//        WorkoutEntity foundWorkoutEntity = workoutRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException(String.format(
+//                        "Workout with the ID %s not found.", id.toString())));
+//
+//        WorkoutDto dto = workoutMapper.mapToDto(foundWorkoutEntity);
+//        dto.setExerciseInstances(workoutDto.getExerciseInstances());
+//        workoutRepository.save(workoutMapper.mapFromDto(dto));
+//
+//        return dto;
+//
+//    }
+
+    @Transactional
+    public WorkoutDto updateById(UUID id, WorkoutDto workoutDto) {
+        WorkoutEntity foundWorkoutEntity = workoutRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Workout with the ID %s not found.", id.toString())));
+
+        // Update exercise instances and working sets
+        for (ExerciseInstanceDto updatedInstanceDto : workoutDto.getExerciseInstances()) {
+            ExerciseInstanceEntity existingInstance = foundWorkoutEntity.getExerciseInstances().stream()
+                    .filter(instance -> instance.getExerciseTypeName().equals(updatedInstanceDto.getExerciseTypeName()))
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException(String.format(
+                            "ExerciseInstance with the type name %s not found.", updatedInstanceDto.getExerciseTypeName())));
+
+            // Update or add working sets
+            for (WorkingSetDto updatedSetDto : updatedInstanceDto.getWorkingSets()) {
+                if (updatedSetDto.getId() == null) {
+                    // Add new working set
+                    WorkingSetEntity newSet = new WorkingSetEntity();
+                    newSet.setReps(updatedSetDto.getReps());
+                    newSet.setWeight(updatedSetDto.getWeight());
+                    newSet.setExerciseInstance(existingInstance);
+                    existingInstance.getWorkingSets().add(newSet);
+                } else {
+                    // Update existing working set
+                    WorkingSetEntity existingSet = existingInstance.getWorkingSets().stream()
+                            .filter(set -> set.getId().equals(updatedSetDto.getId()))
+                            .findFirst()
+                            .orElseThrow(() -> new EntityNotFoundException(String.format(
+                                    "WorkingSet with the ID %s not found.", updatedSetDto.getId())));
+                    existingSet.setReps(updatedSetDto.getReps());
+                    existingSet.setWeight(updatedSetDto.getWeight());
+                }
+            }
+        }
+
+        // Save the updated workout entity
+        WorkoutEntity updatedWorkoutEntity = workoutRepository.save(foundWorkoutEntity);
+
+        return workoutMapper.mapToDto(updatedWorkoutEntity);
     }
 
     public void deleteById(UUID id) {

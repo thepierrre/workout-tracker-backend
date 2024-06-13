@@ -56,6 +56,12 @@ public class WorkoutController {
         return new ResponseEntity<>(createdWorkout, HttpStatus.CREATED);
     }
 
+    @PutMapping(path = "workouts/{workoutId}")
+    public ResponseEntity<WorkoutDto> updateWorkout(@PathVariable("workoutId") UUID id, @RequestBody WorkoutDto workoutDto) {
+        WorkoutDto editedWorkout = workoutService.updateById(id, workoutDto);
+        return new ResponseEntity<>(editedWorkout, HttpStatus.OK);
+    }
+
     @DeleteMapping("workouts/{workoutId}")
     public ResponseEntity<Void> deleteById(@PathVariable("workoutId") UUID id) {
         try {

@@ -46,7 +46,7 @@ public class AuthService {
     public ResponseEntity<String> login(LoginDto loginDto, HttpServletResponse response) {
 
             UserEntity user = userRepository.findByUsername(loginDto.getUsername())
-                    .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password."));
+                    .orElseThrow(() -> new BadCredentialsException("Invalid username or password."));
 
             if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
                 throw new BadCredentialsException("Invalid username or password.");

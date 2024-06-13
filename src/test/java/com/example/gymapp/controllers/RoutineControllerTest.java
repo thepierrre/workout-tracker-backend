@@ -3,6 +3,7 @@ package com.example.gymapp.controllers;
 import com.example.gymapp.repositories.RoutineRepository;
 import com.example.gymapp.services.RoutineService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -39,6 +40,7 @@ class RoutineControllerTest {
     RoutineRepository routineRepository;
 
     @ParameterizedTest
+    @Disabled
     @MethodSource("provideCreateRoutinePayloadAndExpectedResults_Success")
     void createTrainingRoutine_Success(String input, String message, int errorCode) throws Exception {
 

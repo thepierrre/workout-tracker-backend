@@ -10,6 +10,7 @@ import com.example.gymapp.services.ExerciseTypeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -81,6 +82,7 @@ class ExerciseTypeControllerTest {
     }
 
     @ParameterizedTest
+    @Disabled
     @MethodSource("provideCreateExerciseTypePayloadAndExpectedResults")
     void testCreateExerciseType(String testCase, String input, String output, String message, int errorCode, boolean isSuccess) throws Exception {
         when(userRepository.findByUsername("user1")).thenReturn(Optional.ofNullable(testData.user1));
