@@ -10,8 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface RoutineRepository extends JpaRepository<RoutineEntity, UUID> {
-
-    Optional<RoutineEntity> findByName(String name);
-
     Optional<RoutineEntity> findByUserAndName(UserEntity user, String name);
 }

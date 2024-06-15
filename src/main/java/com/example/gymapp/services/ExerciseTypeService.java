@@ -8,8 +8,10 @@ import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.mappers.impl.CategoryMapper;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
-import com.example.gymapp.mappers.impl.RoutineMapper;
-import com.example.gymapp.repositories.*;
+import com.example.gymapp.repositories.CategoryRepository;
+import com.example.gymapp.repositories.ExerciseTypeRepository;
+import com.example.gymapp.repositories.RoutineRepository;
+import com.example.gymapp.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,9 +33,6 @@ public class ExerciseTypeService {
     ExerciseTypeMapper exerciseTypeMapper;
 
     @Autowired
-    RoutineMapper routineMapper;
-
-    @Autowired
     CategoryMapper categoryMapper;
 
     @Autowired
@@ -45,8 +44,6 @@ public class ExerciseTypeService {
     @Autowired
     RoutineRepository routineRepository;
 
-    @Autowired
-    ExerciseInstanceRepository exerciseInstanceRepository;
 
     public ExerciseTypeService(ExerciseTypeRepository exerciseTypeRepository) {
         this.exerciseTypeRepository = exerciseTypeRepository;
@@ -83,11 +80,6 @@ public class ExerciseTypeService {
         userRepository.save(user);
 
         return exerciseTypeMapper.mapToDto(savedEntity);
-    }
-
-    public List<ExerciseTypeDto> findAll() {
-        return exerciseTypeRepository.findAll().stream()
-                .map(exerciseType -> exerciseTypeMapper.mapToDto(exerciseType)).toList();
     }
 
     public List<ExerciseTypeDto> findAllForUser(String username) {

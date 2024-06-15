@@ -1,6 +1,7 @@
 package com.example.gymapp.controllers;
 
-import com.example.gymapp.domain.dto.*;
+import com.example.gymapp.domain.dto.UserDto;
+import com.example.gymapp.domain.dto.UserResponseDto;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
@@ -12,12 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -84,7 +85,6 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
 
 

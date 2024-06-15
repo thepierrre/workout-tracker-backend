@@ -86,11 +86,6 @@ public class RoutineService {
 
     }
 
-    public List<RoutineDto> findAll() {
-        return routineRepository.
-                findAll().stream().map(routineMapper::mapToDto).
-                toList(); }
-
     public List<RoutineDto> findAllForUser(String username) {
 
         UserEntity user = userRepository.findByUsername(username)
@@ -99,7 +94,6 @@ public class RoutineService {
 
         return user.getRoutines().stream()
                 .map(routineEntity -> routineMapper.mapToDto(routineEntity)).toList();
-
     }
 
     public RoutineDto updateById(UUID id, RoutineDto routineDto) {
@@ -129,9 +123,5 @@ public class RoutineService {
                                 "Routine with the ID %s not found.", routineId.toString())));
 
         routineRepository.deleteById(routineId);
-    }
-
-    public void deleteAll() {
-        routineRepository.deleteAll();
     }
 }

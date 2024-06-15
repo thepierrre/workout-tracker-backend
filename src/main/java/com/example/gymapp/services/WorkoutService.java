@@ -1,16 +1,12 @@
 package com.example.gymapp.services;
 
-import com.example.gymapp.domain.dto.ExerciseInstanceDto;
-import com.example.gymapp.domain.dto.WorkingSetDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
-import com.example.gymapp.repositories.ExerciseInstanceRepository;
 import com.example.gymapp.repositories.RoutineRepository;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.repositories.WorkoutRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -35,14 +31,7 @@ public class WorkoutService {
     RoutineRepository routineRepository;
 
     @Autowired
-    ExerciseInstanceRepository exerciseInstanceRepository;
-
-    @Autowired
     WorkoutMapper workoutMapper;
-
-    public List<WorkoutDto> findAll() {
-        return workoutRepository.findAll().stream().map(workoutMapper::mapToDto).toList();
-    }
 
     public List<WorkoutDto> findAllForUser(String username) {
         List<WorkoutEntity> workoutEntities = workoutRepository.findByUserUsername(username)
@@ -113,9 +102,5 @@ public class WorkoutService {
                         "Workout with the ID \"%s\" not found.", id)));
 
         workoutRepository.deleteById(id);
-    }
-
-    public void deleteAll() {
-        workoutRepository.deleteAll();
     }
 }

@@ -4,7 +4,6 @@ import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.dto.WorkingSetDto;
 import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
 import com.example.gymapp.domain.entities.WorkingSetEntity;
-import com.example.gymapp.domain.entities.WorkoutEntity;
 import com.example.gymapp.mappers.impl.ExerciseInstanceMapper;
 import com.example.gymapp.mappers.impl.WorkingSetMapper;
 import com.example.gymapp.repositories.ExerciseInstanceRepository;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,25 +35,6 @@ public class ExerciseInstanceService {
 
     @Autowired
     private WorkoutRepository workoutRepository;
-
-    public List<ExerciseInstanceDto> findAll() {
-        return exerciseInstanceRepository.findAll().stream().map(exerciseInstanceMapper::mapToDto).toList();
-    }
-
-    public List<ExerciseInstanceDto> findAllForWorkout(UUID workoutId) {
-        WorkoutEntity workout = workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(
-                        "Workout with the ID %s not found.", workoutId.toString())));
-
-        return workout.getExerciseInstances().stream()
-                .map(exerciseInstanceEntity -> exerciseInstanceMapper.mapToDto(exerciseInstanceEntity)).toList();
-    }
-
-    public ExerciseInstanceDto createExerciseInstance(ExerciseInstanceDto exerciseInstanceDto) {
-        ExerciseInstanceEntity exerciseInstanceEntity = exerciseInstanceMapper.mapFromDto(exerciseInstanceDto);
-        exerciseInstanceRepository.save(exerciseInstanceEntity);
-        return exerciseInstanceMapper.mapToDto(exerciseInstanceEntity);
-    }
 
     public ExerciseInstanceDto createWorkingSetforExercise(UUID exerciseId, WorkingSetDto workingSetDto) {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseId)
@@ -98,11 +77,7 @@ public class ExerciseInstanceService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Set with the ID %s not found.", setId.toString())));
 
         workingSetRepository.deleteById(setId);
-
         exerciseInstance.getWorkingSets().remove(workingSet);
-
-//        exerciseInstance.getWorkingSets().sort(Comparator.comparingLong(WorkingSetEntity::getId));
-
 
         return exerciseInstanceMapper.mapToDto(exerciseInstance);
     }

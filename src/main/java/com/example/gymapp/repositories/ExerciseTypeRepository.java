@@ -12,11 +12,6 @@ import java.util.UUID;
 
 @Repository
 public interface ExerciseTypeRepository extends JpaRepository<ExerciseTypeEntity, UUID> {
-
-    List<ExerciseTypeEntity> findAllByCategoriesContaining(CategoryEntity categoryEntity);
-
     Optional<ExerciseTypeEntity> findByUserAndName(UserEntity user, String name);
-
     Optional<List<ExerciseTypeEntity>> findByUserUsername(String username);
-
 }

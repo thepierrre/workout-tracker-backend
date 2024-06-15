@@ -91,14 +91,6 @@ class RoutineServiceTest {
     }
 
     @Test
-    void testFindAll() {
-        when(routineRepository.findAll()).thenReturn((List.of(testData.routineEntity1, testData.routineEntity2)));
-
-        List<RoutineDto> result = routineService.findAll();
-        assertEquals(2, result.size());
-    }
-
-    @Test
     void testFindAllForUser() {
         when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
         List<RoutineDto> result = routineService.findAllForUser("user1");

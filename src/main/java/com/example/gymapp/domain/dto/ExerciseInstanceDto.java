@@ -18,9 +18,6 @@ public class ExerciseInstanceDto {
 
     private UUID id;
 
-//    @NotNull(message = "Exercise type cannot be null.")
-//    private ExerciseTypeDto exerciseType;
-
     private String exerciseTypeName;
 
     @JsonIgnoreProperties("exerciseInstance")
