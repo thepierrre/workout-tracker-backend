@@ -15,9 +15,8 @@ import java.util.UUID;
 @Builder
 public class WorkingSetDto {
 
-    private UUID id;
+    private Long id;
 
-    @NotNull(message = "Training instance cannot be null.")
     private ExerciseInstanceDto exerciseInstance;
 
     private Short reps;

@@ -17,11 +17,11 @@ public class WorkingSetController {
     @Autowired
     WorkingSetService workingSetService;
 
-    @GetMapping(path = "sets")
-    public ResponseEntity<List<WorkingSetDto>> findAll() {
-        List<WorkingSetDto> sets = workingSetService.findAll();
-        return new ResponseEntity<>(sets, HttpStatus.OK);
-    }
+//    @GetMapping(path = "sets")
+//    public ResponseEntity<List<WorkingSetDto>> findAll() {
+//        List<WorkingSetDto> sets = workingSetService.findAll();
+//        return new ResponseEntity<>(sets, HttpStatus.OK);
+//    }
 
     @GetMapping(path = "{exerciseInstanceId}/sets")
     public ResponseEntity<List<WorkingSetDto>> findAllForExerciseInstance(@PathVariable("exerciseInstanceId") UUID exerciseInstanceId) {
@@ -36,14 +36,8 @@ public class WorkingSetController {
         return new ResponseEntity<>(createdWorkingSet, HttpStatus.CREATED);
     }
 
-    @PatchMapping(path = "sets/{setId}")
-    public ResponseEntity<WorkingSetDto> patchById(@PathVariable("setId") UUID setId, WorkingSetDto workingSetDto) {
-        WorkingSetDto patchedWorkingSet = workingSetService.patchById(setId, workingSetDto);
-        return new ResponseEntity<>(patchedWorkingSet, HttpStatus.OK);
-    }
-
     @DeleteMapping(path = "sets/{setId}")
-    public ResponseEntity<Void> deleteById(@PathVariable("setId") UUID setId) {
+    public ResponseEntity<Void> deleteById(@PathVariable("setId") Long setId) {
         workingSetService.deleteById(setId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

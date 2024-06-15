@@ -1,6 +1,7 @@
 package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
+import com.example.gymapp.domain.dto.WorkingSetDto;
 import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
 import com.example.gymapp.mappers.Mapper;
 import com.example.gymapp.services.ExerciseInstanceService;
@@ -28,12 +29,12 @@ public class ExerciseInstanceController {
     private Mapper<ExerciseInstanceEntity, ExerciseInstanceDto> exerciseInstanceMapper;
 
 
-    @GetMapping(path = "exercise-instances")
-    public ResponseEntity<List<ExerciseInstanceDto>> findAll() {
-
-        List<ExerciseInstanceDto> exerciseInstances = exerciseInstanceService.findAll();
-        return new ResponseEntity<>(exerciseInstances, HttpStatus.OK);
-    }
+//    @GetMapping(path = "exercise-instances")
+//    public ResponseEntity<List<ExerciseInstanceDto>> findAll() {
+//
+//        List<ExerciseInstanceDto> exerciseInstances = exerciseInstanceService.findAll();
+//        return new ResponseEntity<>(exerciseInstances, HttpStatus.OK);
+//    }
 
     @GetMapping(path = "workouts/{workoutId}/exercise-instances")
     public ResponseEntity<List<ExerciseInstanceDto>> findAllForWorkout(@PathVariable("workoutId") UUID workoutId) {
@@ -44,40 +45,52 @@ public class ExerciseInstanceController {
 
     }
 
-    @PostMapping(path = "exercise-instances")
-    public ResponseEntity<ExerciseInstanceDto> createExerciseInstance(@Valid @RequestBody ExerciseInstanceDto exerciseInstanceDto) {
-        ExerciseInstanceDto createdExerciseInstance = exerciseInstanceService.createExerciseInstance(exerciseInstanceDto);
-        return new ResponseEntity<>(createdExerciseInstance, HttpStatus.CREATED);
+    @PostMapping(path = "exercise-instances/{exerciseInstanceId}/sets")
+    public ResponseEntity<ExerciseInstanceDto> createWorkingSetForExercise(
+            @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,
+            @RequestBody WorkingSetDto workingSetDto) {
+        ExerciseInstanceDto exercise = exerciseInstanceService.
+                createWorkingSetforExercise(exerciseInstanceId, workingSetDto);
+        return new ResponseEntity<>(exercise, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "exercise-instances")
-    public ResponseEntity<Void> deleteAll() {
-        exerciseInstanceService.deleteAll();
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PatchMapping(path = "exercise-instances/{exerciseInstanceId}/sets/{setId}")
+    public ResponseEntity<ExerciseInstanceDto> updateById(
+            @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,
+            @PathVariable("setId") Long setId,
+            @RequestBody WorkingSetDto workingSetDto) {
+        ExerciseInstanceDto exercise = exerciseInstanceService.updateWorkingSetById(exerciseInstanceId, setId, workingSetDto);
+        return new ResponseEntity<>(exercise, HttpStatus.OK);
     }
+
+
+
+    @DeleteMapping(path = "exercise-instances/{exerciseInstanceId}/sets/{setId}")
+    public ResponseEntity<ExerciseInstanceDto> deleteWorkingSetById(
+            @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,
+            @PathVariable("setId") Long setId
+    ) {
+        ExerciseInstanceDto exercise = exerciseInstanceService.deleteWorkingSetById(exerciseInstanceId, setId);
+        return new ResponseEntity<>(exercise, HttpStatus.OK);
+
+    }
+
+
+//    @PostMapping(path = "exercise-instances")
+//    public ResponseEntity<ExerciseInstanceDto> createExerciseInstance(@Valid @RequestBody ExerciseInstanceDto exerciseInstanceDto) {
+//        ExerciseInstanceDto createdExerciseInstance = exerciseInstanceService.createExerciseInstance(exerciseInstanceDto);
+//        return new ResponseEntity<>(createdExerciseInstance, HttpStatus.CREATED);
+//    }
+
+//    @DeleteMapping(path = "exercise-instances")
+//    public ResponseEntity<Void> deleteAll() {
+//        exerciseInstanceService.deleteAll();
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
     @DeleteMapping(path = "exercise-instances/{exerciseInstanceId}")
     public ResponseEntity<Void> deleteById(@PathVariable("exerciseInstanceId") UUID exerciseInstanceId) {
         exerciseInstanceService.deleteById(exerciseInstanceId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-//    @PatchMapping(path = "exercise-instances/{exerciseInstanceId}")
-//    public ResponseEntity<ExerciseInstanceDto> patchById(@PathVariable("exerciseInstanceId") UUID exerciseInstanceId) {
-//        ExerciseInstanceDto patchedExerciseInstance = exerciseInstanceService.patchById(exerciseInstanceId);
-//        return new ResponseEntity<>(patchedExerciseInstance, HttpStatus.OK);
-//    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
     }
 }

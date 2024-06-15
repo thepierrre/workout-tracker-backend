@@ -9,6 +9,8 @@ import com.example.gymapp.repositories.WorkingSetRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +26,8 @@ public class WorkingSetService {
 
     @Autowired
     WorkingSetMapper workingSetMapper;
+
+    private static final Logger logger = LoggerFactory.getLogger(WorkingSetService.class);
 
     public WorkingSetDto createWorkingSet(WorkingSetDto workingSetDto) {
         WorkingSetEntity createdWorkingSet = workingSetRepository.save(workingSetMapper.mapFromDto(workingSetDto));
@@ -43,24 +47,7 @@ public class WorkingSetService {
                 .map(set -> workingSetMapper.mapToDto(set)).toList();
     }
 
-    public WorkingSetDto patchById(UUID setId, WorkingSetDto workingSetDto) {
-        WorkingSetEntity workingSet = workingSetRepository.findById(setId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Set with the ID %s not found.", setId.toString())));
-
-        if (workingSetDto.getReps() != null) {
-            workingSet.setReps(workingSetDto.getReps());
-        }
-
-        if (workingSetDto.getWeight() != null) {
-            workingSet.setWeight(workingSetDto.getWeight());
-        }
-
-        workingSetRepository.save(workingSet);
-
-        return workingSetMapper.mapToDto(workingSet);
-    }
-
-    public void deleteById(UUID setId) {
+    public void deleteById(Long setId) {
         WorkingSetEntity set = workingSetRepository.findById(setId)
                         .orElseThrow(() -> new EntityNotFoundException(String.format("Set with the ID %s not found.", setId.toString())));
 

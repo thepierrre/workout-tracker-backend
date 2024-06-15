@@ -18,8 +18,8 @@ import java.util.UUID;
 public class WorkingSetEntity {
 
     @Id
-    @UuidGenerator
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "exercise_instance_id", referencedColumnName = "id")

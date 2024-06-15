@@ -35,12 +35,12 @@ public class RoutineController {
         return new ResponseEntity<>(createdTrainingRoutine, HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "routines")
-    public ResponseEntity<List<RoutineDto>> findAll() {
-
-        List<RoutineDto> routines = routineService.findAll();
-        return new ResponseEntity<>(routines, HttpStatus.OK);
-    }
+//    @GetMapping(path = "routines")
+//    public ResponseEntity<List<RoutineDto>> findAll() {
+//
+//        List<RoutineDto> routines = routineService.findAll();
+//        return new ResponseEntity<>(routines, HttpStatus.OK);
+//    }
 
     @GetMapping(path = "user-routines")
     public ResponseEntity<List<RoutineDto>> findAllForUser(@AuthenticationPrincipal UserDetails userDetails) {
@@ -64,23 +64,10 @@ public class RoutineController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "routines")
-    public ResponseEntity<Void> deleteAll() {
-        routineService.deleteAll();
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
+//    @DeleteMapping(path = "routines")
+//    public ResponseEntity<Void> deleteAll() {
+//        routineService.deleteAll();
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
 }

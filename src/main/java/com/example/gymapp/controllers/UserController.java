@@ -75,7 +75,6 @@ public class UserController {
         }
 
     }
-
     @DeleteMapping(path = "{userId}")
     public ResponseEntity<Void> deleteById(@PathVariable("userId") UUID id) {
         try {
@@ -84,90 +83,6 @@ public class UserController {
             throw e;
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping
-    public ResponseEntity<Void> deleteAll() {
-        userService.deleteAll();
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping(path = "{userId}/routines")
-    public ResponseEntity<List<RoutineDto>> getTrainingRoutinesForUser(@PathVariable("userId") String userId) {
-        UUID id;
-        try {
-            id = UUID.fromString(userId);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Provided user ID cannot be converted to a valid UUID");
-        }
-
-        List<RoutineDto> foundTrainingRoutines;
-        foundTrainingRoutines = new ArrayList<>(userService.getTrainingRoutinesForUser(id));
-
-        return ResponseEntity.ok(foundTrainingRoutines);
-    }
-
-    @GetMapping(path = "{userId}/workouts")
-    public ResponseEntity<List<WorkoutDto>> getWorkoutsForUser(@PathVariable("userId") String userId) {
-        UUID id;
-        try {
-            id = UUID.fromString(userId);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Provided user ID cannot be converted to a valid UUID");
-        }
-
-        List<WorkoutDto> foundWorkouts;
-       try {
-           foundWorkouts = new ArrayList<>(userService.getWorkoutsForUser(id));
-       } catch (ResponseStatusException e) {
-           throw e;
-       }
-        return ResponseEntity.ok(foundWorkouts);
-    }
-
-    @GetMapping(path = "{userId}/exercise-types")
-    public ResponseEntity<List<ExerciseTypeDto>> getExerciseTypesForUser(@PathVariable("userId") String userId) throws Exception {
-        UUID id;
-        try {
-            id = UUID.fromString(userId);
-        }
-        catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("Provided user ID cannot be converted to a valid UUID");
-
-        }
-
-        List<ExerciseTypeDto> foundExerciseTypes;
-        try {
-            foundExerciseTypes = new ArrayList<>(userService.getExerciseTypesForUser(id));
-        } catch (ResponseStatusException e) {
-            throw e;
-        }
-        return ResponseEntity.ok(foundExerciseTypes);
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> BadRequestHandler(IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body(Map.of("message", e.getMessage()));
-    }
-
-    @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<Object> NotFoundHandler(ResponseStatusException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).
-                body(Map.of("message", "User with the provided ID was not found"));
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
     }
 
 }

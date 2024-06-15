@@ -31,12 +31,12 @@ public class ExerciseTypeController {
     @Autowired
     private Mapper<ExerciseTypeEntity, ExerciseTypeDto> exerciseTypeMapper;
 
-    @GetMapping(path = "exercise-types")
-    public ResponseEntity<List<ExerciseTypeDto>> findAll() {
-
-        List<ExerciseTypeDto> exerciseTypes =  exerciseTypeService.findAll();
-        return new ResponseEntity<>(exerciseTypes, HttpStatus.OK);
-    }
+//    @GetMapping(path = "exercise-types")
+//    public ResponseEntity<List<ExerciseTypeDto>> findAll() {
+//
+//        List<ExerciseTypeDto> exerciseTypes =  exerciseTypeService.findAll();
+//        return new ResponseEntity<>(exerciseTypes, HttpStatus.OK);
+//    }
 
     @GetMapping(path = "user-exercise-types")
     public ResponseEntity<List<ExerciseTypeDto>> findAllForUser(@AuthenticationPrincipal UserDetails userDetails) {
@@ -57,11 +57,11 @@ public class ExerciseTypeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "exercise-types")
-    public ResponseEntity<Void> deleteAll() {
-        exerciseTypeService.deleteAll();
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping(path = "exercise-types")
+//    public ResponseEntity<Void> deleteAll() {
+//        exerciseTypeService.deleteAll();
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
     @PutMapping(path = "exercise-types/{exerciseTypeId}")
     public ResponseEntity<ExerciseTypeDto> updateById(
@@ -70,18 +70,5 @@ public class ExerciseTypeController {
     ) {
         ExerciseTypeDto patchedExerciseType = exerciseTypeService.updateById(exerciseTypeId, exerciseTypeDto);
         return new ResponseEntity<>(patchedExerciseType, HttpStatus.OK);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
     }
 }
