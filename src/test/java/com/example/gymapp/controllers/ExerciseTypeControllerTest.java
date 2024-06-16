@@ -82,7 +82,6 @@ class ExerciseTypeControllerTest {
     }
 
     @ParameterizedTest
-    @Disabled
     @MethodSource("provideCreateExerciseTypePayloadAndExpectedResults")
     void testCreateExerciseType(String testCase, String input, String output, String message, int errorCode, boolean isSuccess) throws Exception {
         when(userRepository.findByUsername("user1")).thenReturn(Optional.ofNullable(testData.user1));

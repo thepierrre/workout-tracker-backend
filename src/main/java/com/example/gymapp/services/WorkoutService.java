@@ -79,8 +79,8 @@ public class WorkoutService {
             List<WorkingSetEntity> workingSets = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 WorkingSetEntity workingSet = new WorkingSetEntity();
-                workingSet.setReps((short) 0);
-                workingSet.setWeight((short) 0);
+                workingSet.setReps((short) 10);
+                workingSet.setWeight((short) 30);
                 workingSet.setExerciseInstance(exerciseInstance);
                 workingSets.add(workingSet);
             }

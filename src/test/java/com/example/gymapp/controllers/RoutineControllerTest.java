@@ -40,7 +40,6 @@ class RoutineControllerTest {
     RoutineRepository routineRepository;
 
     @ParameterizedTest
-    @Disabled
     @MethodSource("provideCreateRoutinePayloadAndExpectedResults_Success")
     void createTrainingRoutine_Success(String input, String message, int errorCode) throws Exception {
 

@@ -42,40 +42,40 @@ public class AuthService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public ResponseEntity<String> login(LoginDto loginDto, HttpServletResponse response) {
+    public String login(LoginDto loginDto, HttpServletResponse response) {
 
-            UserEntity user = userRepository.findByUsername(loginDto.getUsername())
-                    .orElseThrow(() -> new BadCredentialsException("Invalid username or password."));
+        UserEntity user = userRepository.findByUsername(loginDto.getUsername())
+                .orElseThrow(() -> new BadCredentialsException("Invalid username or password."));
 
-            if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-                throw new BadCredentialsException("Invalid username or password.");
-            }
+        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Invalid username or password.");
+        }
 
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
-                            loginDto.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
+                        loginDto.getPassword()));
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtGenerator.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtGenerator.generateToken(authentication);
 
-            Cookie cookie = new Cookie("token", token);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(false); // Use true if HTTPS
-            cookie.setPath("/");
-            cookie.setMaxAge(7 * 24 * 60 * 60);
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // Use true if HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(7 * 24 * 60 * 60);
 
-            response.addCookie(cookie);
+        response.addCookie(cookie);
 
-            return new ResponseEntity<>("User \"" + loginDto.getUsername() + "\" logged in.", HttpStatus.OK);
+        return "User \"" + loginDto.getUsername() + "\" logged in.";
     }
 
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-            return new ResponseEntity<>("Logging out successful.", HttpStatus.OK);
+            return "Logging out successful.";
     }
 
-    public ResponseEntity<String> register(RegisterDto registerDto) {
+    public String register(RegisterDto registerDto) {
 
         if (userRepository.existsByUsername(registerDto.getUsername())) {
             throw new ConflictException("User with the username \"" + registerDto.getUsername() + "\" already exists.");
@@ -97,7 +97,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        return new ResponseEntity<>("User \"" + registerDto.getUsername() + "\" registered.", HttpStatus.OK);
+        return "User \"" + registerDto.getUsername() + "\" registered.";
 
     }
 }

@@ -36,7 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Disabled
 class AuthControllerTest {
 
     @Autowired
@@ -78,6 +77,24 @@ class AuthControllerTest {
     }
 
     @ParameterizedTest
+    @MethodSource("provideLoginUserPayloadAndExpectedResults_Success")
+    void testLoginUser_Success(String input, String message, int errorCode) throws Exception {
+
+        final HttpServletResponse response = mock(HttpServletResponse.class);
+
+        LoginDto loginDto = objectMapper.readValue(input, LoginDto.class);
+        when(authService.login(any(LoginDto.class), any(HttpServletResponse.class)))
+                .thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+
+        mvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(input))
+                .andExpect(status().is(errorCode))
+                .andExpect(content().string(message));
+
+    }
+
+    @ParameterizedTest
     @MethodSource("provideLoginUserPayloadAndExpectedResults")
     void testLoginUser(String testCase, String input, String message, int errorCode) throws Exception {
 
@@ -111,6 +128,21 @@ class AuthControllerTest {
                 .andExpect(content().string(message))
                 .andDo(result -> System.out.println(testCase));
 
+    }
+
+    private static Stream<Arguments> provideLoginUserPayloadAndExpectedResults_Success() {
+        return Stream.of(
+                Arguments.of(
+                        """
+                            {
+                            "username": "user1",
+                            "password": "password1"
+                            }
+                        """,
+                        "",
+                        200
+                )
+        );
     }
 
     private static Stream<Arguments> provideLoginUserPayloadAndExpectedResults() {

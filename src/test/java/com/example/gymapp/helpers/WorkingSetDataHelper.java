@@ -3,6 +3,7 @@ package com.example.gymapp.helpers;
 import com.example.gymapp.domain.dto.WorkingSetDto;
 import com.example.gymapp.domain.entities.WorkingSetEntity;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class WorkingSetDataHelper {
@@ -12,7 +13,7 @@ public class WorkingSetDataHelper {
             Short weight
     ) {
 
-        UUID id = UUID.randomUUID();
+        Long id = new Random().nextLong();
 
         return WorkingSetEntity.builder()
                 .id(id)
@@ -26,7 +27,7 @@ public class WorkingSetDataHelper {
             Short reps,
             Short weight
     ) {
-        UUID id = UUID.randomUUID();
+        Long id = new Random().nextLong();
 
         return WorkingSetDto.builder()
                 .id(id)

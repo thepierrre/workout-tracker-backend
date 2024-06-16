@@ -26,17 +26,19 @@ public class AuthController {
 
     @PostMapping("login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
-        return authService.login(loginDto, response);
+        String loginResponse = authService.login(loginDto, response);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 
     @PostMapping("logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        ResponseEntity<String> logoutResponse = authService.logout(request, response);
-        return new ResponseEntity<>(HttpStatus.OK);
+        String logoutResponse = authService.logout(request, response);
+        return new ResponseEntity<>(logoutResponse, HttpStatus.OK);
     }
 
     @PostMapping("register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterDto registerDto) {
-        return authService.register(registerDto);
+        String registerResponse = authService.register(registerDto);
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 }
