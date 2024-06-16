@@ -27,7 +27,8 @@ import java.util.stream.Collectors;
 @Service
 public class ExerciseTypeService {
 
-    private final ExerciseTypeRepository exerciseTypeRepository;
+    @Autowired
+    ExerciseTypeRepository exerciseTypeRepository;
 
     @Autowired
     ExerciseTypeMapper exerciseTypeMapper;
@@ -44,10 +45,6 @@ public class ExerciseTypeService {
     @Autowired
     RoutineRepository routineRepository;
 
-
-    public ExerciseTypeService(ExerciseTypeRepository exerciseTypeRepository) {
-        this.exerciseTypeRepository = exerciseTypeRepository;
-    }
 
     public ExerciseTypeDto createExercise(ExerciseTypeDto exerciseTypeDto, String username) {
         UserEntity user = userRepository.findByUsername(username)

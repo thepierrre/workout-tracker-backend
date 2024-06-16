@@ -19,14 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -90,33 +91,140 @@ class ExerciseInstanceControllerTest {
 
     @Test
     void updateWorkingSetById_Success() throws Exception {
+        WorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
+        String jsonInput = objectMapper.writeValueAsString(input);
+
+        testData.exerciseInstanceResponseDto1.setWorkingSets(List.of(input));
+
+        UUID exerciseId = UUID.randomUUID();
+        long setId = new Random().nextLong();
+
+        testData.exerciseInstanceResponseDto1.setWorkingSets(List.of(input));
+
+        when(exerciseInstanceService.updateWorkingSetById(any(), any(), any()))
+                .thenReturn(testData.exerciseInstanceResponseDto1);
+
+        mvc.perform(patch("/api/exercise-instances/" + exerciseId + "/sets/" + setId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isOk());
+
     }
 
     @Test
     void updateWorkingSetById_ExerciseIdNotFound() throws Exception {
+        WorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
+        String jsonInput = objectMapper.writeValueAsString(input);
+
+        UUID exerciseId = UUID.randomUUID();
+        long setId = new Random().nextLong();
+
+        when(exerciseInstanceService.updateWorkingSetById(any(), any(), any()))
+                .thenThrow(new EntityNotFoundException(
+                        String.format("Exercise instance with the ID %s not found.", exerciseId.toString())));
+
+        mvc.perform(patch("/api/exercise-instances/" + exerciseId + "/sets/" + setId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(
+                        String.format("Exercise instance with the ID %s not found.", exerciseId.toString())));
     }
 
     @Test
     void updateWorkingSetById_SetIdNotFound() throws Exception {
+        WorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
+        String jsonInput = objectMapper.writeValueAsString(input);
+
+        UUID exerciseId = UUID.randomUUID();
+        long setId = new Random().nextLong();
+
+        when(exerciseInstanceService.updateWorkingSetById(any(), any(), any()))
+                .thenThrow(new EntityNotFoundException(
+                        String.format("Set with the ID %s not found.", setId)));
+
+        mvc.perform(patch("/api/exercise-instances/" + exerciseId + "/sets/" + setId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(
+                        String.format("Set with the ID %s not found.", setId)));
     }
 
     @Test
     void deleteWorkingSetById_Success() throws Exception {
+        UUID exerciseId = UUID.randomUUID();
+        long setId = new Random().nextLong();
+
+        testData.exerciseInstanceResponseDto1.setWorkingSets(List.of());
+
+        when(exerciseInstanceService.deleteWorkingSetById(any(), any()))
+                .thenReturn(testData.exerciseInstanceResponseDto1);
+
+        mvc.perform(delete("/api/exercise-instances/" + exerciseId + "/sets/" + setId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exerciseTypeName", containsString("exerciseType1")))
+                .andExpect(jsonPath("$.workingSets", is(List.of())));
     }
 
     @Test
     void deleteWorkingSetById_ExerciseIdNotFound() throws Exception {
+        UUID exerciseId = UUID.randomUUID();
+        long setId = new Random().nextLong();
+
+        when(exerciseInstanceService.deleteWorkingSetById(any(), any()))
+                .thenThrow(new EntityNotFoundException(
+                        String.format("Exercise instance with the ID %s not found.", exerciseId)));
+
+        mvc.perform(delete("/api/exercise-instances/" + exerciseId + "/sets/" + setId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(
+                        String.format("Exercise instance with the ID %s not found.", exerciseId.toString())));
     }
 
     @Test
     void deleteWorkingSetById_SetIdNotFound() throws Exception {
+        UUID exerciseId = UUID.randomUUID();
+        long setId = new Random().nextLong();
+
+        when(exerciseInstanceService.deleteWorkingSetById(any(), any()))
+                .thenThrow(new EntityNotFoundException(
+                        String.format("Set with the ID %s not found.", setId)));
+
+        mvc.perform(delete("/api/exercise-instances/" + exerciseId + "/sets/" + setId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(
+                        String.format("Set with the ID %s not found.", setId)));
     }
 
     @Test
-    void deleteById_Success() throws Exception {
+    void deleteExerciseInstanceById_Success() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        doNothing()
+                .when(exerciseInstanceService).deleteById(any());
+
+        mvc.perform(delete("/api/exercise-instances/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
     }
 
     @Test
-    void deleteById_ExerciseIdNotFound() throws Exception {
+    void deleteExerciseInstanceById_ExerciseIdNotFound() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        doThrow(new EntityNotFoundException(
+                String.format("Exercise instance with the ID %s not found.", id)))
+                .when(exerciseInstanceService).deleteById(any());
+
+        mvc.perform(delete("/api/exercise-instances/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(
+                        String.format("Exercise instance with the ID %s not found.", id)));
     }
 }
