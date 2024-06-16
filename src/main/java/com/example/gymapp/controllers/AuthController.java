@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +32,8 @@ public class AuthController {
     }
 
     @PostMapping("logout")
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        String logoutResponse = authService.logout(request, response);
-        return new ResponseEntity<>(logoutResponse, HttpStatus.OK);
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("register")

@@ -69,10 +69,9 @@ public class AuthService {
         return "User \"" + loginDto.getUsername() + "\" logged in.";
     }
 
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-            return "Logging out successful.";
     }
 
     public String register(RegisterDto registerDto) {

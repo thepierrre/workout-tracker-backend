@@ -2,6 +2,7 @@ package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.LoginDto;
 import com.example.gymapp.domain.dto.RegisterDto;
+import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.repositories.RoleRepository;
 import com.example.gymapp.repositories.UserRepository;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,13 +24,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import javax.naming.spi.StateFactory;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -67,9 +75,8 @@ class AuthControllerTest {
     }
 
     @Test
-    void testLogout() throws Exception {
-
-        mvc.perform(post("/api/auth/logout"))
+    void logout() throws Exception {
+        mvc.perform(post("/api/auth/logout").with(user("jack890")))
                 .andExpect(status().isOk());
 
         mvc.perform(get("/api/categories"))
@@ -78,13 +85,13 @@ class AuthControllerTest {
 
     @ParameterizedTest
     @MethodSource("provideLoginUserPayloadAndExpectedResults_Success")
-    void testLoginUser_Success(String input, String message, int errorCode) throws Exception {
+    void loginUser_Success(String input, String message, int errorCode) throws Exception {
 
         final HttpServletResponse response = mock(HttpServletResponse.class);
 
         LoginDto loginDto = objectMapper.readValue(input, LoginDto.class);
         when(authService.login(any(LoginDto.class), any(HttpServletResponse.class)))
-                .thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+                .thenReturn("User \"mockUser\" logged in.");
 
         mvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -95,38 +102,194 @@ class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideLoginUserPayloadAndExpectedResults")
-    void testLoginUser(String testCase, String input, String message, int errorCode) throws Exception {
+    @MethodSource("provideRegisterUserPayloadAndExpectedResults_Success")
+    void registerUser_Success(String input, String message, int errorCode) throws Exception {
 
-        final HttpServletResponse response = mock(HttpServletResponse.class);
+        RegisterDto registerDto = objectMapper.readValue(input, RegisterDto.class);
+        when(authService.register(any(RegisterDto.class)))
+            .thenReturn("User \"mockUser\" registered.");
 
-        LoginDto loginDto = objectMapper.readValue(input, LoginDto.class);
-        when(authService.login(any(LoginDto.class), any(HttpServletResponse.class)))
-                .thenReturn(new ResponseEntity<>(message, errorCode == 200 ? HttpStatus.OK : HttpStatus.UNAUTHORIZED));
-
-        mvc.perform(post("/api/auth/login")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(input))
-                .andExpect(status().is(errorCode))
-                .andExpect(content().string(message))
-                .andDo(result -> System.out.println(testCase));
+        mvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(input))
+        .andExpect(status().is(errorCode))
+        .andExpect(content().string(message));
 
     }
 
     @ParameterizedTest
-    @MethodSource("provideRegisterUserPayloadAndExpectedResults")
-    void testRegisterUser(String testCase, String input, String message, int errorCode) throws Exception {
+    @CsvSource({
+            "'{\"message\":\"User with the username \\\"user1\\\" already exists.\"}', 409"
+    })
+    void registerUser_UsernameAlreadyExists(String message, int errorCode) throws Exception {
+        String input = """
+                          {
+                              "username": "user1",
+                              "email": "firstname.lastname@example.com",
+                              "password": "mypassword"
+                          }
+                        """;
 
-        RegisterDto registerDto = objectMapper.readValue(input, RegisterDto.class);
         when(authService.register(any(RegisterDto.class)))
-                .thenReturn(new ResponseEntity<>(message, errorCode == 200 ? HttpStatus.OK : HttpStatus.CONFLICT));
+                .thenThrow(new ConflictException("User with the username \"user1\" already exists."));
 
         mvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(input))
                 .andExpect(status().is(errorCode))
-                .andExpect(content().string(message))
-                .andDo(result -> System.out.println(testCase));
+                .andExpect(content().string(message));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'{\"message\":\"User with the email \\\"user1@example.com\\\" already exists.\"}', 409"
+    })
+    void registerUser_EmailAlreadyExists(String message, int errorCode) throws Exception {
+
+        String input = """
+                          {
+                              "username": "user1",
+                              "email": "user1@example.com",
+                              "password": "mypassword"
+                          }
+                        """;
+
+        when(authService.register(any(RegisterDto.class)))
+                .thenThrow(new ConflictException("User with the email \"user1@example.com\" already exists."));
+
+        mvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(input))
+                .andExpect(status().is(errorCode))
+                .andExpect(content().string(message));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'{\"username\":\"Username cannot be empty.\"}', 400"
+    })
+    void registerUser_MissingUsername(String message, int errorCode) throws Exception {
+
+        String input = """
+                          {
+                              "email": "user1@example.com",
+                              "password": "mypassword"
+                          }
+                        """;
+
+        mvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(input))
+                .andExpect(status().is(errorCode))
+                .andExpect(content().string(message));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'{\"email\":\"Email address cannot be empty.\"}', 400"
+    })
+    void registerUser_MissingEmail(String message, int errorCode) throws Exception {
+
+        String input = """
+                          {
+                              "username": "user",
+                              "password": "mypassword"
+                          }
+                        """;
+
+        mvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(input))
+                .andExpect(status().is(errorCode))
+                .andExpect(content().string(message));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'{\"password\":\"Password cannot be empty.\"}', 400"
+    })
+    void registerUser_MissingPassword(String message, int errorCode) throws Exception {
+
+        String input = """
+                          {
+                              "username": "user",
+                              "email": "user1@example.com"
+                          }
+                        """;
+
+        mvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(input))
+                .andExpect(status().is(errorCode))
+                .andExpect(content().string(message));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'{\"username\":\"Username cannot be empty.\"}', 400"
+    })
+    void loginUser_MissingUsername(String message, int errorCode) throws Exception {
+
+        String input = """
+                          {
+                              "password": "mypassword"
+                          }
+                        """;
+
+        mvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(input))
+                .andExpect(status().is(errorCode))
+                .andExpect(content().string(message));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'{\"password\":\"Password cannot be empty.\"}', 400"
+    })
+    void loginUser_MissingPassword(String message, int errorCode) throws Exception {
+
+        String input = """
+                          {
+                              "username": "user1"
+                          }
+                        """;
+
+        mvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(input))
+                .andExpect(status().is(errorCode))
+                .andExpect(content().string(message));
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "'Invalid username or password.', 401"
+    })
+    void loginUser_InvalidUsernameOrPassword(String message, int errorCode) throws Exception {
+
+        String input = """
+                          {
+                              "username": "user1",
+                              "password": "password1"
+                          }
+                        """;
+
+        when(authService.login(any(LoginDto.class), any(HttpServletResponse.class)))
+                .thenThrow(new BadCredentialsException("Invalid username or password."));
+
+        mvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(input))
+                .andExpect(status().is(errorCode))
+                .andExpect(content().string(message));
 
     }
 
@@ -139,89 +302,25 @@ class AuthControllerTest {
                             "password": "password1"
                             }
                         """,
-                        "",
+                        "User \"mockUser\" logged in.",
+                        200
+                ),
+                Arguments.of(
+                        """
+                            {
+                            "username": "user2",
+                            "password": "p@ssw0rd"
+                            }
+                        """,
+                        "User \"mockUser\" logged in.",
                         200
                 )
         );
     }
 
-    private static Stream<Arguments> provideLoginUserPayloadAndExpectedResults() {
-
-        return Stream.of(
-                Arguments.of(
-                "OK",
-                        """
-                            {
-                            "username": "user1",
-                            "password": "password1"
-                            }
-                        """,
-                        "",
-                        200
-                ),
-                Arguments.of(
-                        "OK",
-                        """
-                            {
-                            "username": "user2",
-                            "password": "password2"
-                            }
-                        """,
-                        "",
-                        200
-                ),
-                Arguments.of(
-                        "missing username",
-                        """
-                            {
-                            "username": "",
-                            "password": "password2"
-                            }
-                        """,
-                        "{\"username\":\"Username cannot be empty.\"}",
-                        400
-                ),
-                Arguments.of(
-                        "missing password",
-                        """
-                            {
-                            "username": "user2",
-                            "password": ""
-                            }
-                        """,
-                        "{\"password\":\"Password cannot be empty.\"}",
-                        400
-                ),
-                Arguments.of(
-                        "invalid username",
-                        """
-                            {
-                            "username": "non-existing",
-                            "password": "password2"
-                            }
-                        """,
-                        "Invalid username or password.",
-                        401
-                ),
-                Arguments.of(
-                        "invalid password",
-                        """
-                            {
-                            "username": "user1",
-                            "password": "incorrect"
-                            }
-                        """,
-                        "Invalid username or password.",
-                        401
-                )
-        );
-    }
-
-    private static Stream<Arguments> provideRegisterUserPayloadAndExpectedResults() {
-
+    private static Stream<Arguments> provideRegisterUserPayloadAndExpectedResults_Success() {
       return Stream.of(
               Arguments.of(
-                    "OK",
                         """
                           {
                               "username": "john43",
@@ -229,11 +328,10 @@ class AuthControllerTest {
                               "password": "p@ssword"
                           }
                         """,
-                        "User \"john43\" registered.",
+                        "User \"mockUser\" registered.",
                         200
               ),
               Arguments.of(
-              "OK",
                         """
                           {
                               "username": "mary1",
@@ -241,71 +339,9 @@ class AuthControllerTest {
                               "password": "123"
                           }
                         """,
-                        "User \"mary1\" registered.",
+                        "User \"mockUser\" registered.",
                         200
-              ),
-              Arguments.of(
-                        "missing username",
-                        """
-                          {
-                              "username": "",
-                              "email": "mary1@gmail.com",
-                              "password": "123"
-                          }
-                        """,
-                      "{\"username\":\"Username cannot be empty.\"}",
-                      400
-              ),
-              Arguments.of(
-                      "missing email",
-                      """
-                        {
-                            "username": "peter390",
-                            "email": "",
-                            "password": "p@55word"
-                        }
-                      """,
-                      "{\"email\":\"Email address cannot be empty.\"}",
-                      400
-              ),
-              Arguments.of(
-                      "missing password",
-                      """
-                        {
-                            "username": "peter390",
-                            "email": "peter.schmidt@example.com",
-                            "password": ""
-                        }
-                      """,
-                      "{\"password\":\"Password cannot be empty.\"}",
-                      400
-              ),
-              Arguments.of(
-                      "username already exists",
-                      """
-                        {
-                            "username": "user1",
-                            "email": "firstname.lastname@example.com",
-                            "password": "mypassword"
-                        }
-                      """,
-                      "User with the username \"user1\" already exists.",
-                      409
-              ),
-              Arguments.of(
-                      "user with the e-mail already exists",
-                      """
-                        {
-                            "username": "example-user",
-                            "email": "user2@example.com",
-                            "password": "mypassword"
-                        }
-                      """,
-                      "User with the e-mail \"user2@example.com\" already exists.",
-                      409
               )
       );
-
     }
-
 }
