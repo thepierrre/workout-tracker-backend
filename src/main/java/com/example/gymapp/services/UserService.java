@@ -8,6 +8,7 @@ import com.example.gymapp.mappers.impl.UserMapper;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,19 +24,12 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public List<UserDto> findAll() {
-        return userRepository.findAll().stream().map(userMapper::mapToDto).toList();
-    }
+    public Optional<UserEntity> findByUsername(String username) {
 
-    public Optional<UserEntity> findById(UUID id) {
-        return userRepository.findById(id);
-    }
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
 
-    public void deleteById(UUID id) {
-        userRepository.deleteById(id);
-    }
-
-    public Optional<UserEntity> findByUsername(String name) {
-        return userRepository.findByUsername(name);
+        return Optional.ofNullable(user);
     }
 }

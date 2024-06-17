@@ -39,28 +39,10 @@ public class UserController {
     @Autowired
     ExerciseTypeMapper exerciseTypeMapper;
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> findAll() {
-
-        List<UserDto> users = userService.findAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "{userId}")
-    public ResponseEntity<UserDto> findById(@PathVariable("userId") UUID id) {
-        Optional<UserEntity> user = userService.findById(id);
-        if (user.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            UserDto foundUser = userMapper.mapToDto(user.get());
-            return new ResponseEntity<>(foundUser, HttpStatus.OK);
-        }
-    }
-
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getUserDetails(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<UserEntity> user = userService.findByUsername(userDetails.getUsername());
-        if (user.isPresent()) {
+
             UserResponseDto userResponseDto = new UserResponseDto();
             userResponseDto.setUsername(user.get().getUsername());
             userResponseDto.setEmail(user.get().getEmail());
@@ -71,19 +53,6 @@ public class UserController {
             userResponseDto.setExerciseTypes(user.get().getExerciseTypes().stream()
                     .map(exerciseTypeMapper::mapToDto).toList());
             return ResponseEntity.ok(userResponseDto);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-    }
-    @DeleteMapping(path = "{userId}")
-    public ResponseEntity<Void> deleteById(@PathVariable("userId") UUID id) {
-        try {
-            userService.deleteById(id);
-        } catch (ResponseStatusException e) {
-            throw e;
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
 

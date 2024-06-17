@@ -1,8 +1,11 @@
 package com.example.gymapp.services;
 
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.RoutineDto;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.exceptions.ConflictException;
+import com.example.gymapp.helpers.ExerciseTypeDataHelper;
 import com.example.gymapp.helpers.RoutineDataHelper;
 import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.mappers.impl.RoutineMapper;
@@ -88,6 +91,25 @@ class RoutineServiceTest {
 
         assertEquals("Routine with the name 'routine2' already exists.", exception.getMessage());
 
+    }
+
+    @Test
+    void testCreateRoutine_ExerciseNameNotFound() {
+        ExerciseTypeEntity nonExistentExercise = new ExerciseTypeEntity();
+        UUID nonExistentExerciseTypeId = UUID.randomUUID();
+        nonExistentExercise.setId(nonExistentExerciseTypeId);
+
+        ExerciseTypeDto nonExistentExerciseDto = new ExerciseTypeDto();
+        nonExistentExerciseDto.setId(nonExistentExerciseTypeId);
+        testData.routineRequestDto2.getExerciseTypes().add(nonExistentExerciseDto);
+
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+        when(routineMapper.mapFromDto(testData.routineRequestDto2)).thenReturn(testData.routineEntity2);
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
+                routineService.createRoutine(testData.routineRequestDto2, "user1"));
+
+        assertEquals("Exercise type with the ID " + nonExistentExercise.getId() + " not found.", exception.getMessage());
     }
 
     @Test
