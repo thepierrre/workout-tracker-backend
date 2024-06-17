@@ -98,14 +98,11 @@ class ExerciseTypeControllerTest {
         testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto2);
         String jsonInput = objectMapper.writeValueAsString(testData.exerciseTypeRequestDto1);
 
-        testData.exerciseTypeResponseDto1.getCategories().add(testData.categoryResponseDto1);
-        testData.exerciseTypeResponseDto1.getCategories().add(testData.categoryResponseDto2);
-
         when(userRepository.findByUsername("user1")).thenReturn(Optional.empty());
 
         when(exerciseTypeService.createExercise(any(ExerciseTypeDto.class), any(String.class)))
-                .thenThrow(new UsernameNotFoundException(String.format(
-                        "User with the username \"user1\" not found.")));
+                .thenThrow(new UsernameNotFoundException(
+                        "User with the username \"user1\" not found."));
 
         mvc.perform(post("/api/exercise-types")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -120,10 +117,7 @@ class ExerciseTypeControllerTest {
         testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto2);
         String jsonInput = objectMapper.writeValueAsString(testData.exerciseTypeRequestDto1);
 
-        testData.exerciseTypeResponseDto1.getCategories().add(testData.categoryResponseDto1);
-        testData.exerciseTypeResponseDto1.getCategories().add(testData.categoryResponseDto2);
-
-        when(userRepository.findByUsername("user1")).thenReturn(Optional.empty());
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
 
         when(exerciseTypeService.createExercise(any(ExerciseTypeDto.class), any(String.class)))
                 .thenThrow(

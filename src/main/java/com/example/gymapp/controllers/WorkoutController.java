@@ -37,13 +37,7 @@ public class WorkoutController {
 
     @DeleteMapping("workouts/{workoutId}")
     public ResponseEntity<Void> deleteById(@PathVariable("workoutId") UUID id) {
-        try {
             workoutService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 }

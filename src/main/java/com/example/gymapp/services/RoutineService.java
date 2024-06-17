@@ -41,8 +41,6 @@ public class RoutineService {
     private ExerciseTypeRepository exerciseTypeRepository;
 
     public RoutineDto createRoutine(RoutineDto routineDto, String username) {
-
-        try {
             UserEntity user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException(String.format(
                             "User with the username \"%s\" not found.", username)));
@@ -75,19 +73,9 @@ public class RoutineService {
             userRepository.save(user);
 
             return routineMapper.mapToDto(savedRoutineEntity);
-        } catch (UsernameNotFoundException | ConflictException e) {
-            throw e;
-        }
-        catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Couldn't create a new routine due to an unexpected error.", e);
-        }
-
-
     }
 
     public List<RoutineDto> findAllForUser(String username) {
-
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(
                         "User with the username \"%s\" not found.", username)));

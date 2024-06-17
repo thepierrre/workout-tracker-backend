@@ -88,7 +88,7 @@ class AuthServiceTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(userRepository.findByUsername(testData.loginDto1.getUsername())).thenReturn(Optional.empty());
 
-        UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class,
+        BadCredentialsException exception = assertThrows(BadCredentialsException.class,
                 () -> authService.login(testData.loginDto1, response));
 
         assertEquals("Invalid username or password.", exception.getMessage());
