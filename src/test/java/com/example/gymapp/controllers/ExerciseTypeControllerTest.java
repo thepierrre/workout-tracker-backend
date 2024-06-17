@@ -29,11 +29,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -174,6 +175,7 @@ class ExerciseTypeControllerTest {
                 .andExpect(jsonPath("$.[1].name", is("exerciseType2")));
     }
 
+
     @Test
     void findAllForUser_UserNotFound() throws Exception {
         when(exerciseTypeService.findAllForUser("user1"))
@@ -189,18 +191,65 @@ class ExerciseTypeControllerTest {
 
     @Test
     void deleteById_Success() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        doNothing()
+                .when(exerciseTypeService).deleteById(any());
+
+        mvc.perform(delete("/api/exercise-types/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
     }
 
     @Test
     void deleteById_ExerciseTypeIdNotFound() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        doThrow(new EntityNotFoundException(
+                String.format("Exercise with the ID %s not found.", id.toString())))
+                .when(exerciseTypeService).deleteById(any());
+
+        mvc.perform(delete("/api/exercise-types/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Exercise with the ID " + id + " not found."));
+
     }
 
     @Test
     void updateById_Success() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        when(exerciseTypeService.updateById(any(), any(ExerciseTypeDto.class)))
+                .thenReturn(testData.exerciseTypeResponseDto1);
+
+        ExerciseTypeDto input = testData.exerciseTypeRequestDto1;
+        String jsonInput = objectMapper.writeValueAsString(input);
+
+        mvc.perform(put("/api/exercise-types/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("exerciseType1")));
     }
 
     @Test
     void updateById_ExerciseTypeIdNotFound() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        when(exerciseTypeService.updateById(any(), any(ExerciseTypeDto.class)))
+                .thenThrow(new UsernameNotFoundException(
+                        String.format("Exercise with the ID %s not found.", id.toString())));
+
+        ExerciseTypeDto input = testData.exerciseTypeRequestDto1;
+        String jsonInput = objectMapper.writeValueAsString(input);
+
+        mvc.perform(put("/api/exercise-types/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(String.format("Exercise with the ID %s not found.", id.toString())));
     }
 }
 
