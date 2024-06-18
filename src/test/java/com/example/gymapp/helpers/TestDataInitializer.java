@@ -62,6 +62,9 @@ public class TestDataInitializer {
         public WorkingSetEntity workingSetEntity1;
         public WorkingSetEntity workingSetEntity2;
         public WorkingSetEntity workingSetEntity3;
+        public WorkingSetDto workingSetRequestDto1;
+        public WorkingSetDto workingSetRequestDto2;
+        public WorkingSetDto workingSetRequestDto3;
         public WorkingSetDto workingSetResponseDto1;
         public WorkingSetDto workingSetResponseDto2;
         public WorkingSetDto workingSetResponseDto3;
@@ -129,6 +132,9 @@ public class TestDataInitializer {
         testData.workingSetResponseDto1 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 10, (short) 50);
         testData.workingSetResponseDto2 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 9, (short) 40);
         testData.workingSetResponseDto3 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 8, (short) 30);
+        testData.workingSetRequestDto1 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 50);
+        testData.workingSetRequestDto2 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 9, (short) 40);
+        testData.workingSetRequestDto3 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 8, (short) 30);
         testData.loginDto1 = AuthDataHelper.createLoginDto("user1", "pass1");
         testData.registerDto1 = AuthDataHelper.createRegisterDto("user1", "user1@example.com", "pass1");
 
