@@ -18,9 +18,6 @@ class ExerciseInstanceMapperTest {
     @Autowired
     ExerciseInstanceMapper exerciseInstanceMapper;
 
-    @MockBean
-    WorkoutMapper workoutMapper;
-
     TestDataInitializer.TestData testData;
 
     @BeforeEach

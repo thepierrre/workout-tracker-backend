@@ -20,8 +20,6 @@ class WorkingSetMapperTest {
     void setUp() {
         testData = TestDataInitializer.initializeTestData();
     }
-
-
     @Autowired
     WorkingSetMapper workingSetMapper;
 

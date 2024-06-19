@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class JWTGenerator {
 
-    private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
@@ -47,9 +47,9 @@ public class JWTGenerator {
                     .parseSignedClaims(token);
             return true;
         } catch (ExpiredJwtException ex) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was expired");
+            throw new AuthenticationCredentialsNotFoundException("JWT is expired.");
         } catch (MalformedJwtException | SecurityException | UnsupportedJwtException | IllegalArgumentException ex) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was incorrect");
+            throw new AuthenticationCredentialsNotFoundException("JWT is incorrect.");
         }
     }
 }
