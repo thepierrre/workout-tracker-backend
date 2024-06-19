@@ -43,9 +43,6 @@ class UserControllerTest {
     @MockBean
     UserService userService;
 
-    @MockBean
-    UserRepository userRepository;
-
     TestDataInitializer.TestData testData;
 
     @BeforeEach

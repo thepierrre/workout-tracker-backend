@@ -56,16 +56,7 @@ class ExerciseTypeControllerTest {
     ExerciseTypeService exerciseTypeService;
 
     @MockBean
-    CategoryRepository categoryRepository;
-
-    @MockBean
     UserRepository userRepository;
-
-    @MockBean
-    ExerciseTypeRepository exerciseTypeRepository;
-
-    @MockBean
-    RoleRepository roleRepository;
 
     TestDataInitializer.TestData testData;
 

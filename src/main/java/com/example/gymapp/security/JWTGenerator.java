@@ -2,6 +2,7 @@ package com.example.gymapp.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
@@ -47,7 +48,7 @@ public class JWTGenerator {
             return true;
         } catch (ExpiredJwtException ex) {
             throw new AuthenticationCredentialsNotFoundException("JWT was expired");
-        } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException ex) {
+        } catch (MalformedJwtException | SecurityException | UnsupportedJwtException | IllegalArgumentException ex) {
             throw new AuthenticationCredentialsNotFoundException("JWT was incorrect");
         }
     }

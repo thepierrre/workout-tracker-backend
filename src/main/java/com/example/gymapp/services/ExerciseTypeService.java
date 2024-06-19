@@ -91,7 +91,6 @@ public class ExerciseTypeService {
         return List.of();
     }
 
-
     @Transactional
     public void deleteById(UUID exerciseTypeId) {
         ExerciseTypeEntity exerciseType= exerciseTypeRepository.findById(exerciseTypeId)
@@ -111,10 +110,6 @@ public class ExerciseTypeService {
         exerciseType.getUser().getExerciseTypes().remove(exerciseType);
 
         exerciseTypeRepository.deleteById(exerciseTypeId);
-    }
-
-    public void deleteAll() {
-        exerciseTypeRepository.deleteAll();
     }
 
 

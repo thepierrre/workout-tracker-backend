@@ -56,9 +56,6 @@ class RoutineControllerTest {
     RoutineService routineService;
 
     @MockBean
-    RoutineRepository routineRepository;
-
-    @MockBean
     UserRepository userRepository;
 
     TestDataInitializer.TestData testData;
