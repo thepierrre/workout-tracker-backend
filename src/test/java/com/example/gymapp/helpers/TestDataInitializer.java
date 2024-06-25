@@ -87,8 +87,8 @@ public class TestDataInitializer {
         testData.categoryRequestDto2 = CategoryDataHelper.createCategoryRequestDto("category2");
         testData.categoryRequestDto3 = CategoryDataHelper.createCategoryRequestDto("category3");
         testData.categoryResponseDto1 = CategoryDataHelper.createCategoryResponseDto("category1");
-        testData.categoryResponseDto2 = CategoryDataHelper.createCategoryResponseDto("category1");
-        testData.categoryResponseDto3 = CategoryDataHelper.createCategoryResponseDto("category1");
+        testData.categoryResponseDto2 = CategoryDataHelper.createCategoryResponseDto("category2");
+        testData.categoryResponseDto3 = CategoryDataHelper.createCategoryResponseDto("category3");
         testData.exerciseTypeEntity1 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType1");
         testData.exerciseTypeEntity2 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType2");
         testData.exerciseTypeEntity3 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType3");

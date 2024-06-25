@@ -28,9 +28,6 @@ public class UserController {
     UserService userService;
 
     @Autowired
-    UserMapper userMapper;
-
-    @Autowired
     RoutineMapper routineMapper;
 
     @Autowired

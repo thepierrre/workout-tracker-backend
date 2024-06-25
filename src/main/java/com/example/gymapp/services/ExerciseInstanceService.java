@@ -34,7 +34,7 @@ public class ExerciseInstanceService {
     WorkingSetRepository workingSetRepository;
 
     @Autowired
-    private WorkoutRepository workoutRepository;
+    WorkoutRepository workoutRepository;
 
     public ExerciseInstanceDto createWorkingSetforExercise(UUID exerciseId, WorkingSetDto workingSetDto) {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseId)
