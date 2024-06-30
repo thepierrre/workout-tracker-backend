@@ -43,9 +43,10 @@ public class ExerciseTypeController {
     @PutMapping(path = "exercise-types/{exerciseTypeId}")
     public ResponseEntity<ExerciseTypeDto> updateById(
             @PathVariable("exerciseTypeId") UUID exerciseTypeId,
-            @RequestBody ExerciseTypeDto exerciseTypeDto
+            @RequestBody ExerciseTypeDto exerciseTypeDto,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        ExerciseTypeDto patchedExerciseType = exerciseTypeService.updateById(exerciseTypeId, exerciseTypeDto);
+        ExerciseTypeDto patchedExerciseType = exerciseTypeService.updateById(exerciseTypeId, exerciseTypeDto, userDetails.getUsername());
         return new ResponseEntity<>(patchedExerciseType, HttpStatus.OK);
     }
 }
