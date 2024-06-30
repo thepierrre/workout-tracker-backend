@@ -36,9 +36,10 @@ public class RoutineController {
     @PutMapping(path = "routines/{routineId}")
     public ResponseEntity<RoutineDto> updateById(
             @PathVariable("routineId") UUID routineId,
-            @RequestBody RoutineDto routineDto
+            @RequestBody RoutineDto routineDto,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        RoutineDto updatedRoutine = routineService.updateById(routineId, routineDto);
+        RoutineDto updatedRoutine = routineService.updateById(routineId, routineDto, userDetails.getUsername());
         return new ResponseEntity<>(updatedRoutine, HttpStatus.OK);
     }
 

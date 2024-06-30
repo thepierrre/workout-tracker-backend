@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -84,23 +85,34 @@ public class RoutineService {
                 .map(routineEntity -> routineMapper.mapToDto(routineEntity)).toList();
     }
 
-    public RoutineDto updateById(UUID id, RoutineDto routineDto) {
-        RoutineEntity existingRoutine = routineRepository.findById(id)
+    public RoutineDto updateById(UUID id, RoutineDto routineDto, String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
+
+        Optional<RoutineEntity> existingRoutine = Optional.ofNullable(routineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
-                        "Routine with the ID %s not found.", id.toString())));
+                        "Routine with the ID %s not found.", id.toString()))));
 
-        existingRoutine.setId(routineDto.getId());
-        existingRoutine.setName(routineDto.getName());
+        Optional<RoutineEntity> existingRoutineWithName = routineRepository.findByUserAndName(user, routineDto.getName());
 
-        existingRoutine.setUser(existingRoutine.getUser());
+        if (existingRoutineWithName.isPresent() && !existingRoutineWithName.get().getId().equals(id)) {
+            throw new ConflictException(
+                    "Routine with the name '" + routineDto.getName() + "' already exists.");
+        }
+
+        existingRoutine.get().setId(routineDto.getId());
+        existingRoutine.get().setName(routineDto.getName());
+
+        existingRoutine.get().setUser(existingRoutine.get().getUser());
 
         List<ExerciseTypeEntity> newExercises = routineDto.getExerciseTypes().stream()
                 .map(exerciseTypeDto -> exerciseTypeMapper.mapFromDto(exerciseTypeDto)).toList();
 
-        existingRoutine.getExerciseTypes().clear();
-        existingRoutine.getExerciseTypes().addAll(newExercises);
+        existingRoutine.get().getExerciseTypes().clear();
+        existingRoutine.get().getExerciseTypes().addAll(newExercises);
 
-        RoutineEntity updatedRoutine = routineRepository.save(existingRoutine);
+        RoutineEntity updatedRoutine = routineRepository.save(existingRoutine.get());
 
         return routineMapper.mapToDto(updatedRoutine);
     }
