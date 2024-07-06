@@ -101,7 +101,7 @@ public class ExerciseInstanceService {
         exerciseInstanceRepository.deleteById(exerciseInstanceId);
     }
 
-    public WorkoutDto addExerciseToWorkout(UUID workoutId, String username, ExerciseTypeDto exerciseTypeDto) {
+    public ExerciseInstanceDto addExerciseToWorkout(UUID workoutId, String username, ExerciseTypeDto exerciseTypeDto) {
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(
                         "User with the username \"%s\" not found.", username)));
@@ -128,6 +128,6 @@ public class ExerciseInstanceService {
 
         exerciseToAdd.setWorkout(workoutEntity);
         exerciseInstanceRepository.save(exerciseToAdd);
-        return workoutMapper.mapToDto(workoutEntity);
+        return exerciseInstanceMapper.mapToDto(exerciseToAdd);
     }
 }

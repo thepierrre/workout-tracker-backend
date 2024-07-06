@@ -58,14 +58,14 @@ public class ExerciseInstanceController {
     }
 
     @PostMapping("/workouts/{workoutId}/exercise-instances")
-    public ResponseEntity<WorkoutDto> addExerciseToWorkout(
+    public ResponseEntity<ExerciseInstanceDto> addExerciseToWorkout(
             @Valid
             @RequestBody ExerciseTypeDto exerciseTypeDto,
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("workoutId") UUID workoutId
     ) {
-        WorkoutDto workoutWithNewExercise = exerciseInstanceService.addExerciseToWorkout(
+        ExerciseInstanceDto newExercise = exerciseInstanceService.addExerciseToWorkout(
                 workoutId, userDetails.getUsername(), exerciseTypeDto);
-        return new ResponseEntity<>(workoutWithNewExercise, HttpStatus.OK);
+        return new ResponseEntity<>(newExercise, HttpStatus.OK);
     }
 }
