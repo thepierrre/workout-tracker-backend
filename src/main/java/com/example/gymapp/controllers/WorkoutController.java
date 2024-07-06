@@ -1,5 +1,6 @@
 package com.example.gymapp.controllers;
 
+import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.services.WorkoutService;
 import jakarta.validation.Valid;
@@ -40,4 +41,5 @@ public class WorkoutController {
             workoutService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

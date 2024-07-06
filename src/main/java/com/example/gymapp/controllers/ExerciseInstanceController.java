@@ -1,11 +1,16 @@
 package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.WorkingSetDto;
+import com.example.gymapp.domain.dto.WorkoutDto;
 import com.example.gymapp.services.ExerciseInstanceService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -50,5 +55,17 @@ public class ExerciseInstanceController {
     public ResponseEntity<Void> deleteById(@PathVariable("exerciseInstanceId") UUID exerciseInstanceId) {
         exerciseInstanceService.deleteById(exerciseInstanceId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/workouts/{workoutId}/exercise-instances")
+    public ResponseEntity<WorkoutDto> addExerciseToWorkout(
+            @Valid
+            @RequestBody ExerciseTypeDto exerciseTypeDto,
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("workoutId") UUID workoutId
+    ) {
+        WorkoutDto workoutWithNewExercise = exerciseInstanceService.addExerciseToWorkout(
+                workoutId, userDetails.getUsername(), exerciseTypeDto);
+        return new ResponseEntity<>(workoutWithNewExercise, HttpStatus.OK);
     }
 }
