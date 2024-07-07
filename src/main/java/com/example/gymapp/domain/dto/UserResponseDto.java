@@ -23,4 +23,6 @@ public class UserResponseDto {
 
     private List<ExerciseTypeDto> exerciseTypes;
 
+    private short changeThreshold;
+
 }

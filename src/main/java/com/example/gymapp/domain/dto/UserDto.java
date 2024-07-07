@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,8 @@ public class UserDto {
 
     private List<ExerciseTypeDto> exerciseTypes;
 
+    private short changeThreshold;
+    
     public UserDto(String id) {
         this.id = UUID.fromString(id);
     }
