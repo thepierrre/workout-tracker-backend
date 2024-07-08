@@ -46,6 +46,14 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(
                         "User with the username \"%s\" not found.", username)));
 
+        if (num < 1) {
+            throw new IllegalArgumentException("The minimum allowed value is 1.");
+        }
+
+        if (num > 100) {
+            throw new IllegalArgumentException("The maximum allowed value is 100.");
+        }
+
         user.setChangeThreshold(num);
         userRepository.save(user);
 
