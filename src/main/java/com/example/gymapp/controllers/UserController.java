@@ -1,5 +1,6 @@
 package com.example.gymapp.controllers;
 
+import com.example.gymapp.domain.dto.RoutineDto;
 import com.example.gymapp.domain.dto.UserResponseDto;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
@@ -7,11 +8,13 @@ import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -47,11 +50,16 @@ public class UserController {
             return ResponseEntity.ok(userResponseDto);
     }
 
-    @PatchMapping("/threshold")
-    public Short editChangeThreshold(@AuthenticationPrincipal UserDetails userDetails, Short num) {
-        Optional<UserEntity> user = userService.findByUsername(userDetails.getUsername());
-        user.get().setChangeThreshold(num);
-        return user.get().getChangeThreshold();
+    @PatchMapping("user-threshold")
+    public ResponseEntity<Short> editChangeThreshold(@AuthenticationPrincipal UserDetails userDetails, Short num) {
+        Short changeThreshold = userService.updateChangeThreshold(userDetails.getUsername(), num);
+        return new ResponseEntity<>(changeThreshold, HttpStatus.OK);
+    }
+
+    @GetMapping("user-threshold")
+    public ResponseEntity<Short> getChangeThreshold(@AuthenticationPrincipal UserDetails userDetails) {
+        Short changeThreshold = userService.getChangeThreshold(userDetails.getUsername());
+        return new ResponseEntity<>(changeThreshold, HttpStatus.OK);
     }
 }
 

@@ -87,6 +87,7 @@ public class AuthService {
         user.setUsername(registerDto.getUsername());
         user.setEmail(registerDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        user.setChangeThreshold((short) 1);
 
         Role role = roleRepository.findByName("USER")
                         .orElseThrow(

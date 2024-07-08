@@ -32,4 +32,23 @@ public class UserService {
 
         return Optional.ofNullable(user);
     }
+
+    public Short getChangeThreshold(String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
+
+        return (short) user.getChangeThreshold();
+    }
+
+    public Short updateChangeThreshold(String username, Short num) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
+
+        user.setChangeThreshold(num);
+        userRepository.save(user);
+
+        return (short) user.getChangeThreshold();
+    }
 }
