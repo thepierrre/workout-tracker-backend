@@ -4,9 +4,11 @@ import com.example.gymapp.domain.dto.LoginDto;
 import com.example.gymapp.domain.dto.RegisterDto;
 import com.example.gymapp.domain.entities.Role;
 import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.domain.entities.UserSettingsEntity;
 import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.repositories.RoleRepository;
 import com.example.gymapp.repositories.UserRepository;
+import com.example.gymapp.repositories.UserSettingsRepository;
 import com.example.gymapp.security.JWTGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
@@ -35,6 +37,9 @@ public class AuthService {
     private JWTGenerator jwtGenerator;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserSettingsRepository userSettingsRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -87,7 +92,13 @@ public class AuthService {
         user.setUsername(registerDto.getUsername());
         user.setEmail(registerDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        user.setChangeThreshold((short) 1);
+
+        UserSettingsEntity userSettingsEntity = new UserSettingsEntity();
+        userSettingsEntity.setChangeThreshold((short) 1);
+        userSettingsEntity.setUser(user);
+        user.setUserSettings(userSettingsEntity);
+        // userSettingsRepository.save(userSettingsEntity);
+
 
         Role role = roleRepository.findByName("USER")
                         .orElseThrow(

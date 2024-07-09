@@ -2,6 +2,7 @@ package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.RoutineDto;
 import com.example.gymapp.domain.dto.UserResponseDto;
+import com.example.gymapp.domain.dto.UserSettingsDto;
 import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
@@ -40,7 +41,6 @@ public class UserController {
             UserResponseDto userResponseDto = new UserResponseDto();
             userResponseDto.setUsername(user.get().getUsername());
             userResponseDto.setEmail(user.get().getEmail());
-            userResponseDto.setChangeThreshold(user.get().getChangeThreshold());
             userResponseDto.setRoutines(user.get().getRoutines().stream()
                     .map(routineMapper::mapToDto).toList());
             userResponseDto.setWorkouts(user.get().getWorkouts().stream()
@@ -50,16 +50,16 @@ public class UserController {
             return ResponseEntity.ok(userResponseDto);
     }
 
-    @PatchMapping("user-threshold")
-    public ResponseEntity<Short> editChangeThreshold(@AuthenticationPrincipal UserDetails userDetails, Short num) {
-        Short changeThreshold = userService.updateChangeThreshold(userDetails.getUsername(), num);
-        return new ResponseEntity<>(changeThreshold, HttpStatus.OK);
+    @PatchMapping("user-settings")
+    public ResponseEntity<UserSettingsDto> updateUserSettings(@AuthenticationPrincipal UserDetails userDetails, UserSettingsDto userSettingsDto) {
+        UserSettingsDto userSettingsDtoResponse = userService.updateUserSettings(userDetails.getUsername(), userSettingsDto);
+        return new ResponseEntity<>(userSettingsDtoResponse, HttpStatus.OK);
     }
 
-    @GetMapping("user-threshold")
-    public ResponseEntity<Short> getChangeThreshold(@AuthenticationPrincipal UserDetails userDetails) {
-        Short changeThreshold = userService.getChangeThreshold(userDetails.getUsername());
-        return new ResponseEntity<>(changeThreshold, HttpStatus.OK);
+    @GetMapping("user-settings")
+    public ResponseEntity<UserSettingsDto> getUserSettings(@AuthenticationPrincipal UserDetails userDetails) {
+        UserSettingsDto userSettingsDto = userService.getUserSettings(userDetails.getUsername());
+        return new ResponseEntity<>(userSettingsDto, HttpStatus.OK);
     }
 }
 

@@ -1,12 +1,12 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.UserDto;
+import com.example.gymapp.domain.dto.UserSettingsDto;
 import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
-import com.example.gymapp.mappers.impl.RoutineMapper;
-import com.example.gymapp.mappers.impl.UserMapper;
-import com.example.gymapp.mappers.impl.WorkoutMapper;
+import com.example.gymapp.domain.entities.UserSettingsEntity;
+import com.example.gymapp.mappers.impl.*;
 import com.example.gymapp.repositories.UserRepository;
+import com.example.gymapp.repositories.UserSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,13 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserSettingsRepository userSettingsRepository;
+
+    @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserSettingsMapper userSettingsMapper;
 
     public Optional<UserEntity> findByUsername(String username) {
 
@@ -33,30 +39,33 @@ public class UserService {
         return Optional.ofNullable(user);
     }
 
-    public Short getChangeThreshold(String username) {
+    public UserSettingsDto getUserSettings(String username) {
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(
                         "User with the username \"%s\" not found.", username)));
 
-        return (short) user.getChangeThreshold();
+        UserSettingsEntity userSettingsEntity = user.getUserSettings();
+
+        return userSettingsMapper.mapToDto(userSettingsEntity);
     }
 
-    public Short updateChangeThreshold(String username, Short num) {
+    public UserSettingsDto updateUserSettings(String username, UserSettingsDto userSettingsDto) {
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(
                         "User with the username \"%s\" not found.", username)));
 
-        if (num < 1) {
+        if (userSettingsDto.getChangeThreshold() < 1) {
             throw new IllegalArgumentException("The minimum allowed value is 1.");
         }
 
-        if (num > 100) {
+        if (userSettingsDto.getChangeThreshold() > 100) {
             throw new IllegalArgumentException("The maximum allowed value is 100.");
         }
 
-        user.setChangeThreshold(num);
-        userRepository.save(user);
+        UserSettingsEntity userSettingsEntity = user.getUserSettings();
+        userSettingsEntity.setChangeThreshold(userSettingsDto.getChangeThreshold());
+        userSettingsRepository.save(userSettingsEntity);
 
-        return (short) user.getChangeThreshold();
+        return userSettingsMapper.mapToDto(userSettingsEntity);
     }
 }
