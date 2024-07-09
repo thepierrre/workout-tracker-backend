@@ -54,13 +54,13 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(
                         "User with the username \"%s\" not found.", username)));
 
-        if (userSettingsDto.getChangeThreshold() < 1) {
-            throw new IllegalArgumentException("The minimum allowed value is 1.");
-        }
-
-        if (userSettingsDto.getChangeThreshold() > 100) {
-            throw new IllegalArgumentException("The maximum allowed value is 100.");
-        }
+//        if (userSettingsDto.getChangeThreshold() < 1) {
+//            throw new IllegalArgumentException("The minimum allowed value is 1.");
+//        }
+//
+//        if (userSettingsDto.getChangeThreshold() > 100) {
+//            throw new IllegalArgumentException("The maximum allowed value is 100.");
+//        }
 
         UserSettingsEntity userSettingsEntity = user.getUserSettings();
         userSettingsEntity.setChangeThreshold(userSettingsDto.getChangeThreshold());
