@@ -8,6 +8,7 @@ import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @PatchMapping("user-settings")
-    public ResponseEntity<UserSettingsDto> updateUserSettings(@AuthenticationPrincipal UserDetails userDetails, UserSettingsDto userSettingsDto) {
+    public ResponseEntity<UserSettingsDto> updateUserSettings(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UserSettingsDto userSettingsDto) {
         UserSettingsDto userSettingsDtoResponse = userService.updateUserSettings(userDetails.getUsername(), userSettingsDto);
         return new ResponseEntity<>(userSettingsDtoResponse, HttpStatus.OK);
     }
