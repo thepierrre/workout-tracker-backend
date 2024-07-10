@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -29,9 +30,9 @@ public class UserSettingsDto {
     @Transient
     private String username;
 
-    @Min(value = 1, message = "The minimum value is 1.")
+    @DecimalMin(value = "0.25", message = "The minimum value is 0.25.")
     @Max(value = 100, message = "The maximum value is 100.")
-    private short changeThreshold;
+    private double changeThreshold;
 
     public String getUsername() {
         return user != null ? user.getUsername() : null;

@@ -21,6 +21,6 @@ public class WorkingSetDto {
 
     private Short reps;
 
-    private Short weight;
+    private double weight;
 
 }

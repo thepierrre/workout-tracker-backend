@@ -27,6 +27,6 @@ public class WorkingSetEntity {
 
     private Short reps;
 
-    private Short weight;
+    private double weight;
 }
 

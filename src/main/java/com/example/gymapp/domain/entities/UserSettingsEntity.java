@@ -25,5 +25,5 @@ public class UserSettingsEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
-    private short changeThreshold;
+    private double changeThreshold;
 }
