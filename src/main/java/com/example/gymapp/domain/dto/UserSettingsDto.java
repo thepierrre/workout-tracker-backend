@@ -37,4 +37,12 @@ public class UserSettingsDto {
         return user != null ? user.getUsername() : null;
     }
 
+    public void setUsername(String username) {
+        if (user == null) {
+            user = new UserDto();
+        }
+        this.username = username;
+    }
+
+
 }
