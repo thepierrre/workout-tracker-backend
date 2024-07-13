@@ -1,10 +1,7 @@
 package com.example.gymapp.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
@@ -23,6 +20,7 @@ public class UserSettingsEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @EqualsAndHashCode.Exclude
     private UserEntity user;
 
     private double changeThreshold;

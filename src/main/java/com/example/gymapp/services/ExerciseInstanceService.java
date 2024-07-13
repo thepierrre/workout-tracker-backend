@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ExerciseInstanceService {
@@ -62,7 +63,7 @@ public class ExerciseInstanceService {
     }
 
     @Transactional
-    public ExerciseInstanceDto updateWorkingSetById(UUID exerciseInstanceId, Long setId, WorkingSetDto workingSetDto) {
+    public ExerciseInstanceDto updateWorkingSetById(UUID exerciseInstanceId, UUID setId, WorkingSetDto workingSetDto) {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
 
@@ -71,16 +72,15 @@ public class ExerciseInstanceService {
 
         workingSet.setReps(workingSetDto.getReps());
         workingSet.setWeight(workingSetDto.getWeight());
-        WorkingSetEntity savedEntity = workingSetRepository.save(workingSet);
+        workingSetRepository.save(workingSet);
 
-        exerciseInstance.getWorkingSets().sort(Comparator.comparingLong(WorkingSetEntity::getId));
-
+        exerciseInstance.getWorkingSets().sort(Comparator.comparing(WorkingSetEntity::getCreationTimedate));
 
         return exerciseInstanceMapper.mapToDto(exerciseInstance);
     }
 
     @Transactional
-    public ExerciseInstanceDto deleteWorkingSetById(UUID exerciseInstanceId, Long setId) {
+    public ExerciseInstanceDto deleteWorkingSetById(UUID exerciseInstanceId, UUID setId) {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
 

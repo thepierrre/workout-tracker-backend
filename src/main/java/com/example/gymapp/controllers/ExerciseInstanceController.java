@@ -35,7 +35,7 @@ public class ExerciseInstanceController {
     @PatchMapping(path = "exercise-instances/{exerciseInstanceId}/sets/{setId}")
     public ResponseEntity<ExerciseInstanceDto> updateWorkingSetById(
             @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,
-            @PathVariable("setId") Long setId,
+            @PathVariable("setId") UUID setId,
             @RequestBody WorkingSetDto workingSetDto
     ) {
         ExerciseInstanceDto exercise = exerciseInstanceService.updateWorkingSetById(exerciseInstanceId, setId, workingSetDto);
@@ -45,7 +45,7 @@ public class ExerciseInstanceController {
     @DeleteMapping(path = "exercise-instances/{exerciseInstanceId}/sets/{setId}")
     public ResponseEntity<ExerciseInstanceDto> deleteWorkingSetById(
             @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,
-            @PathVariable("setId") Long setId
+            @PathVariable("setId") UUID setId
     ) {
         ExerciseInstanceDto exercise = exerciseInstanceService.deleteWorkingSetById(exerciseInstanceId, setId);
         return new ResponseEntity<>(exercise, HttpStatus.OK);

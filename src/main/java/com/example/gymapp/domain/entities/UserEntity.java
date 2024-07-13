@@ -3,10 +3,7 @@ package com.example.gymapp.domain.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.ArrayList;
@@ -48,6 +45,7 @@ public class UserEntity {
     private List<ExerciseTypeEntity> exerciseTypes;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private UserSettingsEntity userSettings;
 
 }

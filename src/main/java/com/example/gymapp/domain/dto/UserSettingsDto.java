@@ -34,16 +34,4 @@ public class UserSettingsDto {
     @Max(value = 100, message = "The maximum value is 100.")
     private double changeThreshold;
 
-    public String getUsername() {
-        return user != null ? user.getUsername() : null;
-    }
-
-    public void setUsername(String username) {
-        if (user == null) {
-            user = new UserDto();
-        }
-        this.username = username;
-    }
-
-
 }

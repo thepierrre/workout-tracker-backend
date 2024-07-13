@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -15,12 +16,18 @@ import java.util.UUID;
 @Builder
 public class WorkingSetDto {
 
-    private Long id;
+    private UUID id;
 
     private ExerciseInstanceDto exerciseInstance;
 
     private Short reps;
 
     private double weight;
+
+    private LocalDateTime creationTimedate;
+
+    public WorkingSetDto(String id) {
+        this.id = UUID.fromString(id);
+    }
 
 }

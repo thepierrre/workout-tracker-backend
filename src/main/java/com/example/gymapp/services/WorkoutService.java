@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,11 +77,14 @@ public class WorkoutService {
             exerciseInstance.setWorkout(workoutEntity);
 
 
+            LocalDateTime now = LocalDateTime.now();
+
             List<WorkingSetEntity> workingSets = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 WorkingSetEntity workingSet = new WorkingSetEntity();
                 workingSet.setReps((short) 10);
                 workingSet.setWeight((short) 30);
+                workingSet.setCreationTimedate(now.plusNanos(i * 1000000));
                 workingSet.setExerciseInstance(exerciseInstance);
                 workingSets.add(workingSet);
             }

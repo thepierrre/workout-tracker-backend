@@ -5,4 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface WorkingSetRepository extends JpaRepository<WorkingSetEntity, Long> {}
+public interface WorkingSetRepository extends JpaRepository<WorkingSetEntity, UUID> {}

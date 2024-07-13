@@ -18,16 +18,6 @@ public class UserSettingsMapper implements Mapper<UserSettingsEntity, UserSettin
     @Autowired
     ModelMapper modelMapper;
 
-    @PostConstruct
-    public void init() {
-        modelMapper.addMappings(new PropertyMap<UserSettingsEntity, UserSettingsDto>() {
-            @Override
-            protected void configure() {
-                map(source.getUser().getUsername(), destination.getUsername());
-            }
-        });
-    }
-
     @Override
     public UserSettingsDto mapToDto(UserSettingsEntity userSettingsEntity) {
         return modelMapper.map(userSettingsEntity, UserSettingsDto.class);
