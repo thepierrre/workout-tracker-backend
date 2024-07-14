@@ -94,7 +94,8 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         UserSettingsEntity userSettingsEntity = new UserSettingsEntity();
-        userSettingsEntity.setChangeThreshold((short) 1);
+        userSettingsEntity.setChangeThreshold((double) 1);
+        userSettingsEntity.setWeightUnit("kgs");
         userSettingsEntity.setUser(user);
         user.setUserSettings(userSettingsEntity);
         // userSettingsRepository.save(userSettingsEntity);

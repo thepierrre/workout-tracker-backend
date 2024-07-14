@@ -30,8 +30,10 @@ public class UserSettingsDto {
     @Transient
     private String username;
 
-    @DecimalMin(value = "0.25", message = "The minimum value is 0.25.")
-    @Max(value = 100, message = "The maximum value is 100.")
-    private double changeThreshold;
+    @DecimalMin(value = "0.1", message = "The minimum value is 0.1.")
+    @Max(value = 200, message = "The maximum value is 200.")
+    private Double changeThreshold;
+
+    private String weightUnit;
 
 }

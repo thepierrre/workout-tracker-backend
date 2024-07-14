@@ -55,7 +55,17 @@ public class UserService {
                         "User with the username \"%s\" not found.", username)));
 
         UserSettingsEntity userSettingsEntity = user.getUserSettings();
-        userSettingsEntity.setChangeThreshold(userSettingsDto.getChangeThreshold());
+
+        if (userSettingsDto.getChangeThreshold() != null) {
+            userSettingsEntity.setChangeThreshold(userSettingsDto.getChangeThreshold());
+        }
+
+        Optional.ofNullable(userSettingsDto.getChangeThreshold())
+                .ifPresent(userSettingsEntity::setChangeThreshold);
+
+        Optional.ofNullable(userSettingsDto.getWeightUnit())
+                .ifPresent(userSettingsEntity::setWeightUnit);
+
         userSettingsRepository.save(userSettingsEntity);
 
         return userSettingsMapper.mapToDto(userSettingsEntity);

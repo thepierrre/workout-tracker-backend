@@ -23,5 +23,7 @@ public class UserSettingsEntity {
     @EqualsAndHashCode.Exclude
     private UserEntity user;
 
-    private double changeThreshold;
+    private Double changeThreshold;
+
+    private String weightUnit;
 }
