@@ -32,6 +32,7 @@ public class RoutineEntity {
             inverseJoinColumns = @JoinColumn(name = "exercise_type_id")
     )
     @JsonIgnoreProperties("exerciseInstances")
+    @OrderColumn(name = "exercise_order")
     private List<ExerciseTypeEntity> exerciseTypes;
 
     @ManyToOne
