@@ -27,8 +27,6 @@ public class ExerciseInstanceMapper implements Mapper<ExerciseInstanceEntity, Ex
                 .sorted(Comparator.comparing(WorkingSetDto::getCreationTimedate)).collect(Collectors.toList()));
 
         return exerciseInstanceDto;
-
-        //return modelMapper.map(exerciseInstanceEntity, ExerciseInstanceDto.class);
     }
 
     @Override

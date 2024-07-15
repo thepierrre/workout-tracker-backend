@@ -90,7 +90,7 @@ class ExerciseInstanceServiceTest {
 
     @Test
     void updateWorkingSetById_Success() {
-        long workingSetId = testData.workingSetResponseDto1.getId();
+        UUID workingSetId = testData.workingSetResponseDto1.getId();
         testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>(List.of(testData.workingSetEntity1)));
         testData.workoutEntity1.setExerciseInstances(new ArrayList<>(List.of(testData.exerciseInstanceEntity1)));
 
@@ -125,7 +125,7 @@ class ExerciseInstanceServiceTest {
     @Test
     void updateWorkingSetById_ExerciseIdNotFound() {
         UUID exerciseId = UUID.randomUUID();
-        long setId = testData.workingSetResponseDto3.getId();
+        UUID setId = testData.workingSetResponseDto3.getId();
 
         when(exerciseInstanceRepository.findById(exerciseId))
                 .thenReturn(Optional.empty());
@@ -138,7 +138,7 @@ class ExerciseInstanceServiceTest {
     @Test
     void updateWorkingSetById_SetIdNotFound() {
         UUID exerciseId = testData.exerciseInstanceEntity1.getId();
-        long setId = new Random().nextLong();
+        UUID setId = UUID.randomUUID();
 
         when(exerciseInstanceRepository.findById(testData.exerciseInstanceEntity1.getId()))
                 .thenReturn(Optional.of(testData.exerciseInstanceEntity1));
@@ -153,7 +153,7 @@ class ExerciseInstanceServiceTest {
     @Test
     void deleteWorkingSetById_Success() {
         UUID exerciseId = testData.exerciseInstanceEntity1.getId();
-        long workingSetId = testData.workingSetEntity1.getId();
+        UUID workingSetId = testData.workingSetEntity1.getId();
 
         testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>(List.of(testData.workingSetEntity1)));
 
@@ -169,7 +169,7 @@ class ExerciseInstanceServiceTest {
     @Test
     void deleteWorkingSetById_ExerciseIdNotFound() {
         UUID exerciseId = UUID.randomUUID();
-        long setId = testData.workingSetResponseDto3.getId();
+        UUID setId = testData.workingSetResponseDto3.getId();
 
         when(exerciseInstanceRepository.findById(exerciseId))
                 .thenReturn(Optional.empty());
@@ -182,7 +182,7 @@ class ExerciseInstanceServiceTest {
     @Test
     void deleteWorkingSetById_SetIdNotFound() {
         UUID exerciseId = testData.exerciseInstanceEntity1.getId();
-        long setId = new Random().nextLong();
+        UUID setId = UUID.randomUUID();
 
         when(exerciseInstanceRepository.findById(testData.exerciseInstanceEntity1.getId()))
                 .thenReturn(Optional.of(testData.exerciseInstanceEntity1));

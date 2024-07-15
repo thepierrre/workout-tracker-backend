@@ -176,7 +176,7 @@ class RoutineControllerTest {
     void updateById_Success() throws Exception {
         UUID id = UUID.randomUUID();
 
-        when(routineService.updateById(any(), any(RoutineDto.class)))
+        when(routineService.updateById(any(), any(RoutineDto.class), any(String.class)))
                 .thenReturn(testData.routineResponseDto1);
 
         RoutineDto input = testData.routineRequestDto1;
@@ -193,7 +193,7 @@ class RoutineControllerTest {
     void updateById_IdNotFound() throws Exception {
         UUID id = UUID.randomUUID();
 
-        when(routineService.updateById(any(), any(RoutineDto.class)))
+        when(routineService.updateById(any(), any(RoutineDto.class), any(String.class)))
                 .thenThrow(new UsernameNotFoundException(
                         String.format("Routine with the ID %s not found.", id.toString())));
 

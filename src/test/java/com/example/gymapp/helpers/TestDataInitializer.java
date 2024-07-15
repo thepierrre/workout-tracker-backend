@@ -4,6 +4,8 @@ import com.example.gymapp.domain.dto.*;
 import com.example.gymapp.domain.entities.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class TestDataInitializer {
 
@@ -126,12 +128,12 @@ public class TestDataInitializer {
         testData.workoutResponseDto1 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 4, 30), "routine1");
         testData.workoutResponseDto2 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 6, 15), "routine2");
         testData.workoutResponseDto3 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 6, 15), "routine3");
-        testData.workingSetEntity1 = WorkingSetDataHelper.createWorkingSetEntity((short) 10, (short) 50);
-        testData.workingSetEntity2 = WorkingSetDataHelper.createWorkingSetEntity((short) 9, (short) 40);
-        testData.workingSetEntity3 = WorkingSetDataHelper.createWorkingSetEntity((short) 8, (short) 30);
-        testData.workingSetResponseDto1 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 10, (short) 50);
-        testData.workingSetResponseDto2 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 9, (short) 40);
-        testData.workingSetResponseDto3 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 8, (short) 30);
+        testData.workingSetEntity1 = WorkingSetDataHelper.createWorkingSetEntity((short) 10, (short) 50, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetEntity2 = WorkingSetDataHelper.createWorkingSetEntity((short) 9, (short) 40, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetEntity3 = WorkingSetDataHelper.createWorkingSetEntity((short) 8, (short) 30, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetResponseDto1 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 10, (short) 50, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetResponseDto2 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 9, (short) 40, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetResponseDto3 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 8, (short) 30, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
         testData.workingSetRequestDto1 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 50);
         testData.workingSetRequestDto2 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 9, (short) 40);
         testData.workingSetRequestDto3 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 8, (short) 30);

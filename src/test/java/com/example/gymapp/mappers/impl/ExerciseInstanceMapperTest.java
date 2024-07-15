@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -28,6 +31,7 @@ class ExerciseInstanceMapperTest {
     @Test
     void mapToDto() {
         testData.exerciseInstanceEntity1.setWorkout(testData.workoutEntity1);
+        testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>());
         ExerciseInstanceDto result = exerciseInstanceMapper.mapToDto(testData.exerciseInstanceEntity1);
 
         assertNotNull(result);

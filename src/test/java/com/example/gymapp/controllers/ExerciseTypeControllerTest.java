@@ -209,7 +209,7 @@ class ExerciseTypeControllerTest {
     void updateById_Success() throws Exception {
         UUID id = UUID.randomUUID();
 
-        when(exerciseTypeService.updateById(any(), any(ExerciseTypeDto.class)))
+        when(exerciseTypeService.updateById(any(), any(ExerciseTypeDto.class), any(String.class)))
                 .thenReturn(testData.exerciseTypeResponseDto1);
 
         ExerciseTypeDto input = testData.exerciseTypeRequestDto1;
@@ -226,7 +226,7 @@ class ExerciseTypeControllerTest {
     void updateById_ExerciseTypeIdNotFound() throws Exception {
         UUID id = UUID.randomUUID();
 
-        when(exerciseTypeService.updateById(any(), any(ExerciseTypeDto.class)))
+        when(exerciseTypeService.updateById(any(), any(ExerciseTypeDto.class), any(String.class)))
                 .thenThrow(new UsernameNotFoundException(
                         String.format("Exercise with the ID %s not found.", id.toString())));
 

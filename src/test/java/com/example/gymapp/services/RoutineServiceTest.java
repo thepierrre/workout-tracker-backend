@@ -122,6 +122,8 @@ class RoutineServiceTest {
     @Test
     void updateById_Success() {
 
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+
         UUID id = testData.routineEntity1.getId();
 
         RoutineEntity editedEntity = RoutineDataHelper.createRoutineEntity("edited");
@@ -142,7 +144,7 @@ class RoutineServiceTest {
         when(routineRepository.save(any(RoutineEntity.class))).thenReturn(editedEntity);
 
 
-        RoutineDto result = routineService.updateById(id, editedRequestDto);
+        RoutineDto result = routineService.updateById(id, editedRequestDto, "user1");
 
         assertNotNull(result);
         assertEquals(testData.routineEntity1.getId(), editedResponseDto.getId());
@@ -177,10 +179,12 @@ class RoutineServiceTest {
 
     @Test
     void updateById_IdNotFound() {
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+
         UUID id = UUID.randomUUID();
         RoutineDto editedRequestDto = RoutineDataHelper.createRoutineRequestDto("edited");
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> routineService.updateById(id, editedRequestDto));
+                () -> routineService.updateById(id, editedRequestDto, "user1"));
 
         assertEquals("Routine with the ID " + id + " not found.", exception.getMessage());
     }

@@ -176,6 +176,8 @@ class ExerciseTypeServiceTest {
     @Test
     void updateById_Success() {
 
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+
         UUID id = testData.exerciseTypeEntity1.getId();
 
         ExerciseTypeEntity editedEntity = ExerciseTypeDataHelper.createExerciseTypeEntity("edited");
@@ -196,7 +198,7 @@ class ExerciseTypeServiceTest {
         when(exerciseTypeRepository.save(any(ExerciseTypeEntity.class))).thenReturn(editedEntity);
 
 
-        ExerciseTypeDto result = exerciseTypeService.updateById(id, editedRequestDto);
+        ExerciseTypeDto result = exerciseTypeService.updateById(id, editedRequestDto, "user1");
 
         assertNotNull(result);
         assertEquals(testData.exerciseTypeEntity1.getId(), editedResponseDto.getId());
@@ -206,10 +208,12 @@ class ExerciseTypeServiceTest {
 
     @Test
     void updateById_IdNotFound() {
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+
         UUID id = UUID.randomUUID();
         ExerciseTypeDto editedRequestDto = ExerciseTypeDataHelper.createExerciseTypeRequestDto("edited");
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> exerciseTypeService.updateById(id, editedRequestDto));
+                () -> exerciseTypeService.updateById(id, editedRequestDto, "user1"));
 
         assertEquals("Exercise type with the ID " + id + " not found.", exception.getMessage());
     }

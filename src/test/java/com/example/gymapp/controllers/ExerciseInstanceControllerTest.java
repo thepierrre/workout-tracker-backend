@@ -70,7 +70,7 @@ class ExerciseInstanceControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.exerciseTypeName", containsString("exerciseType1")))
                 .andExpect(jsonPath("$.workingSets[0].reps", is(10)))
-                .andExpect(jsonPath("$.workingSets[0].weight", is(15)));
+                .andExpect(jsonPath("$.workingSets[0].weight", is(15.0)));
     }
 
     @Test
@@ -100,7 +100,7 @@ class ExerciseInstanceControllerTest {
         testData.exerciseInstanceResponseDto1.setWorkingSets(List.of(input));
 
         UUID exerciseId = UUID.randomUUID();
-        long setId = new Random().nextLong();
+        UUID setId = UUID.randomUUID();
 
         testData.exerciseInstanceResponseDto1.setWorkingSets(List.of(input));
 
@@ -120,7 +120,7 @@ class ExerciseInstanceControllerTest {
         String jsonInput = objectMapper.writeValueAsString(input);
 
         UUID exerciseId = UUID.randomUUID();
-        long setId = new Random().nextLong();
+        UUID setId = UUID.randomUUID();
 
         when(exerciseInstanceService.updateWorkingSetById(any(), any(), any()))
                 .thenThrow(new EntityNotFoundException(
@@ -140,7 +140,7 @@ class ExerciseInstanceControllerTest {
         String jsonInput = objectMapper.writeValueAsString(input);
 
         UUID exerciseId = UUID.randomUUID();
-        long setId = new Random().nextLong();
+        UUID setId = UUID.randomUUID();
 
         when(exerciseInstanceService.updateWorkingSetById(any(), any(), any()))
                 .thenThrow(new EntityNotFoundException(
@@ -157,7 +157,7 @@ class ExerciseInstanceControllerTest {
     @Test
     void deleteWorkingSetById_Success() throws Exception {
         UUID exerciseId = UUID.randomUUID();
-        long setId = new Random().nextLong();
+        UUID setId = UUID.randomUUID();
 
         testData.exerciseInstanceResponseDto1.setWorkingSets(List.of());
 
@@ -174,7 +174,7 @@ class ExerciseInstanceControllerTest {
     @Test
     void deleteWorkingSetById_ExerciseIdNotFound() throws Exception {
         UUID exerciseId = UUID.randomUUID();
-        long setId = new Random().nextLong();
+        UUID setId = UUID.randomUUID();
 
         when(exerciseInstanceService.deleteWorkingSetById(any(), any()))
                 .thenThrow(new EntityNotFoundException(
@@ -190,7 +190,7 @@ class ExerciseInstanceControllerTest {
     @Test
     void deleteWorkingSetById_SetIdNotFound() throws Exception {
         UUID exerciseId = UUID.randomUUID();
-        long setId = new Random().nextLong();
+        UUID setId = UUID.randomUUID();
 
         when(exerciseInstanceService.deleteWorkingSetById(any(), any()))
                 .thenThrow(new EntityNotFoundException(
