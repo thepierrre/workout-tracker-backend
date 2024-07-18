@@ -25,7 +25,8 @@ public class RoutineEntity {
 
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    //@ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "routines_exercise_types",
             joinColumns = @JoinColumn(name = "routine_id"),
