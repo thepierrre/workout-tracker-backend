@@ -1,15 +1,10 @@
 package com.example.gymapp.helpers;
 
-import com.example.gymapp.domain.dto.ExerciseInstanceDto;
-import com.example.gymapp.domain.dto.UserDto;
 import com.example.gymapp.domain.dto.WorkoutDto;
-import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
-import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.domain.entities.WorkoutEntity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class WorkoutDataHelper {

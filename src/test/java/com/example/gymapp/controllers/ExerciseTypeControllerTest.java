@@ -1,228 +1,243 @@
-//package com.example.gymapp.controllers;
-//
-//import com.example.gymapp.domain.dto.ExerciseTypeDto;
-//import com.example.gymapp.domain.entities.CategoryEntity;
-//import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-//import com.example.gymapp.domain.entities.UserEntity;
-//import com.example.gymapp.helpers.CategoryDataHelper;
-//import com.example.gymapp.helpers.ExerciseTypeDataHelper;
-//import com.example.gymapp.helpers.UserDataHelper;
-//import com.example.gymapp.repositories.CategoryRepository;
-//import com.example.gymapp.repositories.ExerciseTypeRepository;
-//import com.example.gymapp.repositories.RoleRepository;
-//import com.example.gymapp.repositories.UserRepository;
-//import com.example.gymapp.services.ExerciseTypeService;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.params.ParameterizedTest;
-//import org.junit.jupiter.params.provider.Arguments;
-//import org.junit.jupiter.params.provider.MethodSource;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.web.servlet.MockMvc;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Optional;
-//import java.util.UUID;
-//import java.util.stream.Stream;
-//
-//import static org.hamcrest.Matchers.containsString;
-//import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.Mockito.when;
-//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-//
-//@SpringBootTest
-//@AutoConfigureMockMvc
-//class ExerciseTypeControllerTest {
-//
-//    @Autowired
-//    MockMvc mvc;
-//
-//    @Autowired
-//    ExerciseTypeService exerciseTypeService;
-//
-//    @Autowired
-//    ObjectMapper objectMapper;
-//
-//    @Autowired
-//    ExerciseTypeController exerciseTypeController;
-//
-//    @MockBean
-//    CategoryRepository categoryRepository;
-//
-//    @MockBean
-//    UserRepository userRepository;
-//
-//    @MockBean
-//    ExerciseTypeRepository exerciseTypeRepository;
-//
-//    @MockBean
-//    RoleRepository roleRepository;
-//
-//    private static CategoryEntity category1;
-//    private static CategoryEntity category2;
-//    private static CategoryEntity category3;
-//    private static ExerciseTypeEntity exerciseType1;
-//    private static ExerciseTypeEntity exerciseType2;
-//
-//    private static UserEntity user1;
-//    private static UserEntity user2;
-//
-//    @BeforeAll
-//    static void setUpEntities() {
-//        category1 = CategoryDataHelper.createCategoryEntity("hamstrings", UUID.fromString("2d80a3b1-7c0e-4c3d-b82b-6851b44b4a17"));
-//        category2 = CategoryDataHelper.createCategoryEntity("glutes", UUID.fromString("a7c4f5d6-bc14-4e5a-80b1-71e09efbf3ff"));
-//        category3 = CategoryDataHelper.createCategoryEntity("lower back", UUID.fromString("d1f5e8a2-74f6-46ea-9ae3-763a2bf7a1b6"));
-//
-//        exerciseType1 = ExerciseTypeDataHelper.createExerciseTypeEntity("bench press", UUID.fromString("e6f7c123-05e3-477b-8cf7-72a6e9f90521"));
-//        exerciseType2 = ExerciseTypeDataHelper.createExerciseTypeEntity("biceps curls", UUID.fromString("3e6a5d2b-cc68-4071-9d57-3c5a4d3a6264"));
-//
-//        user1 = UserDataHelper.createUserEntity("jack890", "jack@abc.com", "p@ss");
-//        user2 = UserDataHelper.createUserEntity("kate123", "kate123@abc.com", "pswd");
-//    }
-//
-//    // export to a separate class at a later point
-//    @BeforeEach
-//    void setUp() {
-////        when(userRepository.findByUsername("jack890")).thenReturn(Optional.of(user1));
-////        when(userRepository.findByUsername("kate123")).thenReturn(Optional.of(user2));
-////
-////        when(categoryRepository.save(any(CategoryEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
-////        when(userRepository.save(any(UserEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
-////        when(exerciseTypeRepository.save(any(ExerciseTypeEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
-////
-////        categoryRepository.save(category1);
-////        categoryRepository.save(category2);
-////        categoryRepository.save(category3);
-////        userRepository.save(user1);
-////        userRepository.save(user2);
-//
-//        user1.setExerciseTypes(new ArrayList<>(List.of(exerciseType1)));
-//        user2.setExerciseTypes(new ArrayList<>());
-//
-//        when(userRepository.findByUsername("jack890")).thenReturn(Optional.of(user1));
-//        when(userRepository.findByUsername("kate123")).thenReturn(Optional.of(user2));
-//
-//        when(categoryRepository.findById(category1.getId())).thenReturn(Optional.of(category1));
-//        when(categoryRepository.findById(category2.getId())).thenReturn(Optional.of(category2));
-//        when(categoryRepository.findById(category3.getId())).thenReturn(Optional.of(category3));
-//
-//        when(categoryRepository.save(any(CategoryEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
-//        when(userRepository.save(any(UserEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
-//        when(exerciseTypeRepository.save(any(ExerciseTypeEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
-//
-//        categoryRepository.save(category1);
-//        categoryRepository.save(category2);
-//        categoryRepository.save(category3);
-//        userRepository.save(user1);
-//        userRepository.save(user2);
-//
-////        when(categoryRepository.save(category1)).thenReturn(category1);
-////        when(categoryRepository.save(category2)).thenReturn(category2);
-////        when(categoryRepository.save(category3)).thenReturn(category3);
-////
-////        when(userRepository.findByUsername("jack890")).thenReturn(Optional.of(user1));
-////        when(userRepository.findByUsername("kate123")).thenReturn(Optional.of(user2));
-////
-////        when(userRepository.save(user1)).thenReturn(user1);
-////        when(userRepository.save(user2)).thenReturn(user2);
-////
-////        when(exerciseTypeRepository.save(exerciseType1)).thenReturn(exerciseType1);
-////        when(exerciseTypeRepository.save(exerciseType2)).thenReturn(exerciseType2);
-////
-////        categoryRepository.save(category1);
-////        categoryRepository.save(category2);
-////        categoryRepository.save(category3);
-////        userRepository.save(user1);
-////        userRepository.save(user2);
-//    }
-//
-//    @AfterEach
-//    void tearDown() {
-//        userRepository.deleteAll();
-//        categoryRepository.deleteAll();
-//        exerciseTypeRepository.deleteAll();
-//    }
-//
-//    @Test
-//    void testFindAll() {
-//    }
-//
-//    @Test
-//    void testFindAllForUser() {
-//    }
-//
-//    @ParameterizedTest
-//    @MethodSource("provideCreateExerciseTypePayloadAndExpectedResults")
-//    void testCreateExerciseType(String testCase, String input, String output, String message, int errorCode, boolean isSuccess) throws Exception {
-//
-//        ExerciseTypeDto exerciseTypeDto = objectMapper.readValue(input, ExerciseTypeDto.class);
-//
-//        if (isSuccess) {
-//            ExerciseTypeDto returnedDto = objectMapper.readValue(output, ExerciseTypeDto.class);
-//            when(exerciseTypeService
-//                    .createExercise(exerciseTypeDto, "jack890"))
-//                    .thenReturn(returnedDto);
-//        }
-//
-//        var resultActions = mvc.perform(post("/api/exercise-types").with(user("jack890"))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(input));
-//
-//        if (isSuccess) {
-//            resultActions.andExpect(jsonPath("$.name").value("dumbbell pushes"))
-//                    .andExpect(jsonPath("$.id").isNotEmpty());
-//        } else {
-//            resultActions.andExpect(status().is(errorCode))
-//                    .andExpect(content().string(containsString(message)));
-//        }
-//
-//        resultActions.andDo(result -> System.out.println(testCase));
-//
-//    }
-//
-//    @Test
-//    void testDeleteById() {
-//    }
-//
-//    @Test
-//    void testDeleteAll() {
-//    }
-//
-//    @Test
-//    void testUpdateById() {
-//    }
-//
-//    private static Stream<Arguments> provideCreateExerciseTypePayloadAndExpectedResults() {
-//        return Stream.of(
-//                Arguments.of(
-//                        "OK",
-//                        """
-//                            {
-//                                "name": "dumbbell pushes"
-//                            }
-//                        """,
-//                        """
-//                            {
-//                                "id": "14b6c95e-5828-4c9c-8e28-3d7f6a3c9a6d",
-//                                "name": "dumbbell pushes",
-//                                "categories": []
-//                            }
-//                        """,
-//                        "",
-//                        201,
-//                        true
-//                )
-//        );
-//    }
-//}
-//
+package com.example.gymapp.controllers;
+
+import com.example.gymapp.domain.dto.ExerciseTypeDto;
+import com.example.gymapp.exceptions.ConflictException;
+import com.example.gymapp.helpers.TestDataInitializer;
+import com.example.gymapp.repositories.CategoryRepository;
+import com.example.gymapp.repositories.ExerciseTypeRepository;
+import com.example.gymapp.repositories.RoleRepository;
+import com.example.gymapp.repositories.UserRepository;
+import com.example.gymapp.services.ExerciseTypeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
+
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@WithMockUser("user1")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+class ExerciseTypeControllerTest {
+
+    @Autowired
+    MockMvc mvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @MockBean
+    ExerciseTypeService exerciseTypeService;
+
+    @MockBean
+    UserRepository userRepository;
+
+    TestDataInitializer.TestData testData;
+
+    @BeforeEach
+    void setUp() {
+        testData = TestDataInitializer.initializeTestData();
+    }
+
+    @Test
+    void createExerciseType_Success() throws Exception {
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto1);
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto2);
+        String jsonInput = objectMapper.writeValueAsString(testData.exerciseTypeRequestDto1);
+
+        testData.exerciseTypeResponseDto1.getCategories().add(testData.categoryResponseDto1);
+        testData.exerciseTypeResponseDto1.getCategories().add(testData.categoryResponseDto2);
+
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.ofNullable(testData.user1));
+
+        when(exerciseTypeService.createExercise(any(ExerciseTypeDto.class), any(String.class)))
+                .thenReturn(testData.exerciseTypeResponseDto1);
+
+        mvc.perform(post("/api/exercise-types")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isCreated());
+    };
+
+    @Test
+    void createExerciseType_UserNotFound() throws Exception {
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto1);
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto2);
+        String jsonInput = objectMapper.writeValueAsString(testData.exerciseTypeRequestDto1);
+
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.empty());
+
+        when(exerciseTypeService.createExercise(any(ExerciseTypeDto.class), any(String.class)))
+                .thenThrow(new UsernameNotFoundException(
+                        "User with the username \"user1\" not found."));
+
+        mvc.perform(post("/api/exercise-types")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User with the username \"user1\" not found."));
+    };
+
+    @Test
+    void createExerciseType_ExerciseNameAlreadyExists() throws Exception {
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto1);
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto2);
+        String jsonInput = objectMapper.writeValueAsString(testData.exerciseTypeRequestDto1);
+
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+
+        when(exerciseTypeService.createExercise(any(ExerciseTypeDto.class), any(String.class)))
+                .thenThrow(
+                        new ConflictException(
+                        "Exercise with the name '" + testData.exerciseTypeRequestDto1.getName() + "' already exists."));
+
+        mvc.perform(post("/api/exercise-types")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isConflict())
+                .andExpect(content().string(
+                        "{\"message\":\"Exercise with the name 'exerciseType1' already exists.\"}"));
+    };
+
+    @Test
+    void createExerciseType_CategoryNotFound() throws Exception {
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto1);
+        testData.exerciseTypeRequestDto1.getCategories().add(testData.categoryResponseDto2);
+        String jsonInput = objectMapper.writeValueAsString(testData.exerciseTypeRequestDto1);
+
+        testData.exerciseTypeResponseDto1.getCategories().add(testData.categoryResponseDto1);
+        testData.exerciseTypeResponseDto1.getCategories().add(testData.categoryResponseDto2);
+
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.empty());
+
+        when(exerciseTypeService.createExercise(any(ExerciseTypeDto.class), any(String.class)))
+                .thenThrow(
+                        new EntityNotFoundException(
+                                "Category with the ID " + testData.categoryResponseDto1.getId() + " not found."));
+
+        mvc.perform(post("/api/exercise-types")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(
+                        "Category with the ID " + testData.categoryResponseDto1.getId() + " not found."));
+    };
+
+    @Test
+    void findAllForUser_Success() throws Exception {
+        when(exerciseTypeService.findAllForUser(any(String.class)))
+                .thenReturn(List.of(testData.exerciseTypeResponseDto1, testData.exerciseTypeResponseDto2));
+
+        mvc.perform(get("/api/user-exercise-types")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$.[0].name", is("exerciseType1")))
+                .andExpect(jsonPath("$.[1].name", is("exerciseType2")));
+    }
+
+
+    @Test
+    void findAllForUser_UserNotFound() throws Exception {
+        when(exerciseTypeService.findAllForUser("user1"))
+                .thenThrow(new UsernameNotFoundException(
+                        "User with the username \"user1\" not found."));
+
+        mvc.perform(get("/api/user-exercise-types")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(
+                        "User with the username \"user1\" not found."));
+    }
+
+    @Test
+    void deleteById_Success() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        doNothing()
+                .when(exerciseTypeService).deleteById(any());
+
+        mvc.perform(delete("/api/exercise-types/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    void deleteById_ExerciseTypeIdNotFound() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        doThrow(new EntityNotFoundException(
+                String.format("Exercise with the ID %s not found.", id.toString())))
+                .when(exerciseTypeService).deleteById(any());
+
+        mvc.perform(delete("/api/exercise-types/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Exercise with the ID " + id + " not found."));
+
+    }
+
+    @Test
+    void updateById_Success() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        when(exerciseTypeService.updateById(any(), any(ExerciseTypeDto.class), any(String.class)))
+                .thenReturn(testData.exerciseTypeResponseDto1);
+
+        ExerciseTypeDto input = testData.exerciseTypeRequestDto1;
+        String jsonInput = objectMapper.writeValueAsString(input);
+
+        mvc.perform(put("/api/exercise-types/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("exerciseType1")));
+    }
+
+    @Test
+    void updateById_ExerciseTypeIdNotFound() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        when(exerciseTypeService.updateById(any(), any(ExerciseTypeDto.class), any(String.class)))
+                .thenThrow(new UsernameNotFoundException(
+                        String.format("Exercise with the ID %s not found.", id.toString())));
+
+        ExerciseTypeDto input = testData.exerciseTypeRequestDto1;
+        String jsonInput = objectMapper.writeValueAsString(input);
+
+        mvc.perform(put("/api/exercise-types/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInput))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(String.format("Exercise with the ID %s not found.", id.toString())));
+    }
+}
+

@@ -8,7 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +32,7 @@ public class RoutineEntity {
             inverseJoinColumns = @JoinColumn(name = "exercise_type_id")
     )
     @JsonIgnoreProperties("exerciseInstances")
+    @OrderColumn(name = "exercise_order")
     private List<ExerciseTypeEntity> exerciseTypes;
 
     @ManyToOne

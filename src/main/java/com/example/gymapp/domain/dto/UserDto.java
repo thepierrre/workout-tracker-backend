@@ -1,5 +1,8 @@
 package com.example.gymapp.domain.dto;
 
+import com.example.gymapp.domain.entities.UserSettingsEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +35,9 @@ public class UserDto {
     private List<WorkoutDto> workouts;
 
     private List<ExerciseTypeDto> exerciseTypes;
+
+    @JsonIgnoreProperties({"user"})
+    private UserSettingsDto userSettings;
 
     public UserDto(String id) {
         this.id = UUID.fromString(id);

@@ -1,8 +1,6 @@
 package com.example.gymapp.services;
 
-import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.RoutineDto;
-import com.example.gymapp.domain.entities.CategoryEntity;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineEntity;
 import com.example.gymapp.domain.entities.UserEntity;
@@ -17,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -44,8 +43,6 @@ public class RoutineService {
     private ExerciseTypeRepository exerciseTypeRepository;
 
     public RoutineDto createRoutine(RoutineDto routineDto, String username) {
-
-        try {
             UserEntity user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException(String.format(
                             "User with the username \"%s\" not found.", username)));
@@ -78,38 +75,32 @@ public class RoutineService {
             userRepository.save(user);
 
             return routineMapper.mapToDto(savedRoutineEntity);
-        } catch (UsernameNotFoundException | ConflictException e) {
-            throw e;
-        }
-        catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Couldn't create a new routine due to an unexpected error.", e);
-        }
-
-
     }
 
-    public List<RoutineDto> findAll() {
-        return routineRepository.
-                findAll().stream().map(routineMapper::mapToDto).
-                toList(); }
-
     public List<RoutineDto> findAllForUser(String username) {
-
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(
                         "User with the username \"%s\" not found.", username)));
 
         return user.getRoutines().stream()
                 .map(routineEntity -> routineMapper.mapToDto(routineEntity)).toList();
-
     }
 
-    public RoutineDto updateById(UUID id, RoutineDto routineDto) {
+    public RoutineDto updateById(UUID id, RoutineDto routineDto, String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
 
         RoutineEntity existingRoutine = routineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
-                        "Routine type with the ID %s not found.", id.toString())));
+                        "Routine with the ID %s not found.", id.toString())));
+
+        Optional<RoutineEntity> existingRoutineWithName = routineRepository.findByUserAndName(user, routineDto.getName());
+
+        if (existingRoutineWithName.isPresent() && !existingRoutineWithName.get().getId().equals(id)) {
+            throw new ConflictException(
+                    "Routine with the name '" + routineDto.getName() + "' already exists.");
+        }
 
         existingRoutine.setId(routineDto.getId());
         existingRoutine.setName(routineDto.getName());
@@ -117,28 +108,22 @@ public class RoutineService {
         existingRoutine.setUser(existingRoutine.getUser());
 
         List<ExerciseTypeEntity> newExercises = routineDto.getExerciseTypes().stream()
-                .map(exerciseTypeDto -> exerciseTypeMapper.mapFromDto(exerciseTypeDto)).toList();
+                .map(exerciseTypeDto -> exerciseTypeMapper.mapFromDto(exerciseTypeDto))
+                .collect(Collectors.toList());
 
         existingRoutine.getExerciseTypes().clear();
-        existingRoutine.getExerciseTypes().addAll(newExercises);
+        existingRoutine.setExerciseTypes(newExercises);
 
         RoutineEntity updatedRoutine = routineRepository.save(existingRoutine);
 
         return routineMapper.mapToDto(updatedRoutine);
-
-
     }
 
     public void deleteById(UUID routineId) {
-
         RoutineEntity routine = routineRepository.findById(routineId)
                         .orElseThrow(() -> new EntityNotFoundException(String.format(
                                 "Routine with the ID %s not found.", routineId.toString())));
 
         routineRepository.deleteById(routineId);
-    }
-
-    public void deleteAll() {
-        routineRepository.deleteAll();
     }
 }

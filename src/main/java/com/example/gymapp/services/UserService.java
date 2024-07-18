@@ -1,27 +1,17 @@
 package com.example.gymapp.services;
-import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.dto.RoutineDto;
+
 import com.example.gymapp.domain.dto.UserDto;
-import com.example.gymapp.domain.dto.WorkoutDto;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-import com.example.gymapp.domain.entities.Role;
-import com.example.gymapp.domain.entities.RoutineEntity;
+import com.example.gymapp.domain.dto.UserSettingsDto;
 import com.example.gymapp.domain.entities.UserEntity;
-import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
-import com.example.gymapp.mappers.impl.RoutineMapper;
-import com.example.gymapp.mappers.impl.UserMapper;
-import com.example.gymapp.mappers.impl.WorkoutMapper;
+import com.example.gymapp.domain.entities.UserSettingsEntity;
+import com.example.gymapp.mappers.impl.*;
 import com.example.gymapp.repositories.UserRepository;
+import com.example.gymapp.repositories.UserSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,84 +22,52 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserSettingsRepository userSettingsRepository;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired
-    private RoutineMapper routineMapper;
+    private UserSettingsMapper userSettingsMapper;
 
-    @Autowired
-    private ExerciseTypeMapper exerciseTypeMapper;
+    public Optional<UserEntity> findByUsername(String username) {
 
-    @Autowired
-    private WorkoutMapper workoutMapper;
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
 
-    public List<UserDto> findAll() {
-        return userRepository.findAll().stream().map(userMapper::mapToDto).toList();
+        return Optional.ofNullable(user);
     }
 
-    public Optional<UserEntity> findById(UUID id) {
-        return userRepository.findById(id);
+    public UserSettingsDto getUserSettings(String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
+
+        UserSettingsEntity userSettingsEntity = user.getUserSettings();
+
+        return userSettingsMapper.mapToDto(userSettingsEntity);
     }
 
-    public void deleteById(UUID id) {
-//        UserEntity user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException(String.format(
-//                        "User with the username \"%s\" not found.", username)));
+    public UserSettingsDto updateUserSettings(String username, UserSettingsDto userSettingsDto) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
 
-//        for (ExerciseTypeEntity exerciseType : category.getExerciseTypes()) {
-//            exerciseType.getCategories().remove(category);
-//            exerciseTypeRepository.save(exerciseType);
-//        }
+        UserSettingsEntity userSettingsEntity = user.getUserSettings();
 
-
-        userRepository.deleteById(id);
-    }
-
-    public void deleteAll() {
-
-        userRepository.deleteAll();
-    }
-
-    public boolean isExists(UUID id) {
-        return userRepository.existsById(id);
-    }
-
-
-    public List<RoutineDto> getTrainingRoutinesForUser(UUID id) {
-        Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND
-            );
+        if (userSettingsDto.getChangeThreshold() != null) {
+            userSettingsEntity.setChangeThreshold(userSettingsDto.getChangeThreshold());
         }
-        return userEntity.get().getRoutines().stream().map(routineMapper::mapToDto).toList();
-    }
 
-    public List<ExerciseTypeDto> getExerciseTypesForUser(UUID id) {
-        Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        return userEntity.get().getExerciseTypes().stream().map(exerciseTypeMapper::mapToDto).toList();
-    }
+        Optional.ofNullable(userSettingsDto.getChangeThreshold())
+                .ifPresent(userSettingsEntity::setChangeThreshold);
 
-    public List<WorkoutDto> getWorkoutsForUser(UUID id) {
-        return null;
-    }
+        Optional.ofNullable(userSettingsDto.getWeightUnit())
+                .ifPresent(userSettingsEntity::setWeightUnit);
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> NotFoundHandler(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", ex.getMessage()));
-    }
+        userSettingsRepository.save(userSettingsEntity);
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> BadRequestHandler(IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body(Map.of("message", e.getMessage()));
-    }
-
-
-    public Optional<UserEntity> findByUsername(String name) {
-        return userRepository.findByUsername(name);
+        return userSettingsMapper.mapToDto(userSettingsEntity);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,8 @@ public class RoutineDto {
 
     private List<ExerciseTypeDto> exerciseTypes;
 
-    @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
+    //@JsonIgnoreProperties({"routines", "password", "email", "workouts"})
+    @JsonIgnore
     private UserDto user;
 
 }

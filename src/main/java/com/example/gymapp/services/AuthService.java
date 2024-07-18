@@ -4,8 +4,11 @@ import com.example.gymapp.domain.dto.LoginDto;
 import com.example.gymapp.domain.dto.RegisterDto;
 import com.example.gymapp.domain.entities.Role;
 import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.domain.entities.UserSettingsEntity;
+import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.repositories.RoleRepository;
 import com.example.gymapp.repositories.UserRepository;
+import com.example.gymapp.repositories.UserSettingsRepository;
 import com.example.gymapp.security.JWTGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
@@ -15,16 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Collections;
 
@@ -39,86 +39,78 @@ public class AuthService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserSettingsRepository userSettingsRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private RoleRepository roleRepository;
 
-    public ResponseEntity<String> login(LoginDto loginDto, HttpServletResponse response) {
-        try {
+    public String login(LoginDto loginDto, HttpServletResponse response) {
 
-            UserEntity user = userRepository.findByUsername(loginDto.getUsername())
-                    .orElseThrow(() -> new AuthenticationException(
-                            "Invalid username or password.") {
-                    });
+        UserEntity user = userRepository.findByUsername(loginDto.getUsername())
+                .orElseThrow(() -> new BadCredentialsException("Invalid username or password."));
 
-            if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-                return new ResponseEntity<>("Invalid username or password.", HttpStatus.UNAUTHORIZED);
-            }
-
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
-                            loginDto.getPassword()));
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtGenerator.generateToken(authentication);
-
-            Cookie cookie = new Cookie("token", token);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(false); // Use true if HTTPS
-            cookie.setPath("/");
-            cookie.setMaxAge(7 * 24 * 60 * 60);
-
-            response.addCookie(cookie);
-
-            return new ResponseEntity<>("User \"" + loginDto.getUsername() + "\" logged in.", HttpStatus.OK);
-        } catch (AuthenticationException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>("Logging in failed due to an unexpected error.", HttpStatus.INTERNAL_SERVER_ERROR);
+        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Invalid username or password.");
         }
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
+                        loginDto.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtGenerator.generateToken(authentication);
+
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // Use true if HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(7 * 24 * 60 * 60);
+
+        response.addCookie(cookie);
+
+        return "User \"" + loginDto.getUsername() + "\" logged in.";
     }
 
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-            return new ResponseEntity<>("Logging out successful.", HttpStatus.OK);
-        } catch (AuthenticationException e) {
-            return new ResponseEntity<>("Logging out failed due to an unexpected error.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
     }
 
-    public ResponseEntity<String> register(RegisterDto registerDto) {
+    public String register(RegisterDto registerDto) {
 
         if (userRepository.existsByUsername(registerDto.getUsername())) {
-            return new ResponseEntity<>("User with the username \"" + registerDto.getUsername() + "\" already exists.", HttpStatus.CONFLICT);
+            throw new ConflictException("User with the username \"" + registerDto.getUsername() + "\" already exists.");
         }
         if (userRepository.existsByEmail(registerDto.getEmail())) {
-            return new ResponseEntity<>("User with the e-mail \"" + registerDto.getEmail() + "\" already exists.", HttpStatus.CONFLICT);
+            throw new ConflictException("User with the email \"" + registerDto.getEmail() + "\" already exists.");
         }
 
-        try {
-            UserEntity user = new UserEntity();
-            user.setUsername(registerDto.getUsername());
-            user.setEmail(registerDto.getEmail());
-            user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        UserEntity user = new UserEntity();
+        user.setUsername(registerDto.getUsername());
+        user.setEmail(registerDto.getEmail());
+        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
-            Role role = roleRepository.findByName("USER")
-                            .orElseThrow(
-                                    () -> new EntityNotFoundException(
-                                            "Cannot register a new user because the \"USER\" role hasn't been set."));
-            user.setRoles(Collections.singletonList(role));
+        UserSettingsEntity userSettingsEntity = new UserSettingsEntity();
+        userSettingsEntity.setChangeThreshold((double) 1);
+        userSettingsEntity.setWeightUnit("kgs");
+        userSettingsEntity.setUser(user);
+        user.setUserSettings(userSettingsEntity);
+        // userSettingsRepository.save(userSettingsEntity);
 
-            userRepository.save(user);
 
-            return new ResponseEntity<>("User \"" + registerDto.getUsername() + "\" registered.", HttpStatus.OK);
+        Role role = roleRepository.findByName("USER")
+                        .orElseThrow(
+                                () -> new EntityNotFoundException(
+                                        "Cannot register a new user because the \"USER\" role hasn't been set."));
+        user.setRoles(Collections.singletonList(role));
 
-        } catch (Exception e) {
-            return new ResponseEntity<>("Registration failed due to an unexpected error.",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userRepository.save(user);
+
+        return "User \"" + registerDto.getUsername() + "\" registered.";
+
     }
 }
 

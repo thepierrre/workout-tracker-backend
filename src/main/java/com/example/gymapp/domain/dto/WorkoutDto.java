@@ -1,16 +1,13 @@
 package com.example.gymapp.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +24,8 @@ public class WorkoutDto {
     @JsonIgnoreProperties({"exerciseType", "workout"})
     private List<ExerciseInstanceDto> exerciseInstances;
 
-    @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
+    //@JsonIgnoreProperties({"routines", "password", "email", "workouts"})
+    @JsonIgnore
     private UserDto user;
 
     private String routineName;

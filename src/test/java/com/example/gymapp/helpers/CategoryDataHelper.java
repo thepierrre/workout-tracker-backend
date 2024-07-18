@@ -4,7 +4,6 @@ import com.example.gymapp.domain.dto.CategoryDto;
 import com.example.gymapp.domain.entities.CategoryEntity;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class CategoryDataHelper {

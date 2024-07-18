@@ -1,14 +1,9 @@
 package com.example.gymapp.helpers;
 
-import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.RoutineDto;
-import com.example.gymapp.domain.dto.UserDto;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineEntity;
-import com.example.gymapp.domain.entities.UserEntity;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class RoutineDataHelper {

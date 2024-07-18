@@ -24,7 +24,8 @@ public class ExerciseTypeDto {
     @NotBlank(message = "Exercise name cannot be empty.")
     private String name;
 
-    @JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
+    //@JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
+    @JsonIgnore
     private UserDto user;
 
     @JsonIgnoreProperties("exerciseTypes")

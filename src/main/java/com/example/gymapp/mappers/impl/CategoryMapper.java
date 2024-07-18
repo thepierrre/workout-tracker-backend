@@ -2,9 +2,7 @@ package com.example.gymapp.mappers.impl;
 
 
 import com.example.gymapp.domain.dto.CategoryDto;
-import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.entities.CategoryEntity;
-import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
 import com.example.gymapp.mappers.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

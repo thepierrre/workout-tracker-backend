@@ -4,6 +4,8 @@ import com.example.gymapp.domain.dto.*;
 import com.example.gymapp.domain.entities.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class TestDataInitializer {
 
@@ -11,7 +13,6 @@ public class TestDataInitializer {
 
         public UserEntity user1;
         public UserEntity user2;
-
         public UserDto userDto1;
         public UserDto userDto2;
         public CategoryEntity categoryEntity1;
@@ -23,7 +24,6 @@ public class TestDataInitializer {
         public CategoryDto categoryResponseDto1;
         public CategoryDto categoryResponseDto2;
         public CategoryDto categoryResponseDto3;
-
         public ExerciseTypeEntity exerciseTypeEntity1;
         public ExerciseTypeEntity exerciseTypeEntity2;
         public ExerciseTypeEntity exerciseTypeEntity3;
@@ -51,7 +51,6 @@ public class TestDataInitializer {
         public RoutineDto routineResponseDto1;
         public RoutineDto routineResponseDto2;
         public RoutineDto routineResponseDto3;
-
         public WorkoutEntity workoutEntity1;
         public WorkoutEntity workoutEntity2;
         public WorkoutEntity workoutEntity3;
@@ -62,14 +61,25 @@ public class TestDataInitializer {
         public WorkoutDto workoutResponseDto1;
         public WorkoutDto workoutResponseDto2;
         public WorkoutDto workoutResponseDto3;
+        public WorkingSetEntity workingSetEntity1;
+        public WorkingSetEntity workingSetEntity2;
+        public WorkingSetEntity workingSetEntity3;
+        public WorkingSetDto workingSetRequestDto1;
+        public WorkingSetDto workingSetRequestDto2;
+        public WorkingSetDto workingSetRequestDto3;
+        public WorkingSetDto workingSetResponseDto1;
+        public WorkingSetDto workingSetResponseDto2;
+        public WorkingSetDto workingSetResponseDto3;
+        public LoginDto loginDto1;
+        public RegisterDto registerDto1;
 
     }
 
     public static TestData initializeTestData() {
         TestData testData = new TestData();
 
-        testData.user1 = UserDataHelper.createUserEntity("user1", "user1@example.com", "pass1");
-        testData.user2 = UserDataHelper.createUserEntity("user2", "user2@example.com", "pass2");
+        testData.user1 = UserDataHelper.createUserEntity("user1", "user1@example.com", "encoded1");
+        testData.user2 = UserDataHelper.createUserEntity("user2", "user2@example.com", "encoded2");
         testData.userDto1 = UserDataHelper.createUserResponseDto("user1", "user1@example.com", "pass1");
         testData.userDto2 = UserDataHelper.createUserResponseDto("user2", "user2@example.com", "pass2");
         testData.categoryEntity1 = CategoryDataHelper.createCategoryEntity("category1");
@@ -79,8 +89,8 @@ public class TestDataInitializer {
         testData.categoryRequestDto2 = CategoryDataHelper.createCategoryRequestDto("category2");
         testData.categoryRequestDto3 = CategoryDataHelper.createCategoryRequestDto("category3");
         testData.categoryResponseDto1 = CategoryDataHelper.createCategoryResponseDto("category1");
-        testData.categoryResponseDto2 = CategoryDataHelper.createCategoryResponseDto("category1");
-        testData.categoryResponseDto3 = CategoryDataHelper.createCategoryResponseDto("category1");
+        testData.categoryResponseDto2 = CategoryDataHelper.createCategoryResponseDto("category2");
+        testData.categoryResponseDto3 = CategoryDataHelper.createCategoryResponseDto("category3");
         testData.exerciseTypeEntity1 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType1");
         testData.exerciseTypeEntity2 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType2");
         testData.exerciseTypeEntity3 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType3");
@@ -93,9 +103,9 @@ public class TestDataInitializer {
         testData.exerciseInstanceEntity1 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType1");
         testData.exerciseInstanceEntity2 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType2");
         testData.exerciseInstanceEntity3 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType3");
-//        testData.exerciseInstanceRequestDto1;
-//        testData.exerciseInstanceRequestDto2;
-//        testData.exerciseInstanceRequestDto3;
+        testData.exerciseInstanceRequestDto1 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType1");
+        testData.exerciseInstanceRequestDto2 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType2");
+        testData.exerciseInstanceRequestDto3 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType3");
         testData.exerciseInstanceResponseDto1 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType1");
         testData.exerciseInstanceResponseDto2 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType2");
         testData.exerciseInstanceResponseDto3 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType3");
@@ -118,6 +128,17 @@ public class TestDataInitializer {
         testData.workoutResponseDto1 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 4, 30), "routine1");
         testData.workoutResponseDto2 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 6, 15), "routine2");
         testData.workoutResponseDto3 = WorkoutDataHelper.createWorkoutResponseDto(LocalDate.of(2024, 6, 15), "routine3");
+        testData.workingSetEntity1 = WorkingSetDataHelper.createWorkingSetEntity((short) 10, (short) 50, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetEntity2 = WorkingSetDataHelper.createWorkingSetEntity((short) 9, (short) 40, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetEntity3 = WorkingSetDataHelper.createWorkingSetEntity((short) 8, (short) 30, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetResponseDto1 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 10, (short) 50, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetResponseDto2 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 9, (short) 40, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetResponseDto3 = WorkingSetDataHelper.createWorkingSetResponseDto((short) 8, (short) 30, LocalDateTime.of(2023, 7, 14, 10, 30).truncatedTo(ChronoUnit.MILLIS));
+        testData.workingSetRequestDto1 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 50);
+        testData.workingSetRequestDto2 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 9, (short) 40);
+        testData.workingSetRequestDto3 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 8, (short) 30);
+        testData.loginDto1 = AuthDataHelper.createLoginDto("user1", "pass1");
+        testData.registerDto1 = AuthDataHelper.createRegisterDto("user1", "user1@example.com", "pass1");
 
         return testData;
 

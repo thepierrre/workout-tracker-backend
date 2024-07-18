@@ -22,10 +22,6 @@ public class ExerciseInstanceEntity {
     @UuidGenerator
     private UUID id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "exercise_type_id", referencedColumnName = "id")
-//    private ExerciseTypeEntity exerciseType;
-
     @OneToMany(mappedBy = "exerciseInstance", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("exerciseInstance")
     private List<WorkingSetEntity> workingSets;
