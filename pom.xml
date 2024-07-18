@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>gym-app</artifactId>
+    <artifactId>workout-tracker-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>gym-app</name>
     <description>My gym app in Spring Boot</description>
