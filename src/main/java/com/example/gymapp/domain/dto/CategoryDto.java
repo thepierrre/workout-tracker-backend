@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class CategoryDto {
     @NotBlank(message = "Category name cannot be empty.")
     private String name;
 
-    @JsonIgnoreProperties("categories")
+    @JsonIgnore
     private List<ExerciseTypeDto> exerciseTypes;
 
 }

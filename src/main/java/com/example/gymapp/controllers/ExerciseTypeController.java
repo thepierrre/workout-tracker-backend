@@ -24,6 +24,7 @@ public class ExerciseTypeController {
 
     @GetMapping(path = "user-exercise-types")
     public ResponseEntity<List<ExerciseTypeDto>> findAllForUser(@AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println("blabla");
         List<ExerciseTypeDto> exerciseTypes = exerciseTypeService.findAllForUser(userDetails.getUsername());
         return new ResponseEntity<>(exerciseTypes, HttpStatus.OK);
     }
