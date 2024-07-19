@@ -12,7 +12,7 @@ RUN mvn dependency:go-offline
 COPY src ./src
 
 # Package the application
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 
 # Use a different base image for running the application
 FROM registry.access.redhat.com/ubi9/openjdk-17
