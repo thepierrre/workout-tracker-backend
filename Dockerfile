@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn clean package
 
 # Use a different base image for running the application
-FROM registry.access.redhat.com/ubi9/openjdk-21
+FROM registry.access.redhat.com/ubi9/openjdk-17
 
 # Set the working directory inside the container
 WORKDIR /app
