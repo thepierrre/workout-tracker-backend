@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.EOFException;
 import java.io.IOException;
 
 @AllArgsConstructor
@@ -30,17 +31,27 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String token = getJWTFromRequest(request);
-        if (StringUtils.hasText(token) && tokenGenerator.validateToken(token)) {
-            String username = tokenGenerator.getUsernameFromJWT(token);
+        try {String token = getJWTFromRequest(request);
+            if (StringUtils.hasText(token) && tokenGenerator.validateToken(token)) {
+                String username = tokenGenerator.getUsernameFromJWT(token);
 
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+            filterChain.doFilter(request, response);
+        } catch (EOFException ex) {
+            logger.error("EOFException during filtering. Client likely closed the connection prematurely. Request URI: " + request.getRequestURI(), ex);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Client closed the connection prematurely");
+        } catch (IOException ex) {
+            logger.error("IOException during filtering. Request URI: " + request.getRequestURI(), ex);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
+        } catch (Exception ex) {
+            logger.error("Unexpected error during filtering. Request URI: " + request.getRequestURI(), ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         }
-        filterChain.doFilter(request, response);
     }
 
     private String getJWTFromRequest(HttpServletRequest request) {
