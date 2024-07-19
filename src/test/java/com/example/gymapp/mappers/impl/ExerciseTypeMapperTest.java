@@ -45,6 +45,6 @@ class ExerciseTypeMapperTest {
 
         assertNotNull(result);
         assertEquals(result.getName(), "exerciseType1");
-        assertEquals(result.getCategories().getFirst().getName(), "category1");
+        assertEquals(result.getCategories().get(0).getName(), "category1");
     }
 }

@@ -136,8 +136,8 @@ class ExerciseTypeServiceTest {
         List<ExerciseTypeDto> result = exerciseTypeService.findAllForUser("user1");
 
         assertEquals(result.size(), 2);
-        assertEquals(result.getFirst(), testData.exerciseTypeResponseDto1);
-        assertEquals(result.getLast(), testData.exerciseTypeResponseDto2);
+        assertEquals(result.get(0), testData.exerciseTypeResponseDto1);
+        assertEquals(result.get(result.size() - 1), testData.exerciseTypeResponseDto2);
 
     }
 

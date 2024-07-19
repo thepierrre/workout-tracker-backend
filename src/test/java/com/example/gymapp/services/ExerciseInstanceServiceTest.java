@@ -72,8 +72,8 @@ class ExerciseInstanceServiceTest {
 
         assertNotNull(result);
         assertEquals(result.getWorkingSets().size(), 2);
-        assertEquals(result.getWorkingSets().getLast().getReps(), (short) 9);
-        assertEquals(result.getWorkingSets().getLast().getWeight(), (short) 40);
+        assertEquals(result.getWorkingSets().get(result.getWorkingSets().size() - 1).getReps(), (short) 9);
+        assertEquals(result.getWorkingSets().get(result.getWorkingSets().size() - 1).getWeight(), (short) 40);
     }
 
     @Test
@@ -118,8 +118,8 @@ class ExerciseInstanceServiceTest {
 
         assertNotNull(result);
         assertEquals(result.getWorkingSets().size(), 2);
-        assertEquals(result.getWorkingSets().getLast().getReps(), (short) 9);
-        assertEquals(result.getWorkingSets().getLast().getWeight(), (short) 40);
+        assertEquals(result.getWorkingSets().get(result.getWorkingSets().size() - 1).getReps(), (short) 9);
+        assertEquals(result.getWorkingSets().get(result.getWorkingSets().size() - 1).getWeight(), (short) 40);
     }
 
     @Test

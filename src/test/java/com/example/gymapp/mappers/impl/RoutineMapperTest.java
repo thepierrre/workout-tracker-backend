@@ -35,8 +35,8 @@ class RoutineMapperTest {
         assertNotNull(result);
         assertNotNull(result.getId());
         assertEquals(result.getUser().getUsername(), "user1");
-        assertEquals(result.getExerciseTypes().getFirst().getName(), "exerciseType1");
-        assertEquals(result.getExerciseTypes().getLast().getName(), "exerciseType2");
+        assertEquals(result.getExerciseTypes().get(0).getName(), "exerciseType1");
+        assertEquals(result.getExerciseTypes().get(result.getExerciseTypes().size() - 1).getName(), "exerciseType2");
     }
 
     @Test
@@ -49,7 +49,7 @@ class RoutineMapperTest {
 
         assertNotNull(result);
         assertEquals(result.getUser().getUsername(), "user1");
-        assertEquals(result.getExerciseTypes().getFirst().getName(), "exerciseType1");
-        assertEquals(result.getExerciseTypes().getLast().getName(), "exerciseType2");
+        assertEquals(result.getExerciseTypes().get(0).getName(), "exerciseType1");
+        assertEquals(result.getExerciseTypes().get(result.getExerciseTypes().size() - 1).getName(), "exerciseType2");
     }
 }
