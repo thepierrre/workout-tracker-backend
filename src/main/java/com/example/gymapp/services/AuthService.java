@@ -69,8 +69,9 @@ public class AuthService {
         cookie.setPath("/");
         cookie.setMaxAge(7 * 24 * 60 * 60);
 
-        response.addCookie(cookie);
         response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=None; Secure");
+        response.addCookie(cookie);
+
 
         return "User \"" + loginDto.getUsername() + "\" logged in.";
     }
