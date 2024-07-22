@@ -44,6 +44,6 @@ class CategoryServiceTest {
         assertNotNull(result);
         assertEquals(result.size(), 2);
         assertEquals(result.get(0).getName(), "category1");
-        assertEquals(result.get(0).getName(), "category2");
+        assertEquals(result.get(1).getName(), "category2");
     }
 }
