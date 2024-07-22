@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://workout-tracker-piotr-client-4d82d4dcd626.herokuapp.com/", "http://localhost:5173")
+                .allowedOrigins("https://workout-tracker-piotr-client-4d82d4dcd626.herokuapp.com", "http://localhost:5173")
                 //.allowedOrigins("http://localhost:5173")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
