@@ -36,6 +36,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("https://workout-tracker-piotr-client-4d82d4dcd626.herokuapp.com"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
