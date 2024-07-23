@@ -70,7 +70,9 @@ public class AuthService {
         cookie.setMaxAge(7 * 24 * 60 * 60);
 
         response.addCookie(cookie);
-        response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=Strict; Secure");
+        //response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=None; Secure");
+        //response.setHeader("Set-Cookie", "token=" + token + "; HttpOnly; SameSite=None; Secure");
+
 
 
         return "User \"" + loginDto.getUsername() + "\" logged in.";
