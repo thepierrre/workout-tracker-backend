@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://workout-tracker-piotr-client-4d82d4dcd626.herokuapp.com"));
+        configuration.setAllowedOrigins(Arrays.asList("https://my-gym-tracker.work"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
