@@ -31,7 +31,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        try {String token = getJWTFromRequest(request);
+        String token = getJWTFromRequest(request);
             if (StringUtils.hasText(token) && tokenGenerator.validateToken(token)) {
                 String username = tokenGenerator.getUsernameFromJWT(token);
 
@@ -42,16 +42,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
             filterChain.doFilter(request, response);
-        } catch (EOFException ex) {
-            logger.error("EOFException during filtering. Client likely closed the connection prematurely. Request URI: " + request.getRequestURI(), ex);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Client closed the connection prematurely");
-        } catch (IOException ex) {
-            logger.error("IOException during filtering. Request URI: " + request.getRequestURI(), ex);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request data");
-        } catch (Exception ex) {
-            logger.error("Unexpected error during filtering. Request URI: " + request.getRequestURI(), ex);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
-        }
     }
 
     private String getJWTFromRequest(HttpServletRequest request) {
