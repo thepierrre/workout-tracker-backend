@@ -67,6 +67,7 @@ public class AuthService {
         cookie.setHttpOnly(true);
         cookie.setSecure(true); // Use true if HTTPS
         cookie.setPath("/");
+        cookie.setDomain(".herokuapp.com");
         cookie.setMaxAge(7 * 24 * 60 * 60);
 
         response.addCookie(cookie);
