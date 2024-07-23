@@ -43,8 +43,10 @@ public class AppCorsFilter extends CorsFilter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://client.my-gym-tracker.work"));
+        configuration.setAllowedOrigins(Arrays.asList("https://client.my-gym-tracker.work", "http://localhost:5173"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST, DELETE, PUT, PATCH"));
+        configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
