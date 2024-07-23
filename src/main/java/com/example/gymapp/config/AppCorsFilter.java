@@ -43,7 +43,7 @@ public class AppCorsFilter extends CorsFilter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://client.my-gym-tracker.work", "http://localhost:5173"));
+        configuration.setAllowedOrigins(Arrays.asList("https://workout-tracker-piotr-client-4d82d4dcd626.herokuapp.com", "https://client.my-gym-tracker.work", "http://localhost:5173"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST, DELETE, PUT, PATCH"));
         configuration.setAllowCredentials(true);
 
