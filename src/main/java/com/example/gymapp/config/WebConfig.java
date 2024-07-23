@@ -12,10 +12,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns(
-                        "http://piotrs-workout-tracker.netlify.app",
-                        "http://workout-tracker-piotr-client-4d82d4dcd626.herokuapp.com/",
-                        "http://my-workout-tracker.work",
-                        "http://client.my-gym-tracker.work",
+                        "https://piotrs-workout-tracker.netlify.app",
+                        "https://workout-tracker-piotr-client-4d82d4dcd626.herokuapp.com/",
+                        "https://my-workout-tracker.work",
+                        "https://client.my-gym-tracker.work",
                         "http://localhost:5173"
                 )
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
