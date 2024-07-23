@@ -43,7 +43,7 @@ public class AppCorsFilter extends CorsFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         //response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Origin", "https://client.my-gym-tracker.work");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", API_METHODS);
         response.setHeader("Access-Control-Max-Age", "3600");
