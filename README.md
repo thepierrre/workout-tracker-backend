@@ -2,9 +2,5 @@
 
 For the most recent changes, see the develop branch.
 
-backend repository: https://github.com/thepierrre/workout-tracker-service
+frontend repository: https://github.com/thepierrre/workout-tracker-client
 
-#### Log in to try out the deployed application:
-
-username: testuser
-password: testp@ss124
