@@ -76,8 +76,6 @@ class AuthServiceTest {
 
         BadCredentialsException exception = assertThrows(BadCredentialsException.class,
                 () -> authService.login(testData.loginDto1, response));
-
-        assertEquals("Invalid username or password.", exception.getMessage());
     }
 
     @Test

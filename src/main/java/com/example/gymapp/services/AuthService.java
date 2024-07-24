@@ -65,7 +65,7 @@ public class AuthService {
 
         Cookie cookie = new Cookie("token", token);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false); // Use true if HTTPS
+        cookie.setSecure(true); // Use true if HTTPS
         cookie.setPath("/");
         cookie.setMaxAge(7 * 24 * 60 * 60);
 

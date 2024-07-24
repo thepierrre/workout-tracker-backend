@@ -83,8 +83,8 @@ class WorkoutServiceTest {
 
         assertNotNull(result);
         assertEquals(result.size(), 2);
-        assertEquals(testData.workoutResponseDto1, result.getFirst());
-        assertEquals(testData.workoutResponseDto2, result.getLast());
+        assertEquals(testData.workoutResponseDto1, result.get(0));
+        assertEquals(testData.workoutResponseDto2, result.get(result.size() - 1));
 
     }
 
