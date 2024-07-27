@@ -40,9 +40,9 @@ public class ExerciseTypeEntity {
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryEntity> categories;
 
-    @ManyToMany(mappedBy = "exerciseTypes")
+    @OneToMany(mappedBy = "exerciseType")
     @JsonIgnore
-    private List<RoutineEntity> routines;
+    private List<RoutineExerciseEntity> routineExercises;
 
 
 }

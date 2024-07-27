@@ -16,16 +16,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "sets")
-public class WorkingSetEntity {
+@Table(name = "blueprint_working_sets")
+public class BlueprintWorkingSetEntity {
 
     @Id
     @UuidGenerator
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "exercise_instance_id", referencedColumnName = "id")
-    private ExerciseInstanceEntity exerciseInstance;
+    @JoinColumn(name = "routine_exercise_id", referencedColumnName = "id")
+    private RoutineExerciseEntity routineExercise;
 
     private Short reps;
 
@@ -35,4 +35,3 @@ public class WorkingSetEntity {
     @Column(columnDefinition = "TIMESTAMP(3)")
     private LocalDateTime creationTimedate;
 }
-

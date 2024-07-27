@@ -1,7 +1,6 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
-import com.example.gymapp.domain.entities.UserEntity;
 import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.mappers.impl.ExerciseInstanceMapper;
 import com.example.gymapp.mappers.impl.WorkingSetMapper;
@@ -50,7 +49,7 @@ class ExerciseInstanceServiceTest {
 
     @Test
     void createWorkingSetforExercise_Success() {
-        testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>(List.of(testData.workingSetEntity1)));
+        testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>(List.of(testData.instanceWorkingSetEntity1)));
         testData.workoutEntity1.setExerciseInstances(new ArrayList<>(List.of(testData.exerciseInstanceEntity1)));
 
         testData.exerciseInstanceResponseDto1.setWorkingSets(
@@ -60,10 +59,10 @@ class ExerciseInstanceServiceTest {
                 .thenReturn(Optional.of(testData.user1));
         when(exerciseInstanceRepository.findById(testData.exerciseInstanceEntity1.getId()))
                 .thenReturn(Optional.of(testData.exerciseInstanceEntity1));
-        when(workingSetRepository.save(testData.workingSetEntity1))
-                .thenReturn(testData.workingSetEntity1);
+        when(workingSetRepository.save(testData.instanceWorkingSetEntity1))
+                .thenReturn(testData.instanceWorkingSetEntity1);
         when(workingSetMapper.mapFromDto(testData.workingSetRequestDto1))
-                .thenReturn(testData.workingSetEntity1);
+                .thenReturn(testData.instanceWorkingSetEntity1);
         when(exerciseInstanceMapper.mapToDto(testData.exerciseInstanceEntity1))
                 .thenReturn(testData.exerciseInstanceResponseDto1);
 
@@ -91,7 +90,7 @@ class ExerciseInstanceServiceTest {
     @Test
     void updateWorkingSetById_Success() {
         UUID workingSetId = testData.workingSetResponseDto1.getId();
-        testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>(List.of(testData.workingSetEntity1)));
+        testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>(List.of(testData.instanceWorkingSetEntity1)));
         testData.workoutEntity1.setExerciseInstances(new ArrayList<>(List.of(testData.exerciseInstanceEntity1)));
 
         testData.exerciseInstanceResponseDto1.setWorkingSets(
@@ -102,11 +101,11 @@ class ExerciseInstanceServiceTest {
         when(exerciseInstanceRepository.findById(testData.exerciseInstanceEntity1.getId()))
                 .thenReturn(Optional.of(testData.exerciseInstanceEntity1));
         when(workingSetRepository.findById(workingSetId))
-                .thenReturn(Optional.of(testData.workingSetEntity1));
-        when(workingSetRepository.save(testData.workingSetEntity1))
-                .thenReturn(testData.workingSetEntity1);
+                .thenReturn(Optional.of(testData.instanceWorkingSetEntity1));
+        when(workingSetRepository.save(testData.instanceWorkingSetEntity1))
+                .thenReturn(testData.instanceWorkingSetEntity1);
         when(workingSetMapper.mapFromDto(testData.workingSetRequestDto1))
-                .thenReturn(testData.workingSetEntity1);
+                .thenReturn(testData.instanceWorkingSetEntity1);
         when(exerciseInstanceMapper.mapToDto(testData.exerciseInstanceEntity1))
                 .thenReturn(testData.exerciseInstanceResponseDto1);
 
@@ -153,14 +152,14 @@ class ExerciseInstanceServiceTest {
     @Test
     void deleteWorkingSetById_Success() {
         UUID exerciseId = testData.exerciseInstanceEntity1.getId();
-        UUID workingSetId = testData.workingSetEntity1.getId();
+        UUID workingSetId = testData.instanceWorkingSetEntity1.getId();
 
-        testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>(List.of(testData.workingSetEntity1)));
+        testData.exerciseInstanceEntity1.setWorkingSets(new ArrayList<>(List.of(testData.instanceWorkingSetEntity1)));
 
         when(exerciseInstanceRepository.findById(testData.exerciseInstanceEntity1.getId()))
                 .thenReturn(Optional.of(testData.exerciseInstanceEntity1));
         when(workingSetRepository.findById(workingSetId))
-                .thenReturn(Optional.of(testData.workingSetEntity1));
+                .thenReturn(Optional.of(testData.instanceWorkingSetEntity1));
 
         exerciseInstanceService.deleteWorkingSetById(exerciseId, workingSetId);
         verify(workingSetRepository, times(1)).deleteById(workingSetId);

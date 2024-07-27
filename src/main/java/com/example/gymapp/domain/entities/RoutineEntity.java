@@ -25,16 +25,10 @@ public class RoutineEntity {
 
     private String name;
 
-    //@ManyToMany(cascade = CascadeType.ALL)
     @ManyToMany
-    @JoinTable(
-            name = "routines_exercise_types",
-            joinColumns = @JoinColumn(name = "routine_id"),
-            inverseJoinColumns = @JoinColumn(name = "exercise_type_id")
-    )
-    @JsonIgnoreProperties("exerciseInstances")
     @OrderColumn(name = "exercise_order")
-    private List<ExerciseTypeEntity> exerciseTypes;
+    @JsonIgnoreProperties({"routine", "exerciseType"})
+    private List<RoutineExerciseEntity> routineExercises;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

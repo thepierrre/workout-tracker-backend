@@ -24,7 +24,7 @@ public class ExerciseInstanceEntity {
 
     @OneToMany(mappedBy = "exerciseInstance", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("exerciseInstance")
-    private List<WorkingSetEntity> workingSets;
+    private List<InstanceWorkingSetEntity> workingSets;
 
     @ManyToOne
     @JoinColumn(name = "workout_id", referencedColumnName = "id")

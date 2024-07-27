@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.dto;
 
+import com.example.gymapp.domain.entities.RoutineExerciseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +25,6 @@ public class ExerciseTypeDto {
     @NotBlank(message = "Exercise name cannot be empty.")
     private String name;
 
-    //@JsonIgnoreProperties({"routines", "password", "email", "workouts", "roles", "exerciseTypes"})
     @JsonIgnore
     private UserDto user;
 
@@ -32,7 +32,7 @@ public class ExerciseTypeDto {
     private List<CategoryDto> categories = new ArrayList<>();
 
     @JsonIgnore
-    private List<RoutineDto> routines;
+    private List<RoutineExerciseDto> routineExercises;
 
     public ExerciseTypeDto(String id) {
         this.id = UUID.fromString(id);

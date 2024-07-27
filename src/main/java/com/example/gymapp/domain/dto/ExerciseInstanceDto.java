@@ -1,7 +1,6 @@
 package com.example.gymapp.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.OrderColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,7 @@ public class ExerciseInstanceDto {
     private String exerciseTypeName;
 
     @JsonIgnoreProperties("exerciseInstance")
-    private List<WorkingSetDto> workingSets;
+    private List<InstanceWorkingSetDto> workingSets;
 
     private WorkoutDto workout;
 }

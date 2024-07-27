@@ -1,6 +1,5 @@
 package com.example.gymapp.domain.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WorkingSetDto {
+public class InstanceWorkingSetDto {
 
     private UUID id;
 
@@ -26,7 +25,7 @@ public class WorkingSetDto {
 
     private LocalDateTime creationTimedate;
 
-    public WorkingSetDto(String id) {
+    public InstanceWorkingSetDto(String id) {
         this.id = UUID.fromString(id);
     }
 

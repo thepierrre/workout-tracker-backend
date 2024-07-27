@@ -79,9 +79,9 @@ public class WorkoutService {
 
             LocalDateTime now = LocalDateTime.now();
 
-            List<WorkingSetEntity> workingSets = new ArrayList<>();
+            List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                WorkingSetEntity workingSet = new WorkingSetEntity();
+                InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
                 workingSet.setReps((short) 10);
                 workingSet.setWeight((short) 30);
                 workingSet.setCreationTimedate(now.plusNanos(i * 1000000));

@@ -2,8 +2,7 @@ package com.example.gymapp.controllers;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.dto.WorkingSetDto;
-import com.example.gymapp.domain.dto.WorkoutDto;
+import com.example.gymapp.domain.dto.InstanceWorkingSetDto;
 import com.example.gymapp.services.ExerciseInstanceService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +24,10 @@ public class ExerciseInstanceController {
     @PostMapping(path = "exercise-instances/{exerciseInstanceId}/sets")
     public ResponseEntity<ExerciseInstanceDto> createWorkingSetForExercise(
             @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,
-            @RequestBody WorkingSetDto workingSetDto
+            @RequestBody InstanceWorkingSetDto instanceWorkingSetDto
     ) {
         ExerciseInstanceDto exercise = exerciseInstanceService.
-                createWorkingSetforExercise(exerciseInstanceId, workingSetDto);
+                createWorkingSetforExercise(exerciseInstanceId, instanceWorkingSetDto);
         return new ResponseEntity<>(exercise, HttpStatus.CREATED);
     }
 
@@ -36,9 +35,9 @@ public class ExerciseInstanceController {
     public ResponseEntity<ExerciseInstanceDto> updateWorkingSetById(
             @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,
             @PathVariable("setId") UUID setId,
-            @RequestBody WorkingSetDto workingSetDto
+            @RequestBody InstanceWorkingSetDto instanceWorkingSetDto
     ) {
-        ExerciseInstanceDto exercise = exerciseInstanceService.updateWorkingSetById(exerciseInstanceId, setId, workingSetDto);
+        ExerciseInstanceDto exercise = exerciseInstanceService.updateWorkingSetById(exerciseInstanceId, setId, instanceWorkingSetDto);
         return new ResponseEntity<>(exercise, HttpStatus.OK);
     }
 

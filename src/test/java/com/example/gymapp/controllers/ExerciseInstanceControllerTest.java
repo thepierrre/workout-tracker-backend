@@ -1,15 +1,13 @@
 package com.example.gymapp.controllers;
 
-import com.example.gymapp.domain.dto.WorkingSetDto;
+import com.example.gymapp.domain.dto.InstanceWorkingSetDto;
 import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.helpers.WorkingSetDataHelper;
 import com.example.gymapp.services.ExerciseInstanceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,15 +16,12 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -56,7 +51,7 @@ class ExerciseInstanceControllerTest {
 
     @Test
     void createWorkingSetForExercise_Success() throws Exception {
-        WorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
+        InstanceWorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
         String jsonInput = objectMapper.writeValueAsString(input);
 
         testData.exerciseInstanceResponseDto1.setWorkingSets(List.of(input));
@@ -75,7 +70,7 @@ class ExerciseInstanceControllerTest {
 
     @Test
     void createWorkingSetForExercise_ExerciseIdNotFound() throws Exception {
-        WorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
+        InstanceWorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
         String jsonInput = objectMapper.writeValueAsString(input);
 
         UUID id = UUID.randomUUID();
@@ -94,7 +89,7 @@ class ExerciseInstanceControllerTest {
 
     @Test
     void updateWorkingSetById_Success() throws Exception {
-        WorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
+        InstanceWorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
         String jsonInput = objectMapper.writeValueAsString(input);
 
         testData.exerciseInstanceResponseDto1.setWorkingSets(List.of(input));
@@ -116,7 +111,7 @@ class ExerciseInstanceControllerTest {
 
     @Test
     void updateWorkingSetById_ExerciseIdNotFound() throws Exception {
-        WorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
+        InstanceWorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
         String jsonInput = objectMapper.writeValueAsString(input);
 
         UUID exerciseId = UUID.randomUUID();
@@ -136,7 +131,7 @@ class ExerciseInstanceControllerTest {
 
     @Test
     void updateWorkingSetById_SetIdNotFound() throws Exception {
-        WorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
+        InstanceWorkingSetDto input = WorkingSetDataHelper.createWorkingSetRequestDto((short) 10, (short) 15);
         String jsonInput = objectMapper.writeValueAsString(input);
 
         UUID exerciseId = UUID.randomUUID();
