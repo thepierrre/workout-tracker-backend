@@ -99,7 +99,6 @@ public class AuthService {
         userSettingsEntity.setUser(user);
         user.setUserSettings(userSettingsEntity);
 
-
         Role role = roleRepository.findByName("USER")
                         .orElseThrow(
                                 () -> new EntityNotFoundException(
@@ -109,6 +108,12 @@ public class AuthService {
         userRepository.save(user);
 
         return "User \"" + registerDto.getUsername() + "\" registered.";
+    }
+
+    public void createUserIfNotExistent(RegisterDto registerDto) {
+        if (userRepository.findByUsername(registerDto.getUsername()).isEmpty()) {
+            register(registerDto);
+        }
     }
 }
 
