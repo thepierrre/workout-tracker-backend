@@ -4,9 +4,12 @@ import com.example.gymapp.domain.dto.CategoryDto;
 import com.example.gymapp.domain.entities.CategoryEntity;
 import com.example.gymapp.mappers.impl.CategoryMapper;
 import com.example.gymapp.repositories.CategoryRepository;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,5 +27,45 @@ public class CategoryService {
         return categories.stream()
                 .map(categoryMapper::mapToDto)
                 .collect(Collectors.toList());
+    }
+
+    public void createCategoriesIfNotExistent() {
+
+        List<CategoryEntity> categories = new ArrayList<>(List.of(
+                new CategoryEntity("Core", CategoryEntity.MuscleGroup.CORE),
+                new CategoryEntity("Abs", CategoryEntity.MuscleGroup.CORE),
+                new CategoryEntity("Upper abs", CategoryEntity.MuscleGroup.CORE),
+                new CategoryEntity("Lower abs", CategoryEntity.MuscleGroup.CORE),
+                new CategoryEntity("Obliques", CategoryEntity.MuscleGroup.CORE),
+                new CategoryEntity("Chest", CategoryEntity.MuscleGroup.CHEST),
+                new CategoryEntity("Upper chest", CategoryEntity.MuscleGroup.CHEST),
+                new CategoryEntity("Lower chest", CategoryEntity.MuscleGroup.CHEST),
+                new CategoryEntity("Inner chest", CategoryEntity.MuscleGroup.CHEST),
+                new CategoryEntity("Outer chest", CategoryEntity.MuscleGroup.CHEST),
+                new CategoryEntity("Back", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Upper back", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Lower back", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Lats", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Rhomboids", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Traps", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Biceps", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Triceps", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Forearms", CategoryEntity.MuscleGroup.BACK),
+                new CategoryEntity("Shoulders", CategoryEntity.MuscleGroup.SHOULDERS),
+                new CategoryEntity("Front delts", CategoryEntity.MuscleGroup.SHOULDERS),
+                new CategoryEntity("Middle delts", CategoryEntity.MuscleGroup.SHOULDERS),
+                new CategoryEntity("Back delts", CategoryEntity.MuscleGroup.SHOULDERS),
+                new CategoryEntity("Glutes", CategoryEntity.MuscleGroup.LEGS),
+                new CategoryEntity("Hip abductors", CategoryEntity.MuscleGroup.LEGS),
+                new CategoryEntity("Hip adductors", CategoryEntity.MuscleGroup.LEGS),
+                new CategoryEntity("Hamstrings", CategoryEntity.MuscleGroup.LEGS),
+                new CategoryEntity("Quadriceps", CategoryEntity.MuscleGroup.LEGS),
+                new CategoryEntity("Calves", CategoryEntity.MuscleGroup.LEGS),
+                new CategoryEntity("Rotator cuff", CategoryEntity.MuscleGroup.SHOULDERS)
+                ));
+
+        for (CategoryEntity category : categories) {
+            categoryRepository.save(category);
+        }
     }
 }

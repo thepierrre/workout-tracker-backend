@@ -71,40 +71,44 @@ public class WorkoutService {
 
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
-        for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
-            ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
-            exerciseInstance.setExerciseTypeName(exerciseType.getName());
-            exerciseInstance.setWorkout(workoutEntity);
+        //TODO
+//        for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
+//            ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
+//            exerciseInstance.setExerciseTypeName(exerciseType.getName());
+//            exerciseInstance.setWorkout(workoutEntity);
 
+        //TODO
 
-            LocalDateTime now = LocalDateTime.now();
-
-            List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
-                workingSet.setReps((short) 10);
-                workingSet.setWeight((short) 30);
-                workingSet.setCreationTimedate(now.plusNanos(i * 1000000));
-                workingSet.setExerciseInstance(exerciseInstance);
-                workingSets.add(workingSet);
-            }
-
-            exerciseInstance.setWorkingSets(workingSets);
-            exerciseInstances.add(exerciseInstance);
-        }
-
-        workoutEntity.setExerciseInstances(exerciseInstances);
-
-        WorkoutEntity savedWorkoutEntity = workoutRepository.save(workoutEntity);
-
-        return workoutMapper.mapToDto(savedWorkoutEntity);
+//            LocalDateTime now = LocalDateTime.now();
+//
+//            List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
+//            for (int i = 0; i < 3; i++) {
+//                InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
+//                workingSet.setReps((short) 10);
+//                workingSet.setWeight((short) 30);
+//                workingSet.setCreationTimedate(now.plusNanos(i * 1000000));
+//                workingSet.setExerciseInstance(exerciseInstance);
+//                workingSets.add(workingSet);
+//            }
+//
+//            exerciseInstance.setWorkingSets(workingSets);
+//            exerciseInstances.add(exerciseInstance);
+//        }
+//
+//        workoutEntity.setExerciseInstances(exerciseInstances);
+//
+//        WorkoutEntity savedWorkoutEntity = workoutRepository.save(workoutEntity);
+//
+//        return workoutMapper.mapToDto(savedWorkoutEntity);
+        return new WorkoutDto();
     }
 
-    public void deleteById(UUID id) {
-        WorkoutEntity workoutEntity = workoutRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(
-                        "Workout with the ID \"%s\" not found.", id)));
-
-        workoutRepository.deleteById(id);
-    }
+    //TODO
+//    public void deleteById(UUID id) {
+//        WorkoutEntity workoutEntity = workoutRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException(String.format(
+//                        "Workout with the ID \"%s\" not found.", id)));
+//
+//        workoutRepository.deleteById(id);
+//    }
 }

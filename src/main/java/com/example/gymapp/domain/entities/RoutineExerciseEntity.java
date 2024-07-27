@@ -25,8 +25,6 @@ public class RoutineExerciseEntity {
 
     private String name;
 
-    private UUID exerciseTypeId;
-
     @ManyToOne
     @JoinColumn(name = "routine_id", referencedColumnName = "id")
     @JsonIgnoreProperties({"routineExercises", "user"})
@@ -40,19 +38,5 @@ public class RoutineExerciseEntity {
     @OneToMany(mappedBy = "routineExercise", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("routineExercise")
     private List<BlueprintWorkingSetEntity> workingSets;
-
-    public void setExerciseType(ExerciseTypeEntity exerciseType) {
-        this.exerciseType = exerciseType;
-        if (exerciseType != null) {
-            this.name = exerciseType.getName();
-        }
-    }
-
-    public void setExerciseTypeId(ExerciseTypeEntity exerciseType) {
-        this.exerciseType = exerciseType;
-        if (exerciseType != null) {
-            this.exerciseTypeId = exerciseType.getId();
-        }
-    }
 
 }

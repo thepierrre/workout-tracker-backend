@@ -97,10 +97,11 @@ public class ExerciseTypeService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
                         "Exercise type with the ID %s not found.", exerciseTypeId.toString())));
 
-        for (RoutineEntity routine : exerciseType.getRoutines()) {
-            routine.getExerciseTypes().remove(exerciseType);
-            routineRepository.save(routine);
-        }
+        //TODO
+//        for (RoutineEntity routine : exerciseType.getRoutines()) {
+//            routine.getExerciseTypes().remove(exerciseType);
+//            routineRepository.save(routine);
+//        }
 
         for (CategoryEntity category : exerciseType.getCategories()) {
             category.getExerciseTypes().remove(exerciseType);
@@ -132,7 +133,9 @@ public class ExerciseTypeService {
         existingExerciseType.get().setName(exerciseTypeDto.getName());
         existingExerciseType.get().setId(exerciseTypeDto.getId());
         existingExerciseType.get().setUser(existingExerciseType.get().getUser());
-        existingExerciseType.get().setRoutines(existingExerciseType.get().getRoutines());
+
+        //TODO
+//        existingExerciseType.get().setRoutines(existingExerciseType.get().getRoutines());
 
         List<CategoryEntity> newCategories = exerciseTypeDto.getCategories().stream()
                 .map(categoryDto -> categoryMapper.mapFromDto(categoryDto)).toList();

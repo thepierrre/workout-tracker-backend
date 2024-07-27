@@ -98,7 +98,6 @@ public class AuthService {
         userSettingsEntity.setWeightUnit("kgs");
         userSettingsEntity.setUser(user);
         user.setUserSettings(userSettingsEntity);
-        // userSettingsRepository.save(userSettingsEntity);
 
 
         Role role = roleRepository.findByName("USER")
@@ -110,7 +109,6 @@ public class AuthService {
         userRepository.save(user);
 
         return "User \"" + registerDto.getUsername() + "\" registered.";
-
     }
 }
 

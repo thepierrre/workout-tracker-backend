@@ -19,8 +19,6 @@ public class RoutineExerciseDto {
 
     private String name;
 
-    private UUID exerciseTypeId;
-
     @JsonIgnoreProperties({"routineExercises", "user"})
     private RoutineDto routine;
 

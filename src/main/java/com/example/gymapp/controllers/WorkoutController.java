@@ -38,7 +38,8 @@ public class WorkoutController {
 
     @DeleteMapping("workouts/{workoutId}")
     public ResponseEntity<Void> deleteById(@PathVariable("workoutId") UUID id) {
-            workoutService.deleteById(id);
+        //TODO
+            //workoutService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
