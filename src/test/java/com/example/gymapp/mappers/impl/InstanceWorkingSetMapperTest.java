@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-class WorkingSetMapperTest {
+class InstanceWorkingSetMapperTest {
 
     TestDataInitializer.TestData testData;
 
@@ -21,11 +21,11 @@ class WorkingSetMapperTest {
         testData = TestDataInitializer.initializeTestData();
     }
     @Autowired
-    WorkingSetMapper workingSetMapper;
+    InstanceWorkingSetMapper instanceWorkingSetMapper;
 
     @Test
     void mapToDto() {
-        InstanceWorkingSetDto result = workingSetMapper.mapToDto(testData.instanceWorkingSetEntity1);
+        InstanceWorkingSetDto result = instanceWorkingSetMapper.mapToDto(testData.instanceWorkingSetEntity1);
 
         assertNotNull(result);
         assertEquals(result.getReps(), (short) 10);
@@ -34,7 +34,7 @@ class WorkingSetMapperTest {
 
     @Test
     void mapFromDto() {
-        InstanceWorkingSetEntity result = workingSetMapper.mapFromDto(testData.workingSetResponseDto1);
+        InstanceWorkingSetEntity result = instanceWorkingSetMapper.mapFromDto(testData.workingSetResponseDto1);
 
         assertNotNull(result);
         assertNotNull(result.getId());

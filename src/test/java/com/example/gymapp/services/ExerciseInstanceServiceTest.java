@@ -3,7 +3,7 @@ package com.example.gymapp.services;
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.helpers.TestDataInitializer;
 import com.example.gymapp.mappers.impl.ExerciseInstanceMapper;
-import com.example.gymapp.mappers.impl.WorkingSetMapper;
+import com.example.gymapp.mappers.impl.InstanceWorkingSetMapper;
 import com.example.gymapp.repositories.ExerciseInstanceRepository;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.repositories.WorkingSetRepository;
@@ -38,7 +38,7 @@ class ExerciseInstanceServiceTest {
     ExerciseInstanceMapper exerciseInstanceMapper;
 
     @MockBean
-    WorkingSetMapper workingSetMapper;
+    InstanceWorkingSetMapper instanceWorkingSetMapper;
 
     private TestDataInitializer.TestData testData;
 
@@ -61,7 +61,7 @@ class ExerciseInstanceServiceTest {
                 .thenReturn(Optional.of(testData.exerciseInstanceEntity1));
         when(workingSetRepository.save(testData.instanceWorkingSetEntity1))
                 .thenReturn(testData.instanceWorkingSetEntity1);
-        when(workingSetMapper.mapFromDto(testData.workingSetRequestDto1))
+        when(instanceWorkingSetMapper.mapFromDto(testData.workingSetRequestDto1))
                 .thenReturn(testData.instanceWorkingSetEntity1);
         when(exerciseInstanceMapper.mapToDto(testData.exerciseInstanceEntity1))
                 .thenReturn(testData.exerciseInstanceResponseDto1);
@@ -104,7 +104,7 @@ class ExerciseInstanceServiceTest {
                 .thenReturn(Optional.of(testData.instanceWorkingSetEntity1));
         when(workingSetRepository.save(testData.instanceWorkingSetEntity1))
                 .thenReturn(testData.instanceWorkingSetEntity1);
-        when(workingSetMapper.mapFromDto(testData.workingSetRequestDto1))
+        when(instanceWorkingSetMapper.mapFromDto(testData.workingSetRequestDto1))
                 .thenReturn(testData.instanceWorkingSetEntity1);
         when(exerciseInstanceMapper.mapToDto(testData.exerciseInstanceEntity1))
                 .thenReturn(testData.exerciseInstanceResponseDto1);

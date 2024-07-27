@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class WorkingSetMapper implements Mapper<InstanceWorkingSetEntity, InstanceWorkingSetDto> {
+public class InstanceWorkingSetMapper implements Mapper<InstanceWorkingSetEntity, InstanceWorkingSetDto> {
 
     @Autowired
     ModelMapper modelMapper;

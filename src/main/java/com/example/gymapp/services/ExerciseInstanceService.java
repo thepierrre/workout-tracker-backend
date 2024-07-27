@@ -5,7 +5,7 @@ import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.InstanceWorkingSetDto;
 import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.mappers.impl.ExerciseInstanceMapper;
-import com.example.gymapp.mappers.impl.WorkingSetMapper;
+import com.example.gymapp.mappers.impl.InstanceWorkingSetMapper;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.ExerciseInstanceRepository;
 import com.example.gymapp.repositories.UserRepository;
@@ -29,7 +29,7 @@ public class ExerciseInstanceService {
     ExerciseInstanceMapper exerciseInstanceMapper;
 
     @Autowired
-    WorkingSetMapper workingSetMapper;
+    InstanceWorkingSetMapper instanceWorkingSetMapper;
 
     @Autowired
     WorkoutMapper workoutMapper;
@@ -50,7 +50,7 @@ public class ExerciseInstanceService {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseId.toString())));
 
-        InstanceWorkingSetEntity newInstanceWorkingSetEntity = workingSetMapper.mapFromDto(instanceWorkingSetDto);
+        InstanceWorkingSetEntity newInstanceWorkingSetEntity = instanceWorkingSetMapper.mapFromDto(instanceWorkingSetDto);
         newInstanceWorkingSetEntity.setExerciseInstance(exerciseInstance);
         workingSetRepository.save(newInstanceWorkingSetEntity);
         exerciseInstance.getWorkingSets().add(newInstanceWorkingSetEntity);
