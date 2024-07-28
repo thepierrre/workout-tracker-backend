@@ -11,6 +11,7 @@ import com.example.gymapp.repositories.ExerciseTypeRepository;
 import com.example.gymapp.repositories.RoutineExerciseRepository;
 import com.example.gymapp.repositories.RoutineRepository;
 import com.example.gymapp.repositories.UserRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,7 @@ public class RoutineService {
     @Autowired
     private BlueprintWorkingSetMapper blueprintWorkingSetMapper;
 
-    private RoutineExerciseEntity createRoutineExercise(UserEntity user, RoutineExerciseDto routineExerciseDto) {
+    private RoutineExerciseEntity createExerciseForRoutine(UserEntity user, RoutineExerciseDto routineExerciseDto) {
         ExerciseTypeEntity exerciseTypeEntity = exerciseTypeRepository.findByUserAndName(user, routineExerciseDto.getName())
                 .orElseGet(() -> exerciseTypeRepository.findByDefaultAndName(routineExerciseDto.getName())
                         .orElseThrow(() -> new EntityNotFoundException(String.format(
@@ -92,7 +93,7 @@ public class RoutineService {
 
         if (!routineDto.getRoutineExercises().isEmpty()) {
             List<RoutineExerciseEntity> routineExercises = routineDto.getRoutineExercises().stream()
-                    .map(routineExerciseDto -> createRoutineExercise(user, routineExerciseDto)).collect(Collectors.toList());
+                    .map(routineExerciseDto -> createExerciseForRoutine(user, routineExerciseDto)).collect(Collectors.toList());
 
             routineExercises.forEach(routineExercise -> {
                 routineExercise.setRoutine(routineEntity);
@@ -120,6 +121,7 @@ public class RoutineService {
                 .map(routineEntity -> routineMapper.mapToDto(routineEntity)).toList();
     }
 
+    @Transactional
     public RoutineDto updateById(UUID id, RoutineDto routineDto, String username) {
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(
@@ -138,16 +140,21 @@ public class RoutineService {
 
         existingRoutine.setId(routineDto.getId());
         existingRoutine.setName(routineDto.getName());
-
         existingRoutine.setUser(existingRoutine.getUser());
 
-        //TODO
-//        List<ExerciseTypeEntity> newExercises = routineDto.getExerciseTypes().stream()
-//                .map(exerciseTypeDto -> exerciseTypeMapper.mapFromDto(exerciseTypeDto))
-//                .collect(Collectors.toList());
-//
-//        existingRoutine.getExerciseTypes().clear();
-//        existingRoutine.setExerciseTypes(newExercises);
+        if (!routineDto.getRoutineExercises().isEmpty()) {
+            List<RoutineExerciseEntity> routineExercises = routineDto.getRoutineExercises().stream()
+                    .map(routineExerciseDto -> createExerciseForRoutine(user, routineExerciseDto)).collect(Collectors.toList());
+
+            routineExercises.forEach(routineExercise -> {
+                routineExercise.setRoutine(existingRoutine);
+                routineExerciseRepository.save(routineExercise);
+            });
+
+            existingRoutine.setRoutineExercises(routineExercises);
+        } else {
+            existingRoutine.setRoutineExercises(new ArrayList<>());
+        }
 
         RoutineEntity updatedRoutine = routineRepository.save(existingRoutine);
 
@@ -155,9 +162,9 @@ public class RoutineService {
     }
 
     public void deleteById(UUID routineId) {
-        RoutineEntity routine = routineRepository.findById(routineId)
+        routineRepository.findById(routineId)
                         .orElseThrow(() -> new EntityNotFoundException(String.format(
-                                "Routine with the ID %s not found.", routineId.toString())));
+                                "Routine with the ID %s not found.", routineId)));
 
         routineRepository.deleteById(routineId);
     }

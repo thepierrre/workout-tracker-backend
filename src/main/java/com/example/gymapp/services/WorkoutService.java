@@ -71,44 +71,38 @@ public class WorkoutService {
 
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
-        //TODO
-//        for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
-//            ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
-//            exerciseInstance.setExerciseTypeName(exerciseType.getName());
-//            exerciseInstance.setWorkout(workoutEntity);
+        for (RoutineExerciseEntity routineExercise : trainingRoutine.getRoutineExercises()) {
+            ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
+            exerciseInstance.setExerciseTypeName(routineExercise.getName());
+            exerciseInstance.setWorkout(workoutEntity);
 
-        //TODO
+            LocalDateTime now = LocalDateTime.now();
 
-//            LocalDateTime now = LocalDateTime.now();
-//
-//            List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
-//            for (int i = 0; i < 3; i++) {
-//                InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
-//                workingSet.setReps((short) 10);
-//                workingSet.setWeight((short) 30);
-//                workingSet.setCreationTimedate(now.plusNanos(i * 1000000));
-//                workingSet.setExerciseInstance(exerciseInstance);
-//                workingSets.add(workingSet);
-//            }
-//
-//            exerciseInstance.setWorkingSets(workingSets);
-//            exerciseInstances.add(exerciseInstance);
-//        }
-//
-//        workoutEntity.setExerciseInstances(exerciseInstances);
-//
-//        WorkoutEntity savedWorkoutEntity = workoutRepository.save(workoutEntity);
-//
-//        return workoutMapper.mapToDto(savedWorkoutEntity);
-        return new WorkoutDto();
+            List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
+            for (BlueprintWorkingSetEntity blueprintWorkingSet : routineExercise.getWorkingSets()) {
+                InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
+                workingSet.setReps((short) blueprintWorkingSet.getReps());
+                workingSet.setWeight((short) blueprintWorkingSet.getWeight());
+                workingSet.setCreationTimedate(now.plusNanos(workingSets.size() * 1000000L));
+                workingSet.setExerciseInstance(exerciseInstance);
+                workingSets.add(workingSet);
+            }
+
+            exerciseInstance.setWorkingSets(workingSets);
+            exerciseInstances.add(exerciseInstance);
+        }
+
+        workoutEntity.setExerciseInstances(exerciseInstances);
+
+        WorkoutEntity savedWorkoutEntity = workoutRepository.save(workoutEntity);
+
+        return workoutMapper.mapToDto(savedWorkoutEntity);
     }
+    public void deleteById(UUID id) {
+        workoutRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Workout with the ID \"%s\" not found.", id)));
 
-    //TODO
-//    public void deleteById(UUID id) {
-//        WorkoutEntity workoutEntity = workoutRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format(
-//                        "Workout with the ID \"%s\" not found.", id)));
-//
-//        workoutRepository.deleteById(id);
-//    }
+        workoutRepository.deleteById(id);
+    }
 }

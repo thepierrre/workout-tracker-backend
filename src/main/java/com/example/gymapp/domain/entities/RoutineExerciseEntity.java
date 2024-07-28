@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class RoutineExerciseEntity {
 
     @ManyToOne
     @JoinColumn(name = "routine_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"routineExercises", "user"})
+    @JsonIgnoreProperties({"user", "routineExercises"})
     private RoutineEntity routine;
 
     @ManyToOne

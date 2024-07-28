@@ -34,7 +34,6 @@ public class RoutineEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    //@JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     @JsonIgnore
     private UserEntity user;
 
