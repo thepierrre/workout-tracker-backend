@@ -52,9 +52,9 @@ public class CategoryService {
                 new CategoryEntity("Triceps", CategoryEntity.MuscleGroup.BACK),
                 new CategoryEntity("Forearms", CategoryEntity.MuscleGroup.BACK),
                 new CategoryEntity("Shoulders", CategoryEntity.MuscleGroup.SHOULDERS),
-                new CategoryEntity("Front delts", CategoryEntity.MuscleGroup.SHOULDERS),
-                new CategoryEntity("Middle delts", CategoryEntity.MuscleGroup.SHOULDERS),
-                new CategoryEntity("Back delts", CategoryEntity.MuscleGroup.SHOULDERS),
+                new CategoryEntity("Anterior delts", CategoryEntity.MuscleGroup.SHOULDERS),
+                new CategoryEntity("Lateral delts", CategoryEntity.MuscleGroup.SHOULDERS),
+                new CategoryEntity("Posterior delts", CategoryEntity.MuscleGroup.SHOULDERS),
                 new CategoryEntity("Glutes", CategoryEntity.MuscleGroup.LEGS),
                 new CategoryEntity("Hip abductors", CategoryEntity.MuscleGroup.LEGS),
                 new CategoryEntity("Hip adductors", CategoryEntity.MuscleGroup.LEGS),
@@ -67,5 +67,11 @@ public class CategoryService {
         for (CategoryEntity category : categories) {
             categoryRepository.save(category);
         }
+    }
+
+    public List<CategoryEntity> findCategoriesByNames(List<String> names) {
+        return names.stream()
+                .map(name -> categoryRepository.findByName(name).orElseThrow(() -> new RuntimeException("Category not found: " + name)))
+                .collect(Collectors.toList());
     }
 }

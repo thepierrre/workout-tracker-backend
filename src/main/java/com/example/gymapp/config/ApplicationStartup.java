@@ -4,6 +4,7 @@ import com.example.gymapp.domain.dto.RegisterDto;
 import com.example.gymapp.repositories.UserRepository;
 import com.example.gymapp.services.AuthService;
 import com.example.gymapp.services.CategoryService;
+import com.example.gymapp.services.ExerciseTypeService;
 import com.example.gymapp.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -21,21 +22,23 @@ public class ApplicationStartup {
     private CategoryService categoryService;
 
     @Autowired
-    private AuthService authService;
+    private ExerciseTypeService exerciseTypeService;
 
     @Autowired
-    private UserRepository userRepository;
+    private AuthService authService;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void onApplicationReady() {
         roleService.createRoleIfNotExistent("USER");
         categoryService.createCategoriesIfNotExistent();
+        // Test user for demonstration purposes.
         authService.createUserIfNotExistent(new RegisterDto(
                 "test",
                 "test@example.com",
                 "test"
         ));
+        exerciseTypeService.createDefaultExercisesIfNotExistent();
     }
 
 }

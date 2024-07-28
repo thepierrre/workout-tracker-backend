@@ -14,6 +14,16 @@ import java.util.UUID;
 @Table(name = "user_settings")
 public class UserSettingsEntity {
 
+    public UserSettingsEntity (
+            Double changeThreshold,
+            String weightUnit,
+            UserEntity user
+            ) {
+        this.changeThreshold = changeThreshold;
+        this.weightUnit = weightUnit;
+        this.user = user;
+    }
+
     @Id
     @UuidGenerator
     private UUID id;

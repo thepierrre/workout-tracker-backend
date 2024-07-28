@@ -18,10 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +40,7 @@ public class ExerciseTypeService {
     CategoryRepository categoryRepository;
 
     @Autowired
-    RoutineRepository routineRepository;
+    CategoryService categoryService;
 
 
     public ExerciseTypeDto createExercise(ExerciseTypeDto exerciseTypeDto, String username) {
@@ -77,6 +74,16 @@ public class ExerciseTypeService {
         userRepository.save(user);
 
         return exerciseTypeMapper.mapToDto(savedEntity);
+    }
+
+    public List<ExerciseTypeDto> findAllDefault(String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with the username \"%s\" not found.", username)));
+
+        List<ExerciseTypeEntity> defaultExercises = exerciseTypeRepository.findAllDefault();
+        return defaultExercises.stream()
+                .map(exerciseTypeMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     public List<ExerciseTypeDto> findAllForUser(String username) {
@@ -146,5 +153,43 @@ public class ExerciseTypeService {
         ExerciseTypeEntity updatedExercise = exerciseTypeRepository.save(existingExerciseType.get());
 
         return exerciseTypeMapper.mapToDto(updatedExercise);
+    }
+
+    public void createDefaultExercisesIfNotExistent() {
+        Map<String, Map<String, List<String>>> exercisesWithCategories = Map.ofEntries(
+        Map.entry("Barbell bench press", Map.of("Barbell", List.of("Chest", "Anterior delts", "Triceps"))),
+        Map.entry("Incline barbell bench press", Map.of("Barbell", List.of("Chest", "Anterior delts", "Triceps"))),
+        Map.entry("Dumbbell bench press", Map.of("Dumbbells", List.of("Chest", "Anterior delts", "Triceps"))),
+        Map.entry("Incline dumbbell bench press", Map.of("Dumbbells", List.of("Chest", "Anterior delts", "Triceps"))),
+        Map.entry("Barbell squats", Map.of("Barbell", List.of("Glutes", "Quadriceps", "Core"))),
+        Map.entry("Barbell deadlifts", Map.of("Barbell", List.of("Glutes", "Hamstrings", "Lower back", "Core"))),
+        Map.entry("Standing calf raises", Map.of("Machine", List.of("Calves"))),
+        Map.entry("Seated calf raises", Map.of("Machine", List.of("Calves"))),
+        Map.entry("Dumbbell shoulder press", Map.of("Dumbbells", List.of("Anterior delts"))),
+        Map.entry("Dumbbell rear delt flies", Map.of("Dumbbells", List.of("Posterior delts"))),
+        Map.entry("Dumbbell shoulder lateral raise", Map.of("Dumbbells", List.of("Lateral delts"))),
+        Map.entry("Barbell standing rows", Map.of("Barbell", List.of("Lats", "Traps", "Rhomboids", "Posterior delts"))),
+        Map.entry("Machine seated rows", Map.of("Machine", List.of("Lats", "Traps", "Rhomboids", "Posterior delts"))),
+        Map.entry("Pull-downs", Map.of("Bar", List.of("Lats", "Traps", "Rhomboids"))),
+        Map.entry("Pull-ups", Map.of("Bar", List.of("Lats", "Traps", "Rhomboids", "Core"))),
+        Map.entry("Machine chest flies", Map.of("Machine", List.of("Chest"))),
+        Map.entry("Dumbbell biceps curls", Map.of("Dumbbells", List.of("Biceps"))),
+        Map.entry("Barbell biceps curls", Map.of("Barbell", List.of("Biceps")))
+        );
+
+        exercisesWithCategories.forEach((exerciseName, details) -> {
+            details.forEach((equipment, categoryNames) -> {
+                createExerciseTypeIfNotExistent(exerciseName, categoryNames, equipment, true);
+            });
+        });
+    }
+
+    private void createExerciseTypeIfNotExistent(String name, List<String> categoryNames, String equipment, Boolean isDefault) {
+        Optional<ExerciseTypeEntity> existingExerciseType = exerciseTypeRepository.findByName(name);
+        if (existingExerciseType.isEmpty()) {
+            List<CategoryEntity> categories = categoryService.findCategoriesByNames(categoryNames);
+            ExerciseTypeEntity exerciseType = new ExerciseTypeEntity(name, categories, equipment, isDefault);
+            exerciseTypeRepository.save(exerciseType);
+        }
     }
 }

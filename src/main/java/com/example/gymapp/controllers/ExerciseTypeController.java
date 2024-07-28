@@ -22,9 +22,14 @@ public class ExerciseTypeController {
     @Autowired
     private ExerciseTypeService exerciseTypeService;
 
+    @GetMapping(path = "default-exercise-types")
+    public ResponseEntity<List<ExerciseTypeDto>> findAllDefault(@AuthenticationPrincipal UserDetails userDetails) {
+        List<ExerciseTypeDto> exerciseTypes = exerciseTypeService.findAllDefault(userDetails.getUsername());
+        return new ResponseEntity<>(exerciseTypes, HttpStatus.OK);
+    }
+
     @GetMapping(path = "user-exercise-types")
     public ResponseEntity<List<ExerciseTypeDto>> findAllForUser(@AuthenticationPrincipal UserDetails userDetails) {
-        System.out.println("blabla");
         List<ExerciseTypeDto> exerciseTypes = exerciseTypeService.findAllForUser(userDetails.getUsername());
         return new ResponseEntity<>(exerciseTypes, HttpStatus.OK);
     }

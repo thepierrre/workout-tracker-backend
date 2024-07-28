@@ -20,11 +20,28 @@ import java.util.UUID;
 @Table(name = "exercise_types")
 public class ExerciseTypeEntity {
 
+    public ExerciseTypeEntity(
+            String name,
+            List<CategoryEntity> categories,
+            String equipment,
+            Boolean isDefault
+    ) {
+        this.name = name;
+        this.categories = categories;
+        this.equipment = equipment;
+        this.isDefault = isDefault;
+
+    }
+
     @Id
     @UuidGenerator
     private UUID id;
 
+    private Boolean isDefault;
+
     private String name;
+
+    private String equipment;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -43,6 +60,17 @@ public class ExerciseTypeEntity {
     @OneToMany(mappedBy = "exerciseType")
     @JsonIgnore
     private List<RoutineExerciseEntity> routineExercises;
+
+    public enum Type {
+        REPS("reps"),
+        TIMED("timed");
+
+        public final String name;
+
+        private Type(String name) {
+            this.name = name;
+        }
+    }
 
 
 }

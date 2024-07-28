@@ -18,6 +18,18 @@ import java.util.UUID;
 @Table(name = "users")
 public class UserEntity {
 
+    public UserEntity(
+            String username,
+            String email,
+            String password,
+            List<Role> roles
+    ) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     @Id
     @UuidGenerator
     private UUID id;

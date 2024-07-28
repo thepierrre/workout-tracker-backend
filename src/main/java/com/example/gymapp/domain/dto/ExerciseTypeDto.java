@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.dto;
 
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineExerciseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -22,8 +23,12 @@ public class ExerciseTypeDto {
 
     private UUID id;
 
+    private Boolean isDefault;
+
     @NotBlank(message = "Exercise name cannot be empty.")
     private String name;
+
+    private String equipment;
 
     @JsonIgnore
     private UserDto user;
