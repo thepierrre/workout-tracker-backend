@@ -22,7 +22,7 @@ public class RoutineController {
 
 
     @PostMapping(path = "routines")
-    public ResponseEntity<RoutineDto> createTrainingRoutine(@Valid @RequestBody RoutineDto routineDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<RoutineDto> createRoutine(@Valid @RequestBody RoutineDto routineDto, @AuthenticationPrincipal UserDetails userDetails) {
         RoutineDto createdTrainingRoutine = routineService.createRoutine(routineDto, userDetails.getUsername());
         return new ResponseEntity<>(createdTrainingRoutine, HttpStatus.CREATED);
     }

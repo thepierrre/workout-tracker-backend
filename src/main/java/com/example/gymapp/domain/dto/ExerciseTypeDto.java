@@ -37,7 +37,7 @@ public class ExerciseTypeDto {
     private List<CategoryDto> categories = new ArrayList<>();
 
     @JsonIgnore
-    private List<RoutineExerciseDto> routineExercises;
+    private List<RoutineExerciseDto> routineExercises = new ArrayList<>();
 
     public ExerciseTypeDto(String id) {
         this.id = UUID.fromString(id);

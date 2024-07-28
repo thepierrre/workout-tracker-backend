@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class ExerciseInstanceEntity {
 
     @OneToMany(mappedBy = "exerciseInstance", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("exerciseInstance")
-    private List<InstanceWorkingSetEntity> workingSets;
+    private List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "workout_id", referencedColumnName = "id")

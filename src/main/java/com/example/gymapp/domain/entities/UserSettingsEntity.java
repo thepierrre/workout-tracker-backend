@@ -1,5 +1,8 @@
 package com.example.gymapp.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -30,7 +33,7 @@ public class UserSettingsEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties({"userSettings"})
     private UserEntity user;
 
     private Double changeThreshold;

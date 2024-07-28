@@ -24,11 +24,8 @@ public class UserSettingsDto {
 
     private UUID id;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"userSettings"})
     private UserDto user;
-
-    @Transient
-    private String username;
 
     @DecimalMin(value = "0.1", message = "The minimum value is 0.1.")
     @Max(value = 200, message = "The maximum value is 200.")

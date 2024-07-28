@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +38,6 @@ public class RoutineExerciseEntity {
 
     @OneToMany(mappedBy = "routineExercise", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("routineExercise")
-    private List<BlueprintWorkingSetEntity> workingSets;
+    private List<BlueprintWorkingSetEntity> workingSets  = new ArrayList<>();
 
 }

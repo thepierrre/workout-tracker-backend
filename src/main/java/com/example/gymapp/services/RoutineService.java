@@ -1,14 +1,14 @@
 package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.RoutineDto;
-import com.example.gymapp.domain.entities.ExerciseTypeEntity;
-import com.example.gymapp.domain.entities.RoutineEntity;
-import com.example.gymapp.domain.entities.RoutineExerciseEntity;
-import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.domain.dto.RoutineExerciseDto;
+import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.exceptions.ConflictException;
+import com.example.gymapp.mappers.impl.BlueprintWorkingSetMapper;
 import com.example.gymapp.mappers.impl.ExerciseTypeMapper;
 import com.example.gymapp.mappers.impl.RoutineMapper;
 import com.example.gymapp.repositories.ExerciseTypeRepository;
+import com.example.gymapp.repositories.RoutineExerciseRepository;
 import com.example.gymapp.repositories.RoutineRepository;
 import com.example.gymapp.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -43,12 +43,44 @@ public class RoutineService {
     @Autowired
     private ExerciseTypeRepository exerciseTypeRepository;
 
-    public RoutineDto createRoutine(RoutineDto routineDto, String username) {
-            UserEntity user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException(String.format(
-                            "User with the username \"%s\" not found.", username)));
+    @Autowired
+    private RoutineExerciseRepository routineExerciseRepository;
 
-        Optional<RoutineEntity> existingRoutine= routineRepository.findByUserAndName(user, routineDto.getName());
+    @Autowired
+    private BlueprintWorkingSetMapper blueprintWorkingSetMapper;
+
+    private RoutineExerciseEntity createRoutineExercise(UserEntity user, RoutineExerciseDto routineExerciseDto) {
+        ExerciseTypeEntity exerciseTypeEntity = exerciseTypeRepository.findByUserAndName(user, routineExerciseDto.getName())
+                .orElseGet(() -> exerciseTypeRepository.findByDefaultAndName(routineExerciseDto.getName())
+                        .orElseThrow(() -> new EntityNotFoundException(String.format(
+                                "Exercise type with the name %s not found", routineExerciseDto.getName()
+                        ))));
+
+        RoutineExerciseEntity routineExerciseEntity = new RoutineExerciseEntity();
+        routineExerciseEntity.setName(exerciseTypeEntity.getName());
+        routineExerciseEntity.setExerciseType(exerciseTypeEntity);
+
+        List<BlueprintWorkingSetEntity> workingSetEntities = new ArrayList<>();
+        if (routineExerciseDto.getWorkingSets() != null) {
+            workingSetEntities = routineExerciseDto.getWorkingSets().stream()
+                    .map(blueprintWorkingSetDto -> {
+                        BlueprintWorkingSetEntity workingSetEntity = blueprintWorkingSetMapper.mapFromDto(blueprintWorkingSetDto);
+                        workingSetEntity.setRoutineExercise(routineExerciseEntity);
+                        return workingSetEntity;
+                    }).collect(Collectors.toList());
+        }
+
+        routineExerciseEntity.setWorkingSets(workingSetEntities);
+        return routineExerciseEntity;
+    }
+
+    @Transactional
+    public RoutineDto createRoutine(RoutineDto routineDto, String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
+
+        Optional<RoutineEntity> existingRoutine = routineRepository.findByUserAndName(user, routineDto.getName());
 
         if (existingRoutine.isPresent()) {
             throw new ConflictException(
@@ -58,19 +90,14 @@ public class RoutineService {
         RoutineEntity routineEntity = routineMapper.mapFromDto(routineDto);
         routineEntity.setUser(user);
 
-        if (routineDto.getRoutineExercises() != null && !routineDto.getRoutineExercises().isEmpty()) {
+        if (!routineDto.getRoutineExercises().isEmpty()) {
             List<RoutineExerciseEntity> routineExercises = routineDto.getRoutineExercises().stream()
-                    .map(routineExerciseDto -> {
-                        ExerciseTypeEntity exerciseTypeEntity = exerciseTypeRepository.findByUserAndName(user, routineExerciseDto.getName())
-                                .orElseThrow(() -> new EntityNotFoundException(String.format(
-                                        "Exercise type with the name %s not found", routineExerciseDto.getName()
-                                )));
-                        RoutineExerciseEntity routineExerciseEntity = new RoutineExerciseEntity();
-                        routineExerciseEntity.setName(exerciseTypeEntity.getName());
-                        routineExerciseEntity.setExerciseType(exerciseTypeEntity);
+                    .map(routineExerciseDto -> createRoutineExercise(user, routineExerciseDto)).collect(Collectors.toList());
 
-                        return routineExerciseEntity;
-                    }).toList();
+            routineExercises.forEach(routineExercise -> {
+                routineExercise.setRoutine(routineEntity);
+                routineExerciseRepository.save(routineExercise);
+            });
 
             routineEntity.setRoutineExercises(routineExercises);
         } else {

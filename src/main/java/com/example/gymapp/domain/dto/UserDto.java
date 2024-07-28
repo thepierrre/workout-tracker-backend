@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,11 +31,11 @@ public class UserDto {
     @NotBlank(message = "Email cannot be blank.")
     private String email;
 
-    private List<RoutineDto> routines;
+    private List<RoutineDto> routines = new ArrayList<>();
 
-    private List<WorkoutDto> workouts;
+    private List<WorkoutDto> workouts = new ArrayList<>();
 
-    private List<ExerciseTypeDto> exerciseTypes;
+    private List<ExerciseTypeDto> exerciseTypes = new ArrayList<>();
 
     @JsonIgnoreProperties({"user"})
     private UserSettingsDto userSettings;

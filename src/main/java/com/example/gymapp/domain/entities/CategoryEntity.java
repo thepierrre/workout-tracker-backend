@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public class CategoryEntity {
 
     @ManyToMany(mappedBy = "categories")
     @JsonIgnore
-    private List<ExerciseTypeEntity> exerciseTypes;
+    private List<ExerciseTypeEntity> exerciseTypes = new ArrayList<>();
 
     public enum MuscleGroup {
         OTHER("Other"),

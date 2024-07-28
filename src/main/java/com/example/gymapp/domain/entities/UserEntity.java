@@ -2,6 +2,7 @@ package com.example.gymapp.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -48,16 +49,16 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"exercises", "user"})
-    private List<RoutineEntity> routines;
+    private List<RoutineEntity> routines = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<WorkoutEntity> workouts;
+    private List<WorkoutEntity> workouts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ExerciseTypeEntity> exerciseTypes;
+    private List<ExerciseTypeEntity> exerciseTypes = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties({"user"})
     private UserSettingsEntity userSettings;
 
 }

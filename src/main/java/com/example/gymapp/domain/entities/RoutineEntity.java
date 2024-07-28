@@ -1,5 +1,6 @@
 package com.example.gymapp.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,11 +30,12 @@ public class RoutineEntity {
     @ManyToMany
     @OrderColumn(name = "exercise_order")
     @JsonIgnoreProperties({"routine", "exerciseType"})
-    private List<RoutineExerciseEntity> routineExercises;
+    private List<RoutineExerciseEntity> routineExercises  = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
+    //@JsonIgnoreProperties({"routines", "password", "email", "workouts"})
+    @JsonIgnore
     private UserEntity user;
 
 }

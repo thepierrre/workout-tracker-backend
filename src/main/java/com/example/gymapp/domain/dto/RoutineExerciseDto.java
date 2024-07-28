@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,5 +27,5 @@ public class RoutineExerciseDto {
     private ExerciseTypeDto exerciseType;
 
     @JsonIgnoreProperties("routineExercise")
-    private List<BlueprintWorkingSetDto> workingSets;
+    private List<BlueprintWorkingSetDto> workingSets = new ArrayList<>();
 }

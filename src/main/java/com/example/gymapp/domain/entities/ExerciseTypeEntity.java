@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,11 +56,11 @@ public class ExerciseTypeEntity {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     @JsonIgnoreProperties("exerciseTypes")
-    private List<CategoryEntity> categories;
+    private List<CategoryEntity> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "exerciseType")
     @JsonIgnore
-    private List<RoutineExerciseEntity> routineExercises;
+    private List<RoutineExerciseEntity> routineExercises = new ArrayList<>();
 
     public enum Type {
         REPS("reps"),
