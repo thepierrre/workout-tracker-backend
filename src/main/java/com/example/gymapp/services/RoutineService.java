@@ -138,22 +138,19 @@ public class RoutineService {
                     "Routine with the name '" + routineDto.getName() + "' already exists.");
         }
 
-        existingRoutine.setId(routineDto.getId());
         existingRoutine.setName(routineDto.getName());
-        existingRoutine.setUser(existingRoutine.getUser());
+
+        existingRoutine.getRoutineExercises().clear();
 
         if (!routineDto.getRoutineExercises().isEmpty()) {
             List<RoutineExerciseEntity> routineExercises = routineDto.getRoutineExercises().stream()
-                    .map(routineExerciseDto -> createExerciseForRoutine(user, routineExerciseDto)).collect(Collectors.toList());
+                    .map(routineExerciseDto -> createExerciseForRoutine(user, routineExerciseDto)).toList();
 
             routineExercises.forEach(routineExercise -> {
                 routineExercise.setRoutine(existingRoutine);
                 routineExerciseRepository.save(routineExercise);
             });
-
-            existingRoutine.setRoutineExercises(routineExercises);
-        } else {
-            existingRoutine.setRoutineExercises(new ArrayList<>());
+            existingRoutine.getRoutineExercises().addAll(routineExercises);
         }
 
         RoutineEntity updatedRoutine = routineRepository.save(existingRoutine);

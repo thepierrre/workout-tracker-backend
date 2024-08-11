@@ -24,7 +24,7 @@ public class ExerciseTypeEntity {
     public ExerciseTypeEntity(
             String name,
             List<CategoryEntity> categories,
-            String equipment,
+            Equipment equipment,
             Boolean isDefault
     ) {
         this.name = name;
@@ -42,7 +42,8 @@ public class ExerciseTypeEntity {
 
     private String name;
 
-    private String equipment;
+    @Enumerated(EnumType.STRING)
+    private Equipment equipment;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -58,19 +59,22 @@ public class ExerciseTypeEntity {
     @JsonIgnoreProperties("exerciseTypes")
     private List<CategoryEntity> categories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "exerciseType")
+    @OneToMany(mappedBy = "exerciseType", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<RoutineExerciseEntity> routineExercises = new ArrayList<>();
 
-    public enum Type {
-        REPS("reps"),
-        TIMED("timed");
+    public enum Equipment {
+        DUMBBELLS("dumbbells"),
+        BARBELL("barbell"),
+        WEIGHT_PLATES("weight plates"),
+        KETTLEBELLS("kettlebells"),
+        MACHINE("machine"),
+        BODYWEIGHT("bodyweight"),
+        BAR("bar");
 
         public final String name;
 
-        private Type(String name) {
-            this.name = name;
-        }
+        private Equipment(String name) { this.name = name; }
     }
 
 

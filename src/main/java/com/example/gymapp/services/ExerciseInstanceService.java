@@ -60,6 +60,16 @@ public class ExerciseInstanceService {
         return exerciseInstanceMapper.mapToDto(exerciseInstance);
     }
 
+    public ExerciseInstanceDto updateNotesForExercise(UUID exerciseInstanceId, ExerciseInstanceDto exerciseInstanceDto) {
+        ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
+
+        exerciseInstance.setNotes(exerciseInstanceDto.getNotes());
+        exerciseInstanceRepository.save(exerciseInstance);
+
+        return exerciseInstanceMapper.mapToDto(exerciseInstance);
+    }
+
     @Transactional
     public ExerciseInstanceDto updateWorkingSetById(UUID exerciseInstanceId, UUID setId, InstanceWorkingSetDto instanceWorkingSetDto) {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
@@ -115,8 +125,8 @@ public class ExerciseInstanceService {
         List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
-            workingSet.setReps((short) 10);
-            workingSet.setWeight((short) 30);
+            workingSet.setReps((short) 0);
+            workingSet.setWeight((double) 0);
             workingSet.setExerciseInstance(exerciseToAdd);
             workingSets.add(workingSet);
         }

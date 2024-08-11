@@ -57,7 +57,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ExerciseTypeEntity> exerciseTypes = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_settings_id", referencedColumnName = "id")
     @JsonIgnoreProperties({"user"})
     private UserSettingsEntity userSettings;
 

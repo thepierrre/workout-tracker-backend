@@ -81,8 +81,8 @@ public class WorkoutService {
             List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
             for (BlueprintWorkingSetEntity blueprintWorkingSet : routineExercise.getWorkingSets()) {
                 InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
-                workingSet.setReps((short) blueprintWorkingSet.getReps());
-                workingSet.setWeight((short) blueprintWorkingSet.getWeight());
+                workingSet.setReps(blueprintWorkingSet.getReps());
+                workingSet.setWeight(blueprintWorkingSet.getWeight());
                 workingSet.setCreationTimedate(now.plusNanos(workingSets.size() * 1000000L));
                 workingSet.setExerciseInstance(exerciseInstance);
                 workingSets.add(workingSet);

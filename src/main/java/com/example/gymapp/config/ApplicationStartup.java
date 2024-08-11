@@ -32,7 +32,7 @@ public class ApplicationStartup {
     public void onApplicationReady() {
         roleService.createRoleIfNotExistent("USER");
         categoryService.createCategoriesIfNotExistent();
-        // Test user for demonstration purposes.
+        // Create a test user for demonstration purposes.
         authService.createUserIfNotExistent(new RegisterDto(
                 "test",
                 "test@example.com",

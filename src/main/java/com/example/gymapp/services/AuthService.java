@@ -105,8 +105,8 @@ public class AuthService {
 
         UserSettingsEntity userSettingsEntity = new UserSettingsEntity(
                 (double) 1,
-                "kgs",
-                user
+                "kgs"
+                //user
         );
 
         user.setUserSettings(userSettingsEntity);

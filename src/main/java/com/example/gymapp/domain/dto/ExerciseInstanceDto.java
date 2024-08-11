@@ -1,6 +1,7 @@
 package com.example.gymapp.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +19,13 @@ public class ExerciseInstanceDto {
 
     private UUID id;
 
-    private String exerciseTypeName;
-
     @JsonIgnoreProperties("exerciseInstance")
     private List<InstanceWorkingSetDto> workingSets  = new ArrayList<>();
 
     private WorkoutDto workout;
+
+    private String exerciseTypeName;
+
+    @Size(max = 300, message="Notes can have a maximum of 300 characters.")
+    private String notes;
 }

@@ -19,22 +19,22 @@ public class UserSettingsEntity {
 
     public UserSettingsEntity (
             Double changeThreshold,
-            String weightUnit,
-            UserEntity user
+            String weightUnit
+            //UserEntity user
             ) {
         this.changeThreshold = changeThreshold;
         this.weightUnit = weightUnit;
-        this.user = user;
+        //this.user = user;
     }
 
     @Id
     @UuidGenerator
     private UUID id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"userSettings"})
-    private UserEntity user;
+//    @OneToOne
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    @JsonIgnoreProperties({"userSettings"})
+//    private UserEntity user;
 
     private Double changeThreshold;
 

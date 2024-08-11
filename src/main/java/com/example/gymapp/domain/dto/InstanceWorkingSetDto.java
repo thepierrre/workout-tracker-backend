@@ -21,7 +21,7 @@ public class InstanceWorkingSetDto {
 
     private Short reps;
 
-    private double weight;
+    private Double weight;
 
     private LocalDateTime creationTimedate;
 

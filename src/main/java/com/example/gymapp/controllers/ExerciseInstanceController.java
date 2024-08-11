@@ -31,6 +31,15 @@ public class ExerciseInstanceController {
         return new ResponseEntity<>(exercise, HttpStatus.CREATED);
     }
 
+    @PatchMapping(path = "exercise-instances/{exerciseInstanceId}")
+    public ResponseEntity<ExerciseInstanceDto> updateNotesForExercise(
+            @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,
+            @RequestBody ExerciseInstanceDto exerciseInstanceDto
+    ) {
+        ExerciseInstanceDto exercise = exerciseInstanceService.updateNotesForExercise(exerciseInstanceId, exerciseInstanceDto);
+        return new ResponseEntity<>(exercise, HttpStatus.OK);
+    }
+
     @PatchMapping(path = "exercise-instances/{exerciseInstanceId}/sets/{setId}")
     public ResponseEntity<ExerciseInstanceDto> updateWorkingSetById(
             @PathVariable("exerciseInstanceId") UUID exerciseInstanceId,

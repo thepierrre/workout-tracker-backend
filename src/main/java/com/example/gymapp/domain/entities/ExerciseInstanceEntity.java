@@ -32,4 +32,6 @@ public class ExerciseInstanceEntity {
     private WorkoutEntity workout;
 
     private String exerciseTypeName;
+
+    private String notes;
 }

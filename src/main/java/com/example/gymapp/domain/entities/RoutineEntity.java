@@ -27,7 +27,7 @@ public class RoutineEntity {
 
     private String name;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "exercise_order")
     @JsonIgnoreProperties({"routine", "exerciseType"})
     private List<RoutineExerciseEntity> routineExercises  = new ArrayList<>();
@@ -36,5 +36,10 @@ public class RoutineEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
     private UserEntity user;
+
+    public void removeRoutineExercise(RoutineExerciseEntity routineExercise) {
+        routineExercises.remove(routineExercise);
+        routineExercise.setRoutine(null);
+    }
 
 }

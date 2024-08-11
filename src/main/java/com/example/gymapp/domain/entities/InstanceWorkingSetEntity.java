@@ -29,7 +29,7 @@ public class InstanceWorkingSetEntity {
 
     private Short reps;
 
-    private double weight;
+    private Double weight;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP(3)")
