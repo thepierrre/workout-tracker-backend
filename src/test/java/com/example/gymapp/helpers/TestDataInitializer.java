@@ -73,6 +73,16 @@ public class TestDataInitializer {
         public LoginDto loginDto1;
         public RegisterDto registerDto1;
 
+        public RoutineExerciseEntity routineExerciseEntity1;
+        public RoutineExerciseEntity routineExerciseEntity2;
+        public RoutineExerciseEntity routineExerciseEntity3;
+        public RoutineExerciseDto routineExerciseRequestDto1;
+        public RoutineExerciseDto routineExerciseRequestDto2;
+        public RoutineExerciseDto routineExerciseRequestDto3;
+        public RoutineExerciseDto routineExerciseResponseDto1;
+        public RoutineExerciseDto routineExerciseResponseDto2;
+        public RoutineExerciseDto routineExerciseResponseDto3;
+
     }
 
     public static TestData initializeTestData() {
@@ -91,24 +101,24 @@ public class TestDataInitializer {
         testData.categoryResponseDto1 = CategoryDataHelper.createCategoryResponseDto("category1");
         testData.categoryResponseDto2 = CategoryDataHelper.createCategoryResponseDto("category2");
         testData.categoryResponseDto3 = CategoryDataHelper.createCategoryResponseDto("category3");
-        testData.exerciseTypeEntity1 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType1");
-        testData.exerciseTypeEntity2 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType2");
-        testData.exerciseTypeEntity3 = ExerciseTypeDataHelper.createExerciseTypeEntity("exerciseType3");
-        testData.exerciseTypeRequestDto1 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exerciseType1");
-        testData.exerciseTypeRequestDto2 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exerciseType2");
-        testData.exerciseTypeRequestDto3 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exerciseType3");
-        testData.exerciseTypeResponseDto1 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exerciseType1");
-        testData.exerciseTypeResponseDto2 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exerciseType2");
-        testData.exerciseTypeResponseDto3 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exerciseType3");
-        testData.exerciseInstanceEntity1 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType1");
-        testData.exerciseInstanceEntity2 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType2");
-        testData.exerciseInstanceEntity3 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exerciseType3");
-        testData.exerciseInstanceRequestDto1 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType1");
-        testData.exerciseInstanceRequestDto2 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType2");
-        testData.exerciseInstanceRequestDto3 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exerciseType3");
-        testData.exerciseInstanceResponseDto1 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType1");
-        testData.exerciseInstanceResponseDto2 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType2");
-        testData.exerciseInstanceResponseDto3 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exerciseType3");
+        testData.exerciseTypeEntity1 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise1");
+        testData.exerciseTypeEntity2 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise2");
+        testData.exerciseTypeEntity3 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise3");
+        testData.exerciseTypeRequestDto1 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exercise1");
+        testData.exerciseTypeRequestDto2 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exercise2");
+        testData.exerciseTypeRequestDto3 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exercise3");
+        testData.exerciseTypeResponseDto1 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise1");
+        testData.exerciseTypeResponseDto2 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise2");
+        testData.exerciseTypeResponseDto3 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise3");
+        testData.exerciseInstanceEntity1 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exercise1");
+        testData.exerciseInstanceEntity2 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exercise2");
+        testData.exerciseInstanceEntity3 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exercise3");
+        testData.exerciseInstanceRequestDto1 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exercise1");
+        testData.exerciseInstanceRequestDto2 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exercise2");
+        testData.exerciseInstanceRequestDto3 = ExerciseInstanceDataHelper.createExerciseInstanceRequestDto("exercise3");
+        testData.exerciseInstanceResponseDto1 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exercise1");
+        testData.exerciseInstanceResponseDto2 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exercise2");
+        testData.exerciseInstanceResponseDto3 = ExerciseInstanceDataHelper.createExerciseInstanceResponseDto("exercise3");
         testData.routineEntity1 = RoutineDataHelper.createRoutineEntity("routine1");
         testData.routineEntity2 = RoutineDataHelper.createRoutineEntity("routine2");
         testData.routineEntity3 = RoutineDataHelper.createRoutineEntity("routine3");
@@ -139,6 +149,15 @@ public class TestDataInitializer {
         testData.workingSetRequestDto3 = WorkingSetDataHelper.createWorkingSetRequestDto((short) 8, (short) 30);
         testData.loginDto1 = AuthDataHelper.createLoginDto("user1", "pass1");
         testData.registerDto1 = AuthDataHelper.createRegisterDto("user1", "user1@example.com", "pass1");
+        testData.routineExerciseEntity1 = RoutineExerciseDataHelper.createRoutineExerciseEntity("exercise1");
+        testData.routineExerciseEntity2 = RoutineExerciseDataHelper.createRoutineExerciseEntity("exercise2");
+        testData.routineExerciseEntity3 = RoutineExerciseDataHelper.createRoutineExerciseEntity("exercise3");
+        testData.routineExerciseRequestDto1 = RoutineExerciseDataHelper.createRoutineExerciseRequestDto("exercise1");
+        testData.routineExerciseRequestDto2 = RoutineExerciseDataHelper.createRoutineExerciseRequestDto("exercise2");
+        testData.routineExerciseRequestDto3 = RoutineExerciseDataHelper.createRoutineExerciseRequestDto("exercise3");
+        testData.routineExerciseResponseDto1 = RoutineExerciseDataHelper.createRoutineExerciseResponseDto("exercise1");
+        testData.routineExerciseResponseDto2 = RoutineExerciseDataHelper.createRoutineExerciseResponseDto("exercise2");
+        testData.routineExerciseResponseDto3 = RoutineExerciseDataHelper.createRoutineExerciseResponseDto("exercise3");
 
         return testData;
 

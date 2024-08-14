@@ -2,8 +2,10 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
 import com.example.gymapp.domain.dto.RoutineDto;
+import com.example.gymapp.domain.dto.RoutineExerciseDto;
 import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.domain.entities.RoutineEntity;
+import com.example.gymapp.domain.entities.RoutineExerciseEntity;
 import com.example.gymapp.exceptions.ConflictException;
 import com.example.gymapp.helpers.ExerciseTypeDataHelper;
 import com.example.gymapp.helpers.RoutineDataHelper;
@@ -84,6 +86,8 @@ class RoutineServiceTest {
         testData.user1.getRoutines().add(testData.routineEntity2);
 
         when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
+        when(routineRepository.findByUserAndName(testData.user1, testData.routineRequestDto2.getName()))
+                .thenReturn(Optional.of(testData.routineEntity2));
         when(routineMapper.mapFromDto(testData.routineRequestDto2)).thenReturn(testData.routineEntity2);
 
         ConflictException exception = assertThrows(ConflictException.class, () ->
@@ -93,24 +97,6 @@ class RoutineServiceTest {
 
     }
 
-    @Test
-    void testCreateRoutine_ExerciseNameNotFound() {
-        ExerciseTypeEntity nonExistentExercise = new ExerciseTypeEntity();
-        UUID nonExistentExerciseTypeId = UUID.randomUUID();
-        nonExistentExercise.setId(nonExistentExerciseTypeId);
-
-        ExerciseTypeDto nonExistentExerciseDto = new ExerciseTypeDto();
-        nonExistentExerciseDto.setId(nonExistentExerciseTypeId);
-        testData.routineRequestDto2.getExerciseTypes().add(nonExistentExerciseDto);
-
-        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
-        when(routineMapper.mapFromDto(testData.routineRequestDto2)).thenReturn(testData.routineEntity2);
-
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
-                routineService.createRoutine(testData.routineRequestDto2, "user1"));
-
-        assertEquals("Exercise type with the ID " + nonExistentExercise.getId() + " not found.", exception.getMessage());
-    }
 
     @Test
     void testFindAllForUser() {
@@ -127,15 +113,15 @@ class RoutineServiceTest {
         UUID id = testData.routineEntity1.getId();
 
         RoutineEntity editedEntity = RoutineDataHelper.createRoutineEntity("edited");
-        editedEntity.setExerciseTypes(List.of(testData.exerciseTypeEntity2, testData.exerciseTypeEntity3));
+        editedEntity.setRoutineExercises(List.of(testData.routineExerciseEntity2, testData.routineExerciseEntity3));
         editedEntity.setId(id);
 
         RoutineDto editedResponseDto = RoutineDataHelper.createRoutineResponseDto("edited");
-        editedResponseDto.setExerciseTypes(List.of(testData.exerciseTypeResponseDto2, testData.exerciseTypeResponseDto3));
+        editedResponseDto.setRoutineExercises(List.of(testData.routineExerciseResponseDto2, testData.routineExerciseResponseDto3));
         editedResponseDto.setId(id);
 
         RoutineDto editedRequestDto = RoutineDataHelper.createRoutineRequestDto("edited");
-        editedRequestDto.setExerciseTypes(List.of(testData.exerciseTypeRequestDto2, testData.exerciseTypeRequestDto3));
+        editedRequestDto.setRoutineExercises(List.of(testData.routineExerciseRequestDto2, testData.routineExerciseRequestDto3));
         editedRequestDto.setId(id);
 
         when(routineRepository.findById(id)).thenReturn(Optional.ofNullable(testData.routineEntity1));
@@ -143,13 +129,24 @@ class RoutineServiceTest {
         when(routineMapper.mapToDto(editedEntity)).thenReturn(editedResponseDto);
         when(routineRepository.save(any(RoutineEntity.class))).thenReturn(editedEntity);
 
+//        ExerciseTypeEntity exerciseTypeEntity = exerciseTypeRepository.findByUserAndName(user, routineExerciseDto.getName())
+//                .orElseGet(() -> exerciseTypeRepository.findByDefaultAndName(routineExerciseDto.getName())
+//                        .orElseThrow(() -> new EntityNotFoundException(String.format(
+//                                "Exercise type with the name %s not found", routineExerciseDto.getName()
+//                        ))));
+
+        when(exerciseTypeRepository.findByUserAndName(testData.user1, testData.routineExerciseRequestDto2.getName()))
+                .thenReturn(Optional.of(testData.exerciseTypeEntity2));
+        when(exerciseTypeRepository.findByUserAndName(testData.user1, testData.routineExerciseRequestDto3.getName()))
+                .thenReturn(Optional.of(testData.exerciseTypeEntity3));
+
 
         RoutineDto result = routineService.updateById(id, editedRequestDto, "user1");
 
         assertNotNull(result);
         assertEquals(testData.routineEntity1.getId(), editedResponseDto.getId());
         assertEquals(editedResponseDto.getName(), "edited");
-        assertEquals(editedResponseDto.getExerciseTypes(), List.of(testData.exerciseTypeResponseDto2, testData.exerciseTypeResponseDto3));
+        assertEquals(editedResponseDto.getRoutineExercises(), List.of(testData.routineExerciseResponseDto2, testData.routineExerciseResponseDto3));
     }
 
     @Test

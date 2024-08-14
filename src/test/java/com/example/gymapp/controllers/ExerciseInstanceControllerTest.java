@@ -63,7 +63,7 @@ class ExerciseInstanceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonInput))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.exerciseTypeName", containsString("exerciseType1")))
+                .andExpect(jsonPath("$.exerciseTypeName", containsString("exercise1")))
                 .andExpect(jsonPath("$.workingSets[0].reps", is(10)))
                 .andExpect(jsonPath("$.workingSets[0].weight", is(15.0)));
     }
@@ -162,7 +162,7 @@ class ExerciseInstanceControllerTest {
         mvc.perform(delete("/api/exercise-instances/" + exerciseId + "/sets/" + setId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.exerciseTypeName", containsString("exerciseType1")))
+                .andExpect(jsonPath("$.exerciseTypeName", containsString("exercise1")))
                 .andExpect(jsonPath("$.workingSets", is(List.of())));
     }
 

@@ -16,7 +16,7 @@ public class RoutineDataHelper {
                 .id(id)
                 .name(name)
                 .user(null)
-                .exerciseTypes(new ArrayList<>())
+                .routineExercises(new ArrayList<>())
                 .build();
     }
 
@@ -24,7 +24,7 @@ public class RoutineDataHelper {
 
         return RoutineDto.builder()
                 .name(name)
-                .exerciseTypes(new ArrayList<>())
+                .routineExercises(new ArrayList<>())
                 .build();
     }
 
@@ -34,7 +34,7 @@ public class RoutineDataHelper {
                 .id(id)
                 .name(name)
                 .user(null)
-                .exerciseTypes(new ArrayList<>())
+                .routineExercises(new ArrayList<>())
                 .build();
     }
 }

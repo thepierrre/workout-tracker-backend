@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.Optional;
@@ -106,7 +107,7 @@ class ExerciseTypeServiceTest {
         ConflictException exception = assertThrows(ConflictException.class,
                 () -> exerciseTypeService.createExercise(testData.exerciseTypeRequestDto1, "user1"));
 
-        assertEquals("Exercise with the name 'exerciseType1' already exists.", exception.getMessage());
+        assertEquals("Exercise with the name 'exercise1' already exists.", exception.getMessage());
     }
 
     @Test

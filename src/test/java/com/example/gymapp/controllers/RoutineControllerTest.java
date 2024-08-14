@@ -67,12 +67,12 @@ class RoutineControllerTest {
 
     @Test
     void createRoutine_Success() throws Exception {
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto1);
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto2);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseResponseDto1);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseResponseDto2);
         String jsonInput = objectMapper.writeValueAsString(testData.routineRequestDto1);
 
-        testData.routineResponseDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto1);
-        testData.routineResponseDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto2);
+        testData.routineResponseDto1.getRoutineExercises().add(testData.routineExerciseResponseDto1);
+        testData.routineResponseDto1.getRoutineExercises().add(testData.routineExerciseResponseDto2);
 
         when(userRepository.findByUsername("user1")).thenReturn(Optional.ofNullable(testData.user1));
 
@@ -87,8 +87,8 @@ class RoutineControllerTest {
 
     @Test
     void createRoutine_UserNotFound() throws Exception {
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto1);
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto2);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseResponseDto1);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseResponseDto2);
         String jsonInput = objectMapper.writeValueAsString(testData.routineRequestDto1);
 
         when(userRepository.findByUsername("user1")).thenReturn(Optional.empty());
@@ -106,8 +106,8 @@ class RoutineControllerTest {
 
     @Test
     void createRoutine_RoutineNameAlreadyExists() throws Exception {
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto1);
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto2);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseResponseDto1);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseResponseDto2);
         String jsonInput = objectMapper.writeValueAsString(testData.routineRequestDto1);
 
         when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
@@ -127,8 +127,8 @@ class RoutineControllerTest {
 
     @Test
     void createRoutine_ExerciseTypeNotFound() throws Exception {
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto1);
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeResponseDto2);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseResponseDto1);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseResponseDto2);
         String jsonInput = objectMapper.writeValueAsString(testData.routineRequestDto1);
 
         when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));

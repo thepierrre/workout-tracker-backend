@@ -41,8 +41,8 @@ class WorkoutMapperTest {
         assertEquals(result.getUser().getUsername(), "user1");
         assertEquals(result.getRoutineName(), "routine1");
         assertEquals(result.getCreationDate(), LocalDate.of(2024, 4, 30));
-        assertEquals(result.getExerciseInstances().get(0).getExerciseTypeName(), "exerciseType1");
-        assertEquals(result.getExerciseInstances().get(result.getExerciseInstances().size() - 1).getExerciseTypeName(), "exerciseType2");
+        assertEquals(result.getExerciseInstances().get(0).getExerciseTypeName(), "exercise1");
+        assertEquals(result.getExerciseInstances().get(result.getExerciseInstances().size() - 1).getExerciseTypeName(), "exercise2");
     }
 
     @Test

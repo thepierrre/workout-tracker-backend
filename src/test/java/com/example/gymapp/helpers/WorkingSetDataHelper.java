@@ -19,7 +19,7 @@ public class WorkingSetDataHelper {
         return InstanceWorkingSetEntity.builder()
                 .id(id)
                 .reps(reps)
-                .weight(weight)
+                .weight(Double.valueOf(weight))
                 .build();
 
     };
@@ -34,7 +34,7 @@ public class WorkingSetDataHelper {
         return InstanceWorkingSetDto.builder()
                 .id(id)
                 .reps(reps)
-                .weight(weight)
+                .weight(Double.valueOf(weight))
                 .build();
     };
 
@@ -45,7 +45,7 @@ public class WorkingSetDataHelper {
 
         return InstanceWorkingSetDto.builder()
                 .reps(reps)
-                .weight(weight)
+                .weight(Double.valueOf(weight))
                 .build();
     };
 

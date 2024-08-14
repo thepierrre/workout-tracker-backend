@@ -54,12 +54,12 @@ class WorkoutServiceTest {
         user1.getExerciseTypes().add(testData.exerciseTypeEntity2);
         user1.getExerciseTypes().add(testData.exerciseTypeEntity3);
 
-        testData.routineEntity1.getExerciseTypes().add(testData.exerciseTypeEntity1);
-        testData.routineEntity1.getExerciseTypes().add(testData.exerciseTypeEntity2);
-        testData.routineEntity2.getExerciseTypes().add(testData.exerciseTypeEntity1);
-        testData.routineEntity2.getExerciseTypes().add(testData.exerciseTypeEntity3);
-        testData.routineEntity3.getExerciseTypes().add(testData.exerciseTypeEntity2);
-        testData.routineEntity3.getExerciseTypes().add(testData.exerciseTypeEntity3);
+        testData.routineEntity1.getRoutineExercises().add(testData.routineExerciseEntity1);
+        testData.routineEntity1.getRoutineExercises().add(testData.routineExerciseEntity2);
+        testData.routineEntity2.getRoutineExercises().add(testData.routineExerciseEntity1);
+        testData.routineEntity2.getRoutineExercises().add(testData.routineExerciseEntity3);
+        testData.routineEntity3.getRoutineExercises().add(testData.routineExerciseEntity2);
+        testData.routineEntity3.getRoutineExercises().add(testData.routineExerciseEntity3);
 
         user1.getRoutines().add(testData.routineEntity1);
         user1.getRoutines().add(testData.routineEntity2);

@@ -18,7 +18,6 @@ public class ExerciseTypeDataHelper {
                 .name(name)
                 .user(null)
                 .categories(new ArrayList<>())
-                .routines(new ArrayList<>())
                 .build();
    }
 
@@ -40,7 +39,6 @@ public class ExerciseTypeDataHelper {
                 .name(name)
                 .user(null)
                 .categories(new ArrayList<>())
-                .routines(new ArrayList<>())
                 .build();
 
    }

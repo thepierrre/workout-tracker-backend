@@ -147,6 +147,10 @@ public class RoutineService {
                     .map(routineExerciseDto -> createExerciseForRoutine(user, routineExerciseDto)).toList();
 
             routineExercises.forEach(routineExercise -> {
+//                Optional<ExerciseTypeEntity> exercise = exerciseTypeRepository.findByUserAndName(user, routineExercise.getName());
+//                if (exercise.isPresent()) {
+//                    routineExercise.setExerciseType(exercise.get());
+//                }
                 routineExercise.setRoutine(existingRoutine);
                 routineExerciseRepository.save(routineExercise);
             });
