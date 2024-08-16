@@ -27,12 +27,18 @@ public class TestDataInitializer {
         public ExerciseTypeEntity exerciseTypeEntity1;
         public ExerciseTypeEntity exerciseTypeEntity2;
         public ExerciseTypeEntity exerciseTypeEntity3;
+        public ExerciseTypeEntity exerciseTypeEntity4;
+        public ExerciseTypeEntity exerciseTypeEntity5;
         public ExerciseTypeDto exerciseTypeRequestDto1;
         public ExerciseTypeDto exerciseTypeRequestDto2;
         public ExerciseTypeDto exerciseTypeRequestDto3;
+        public ExerciseTypeDto exerciseTypeRequestDto4;
+        public ExerciseTypeDto exerciseTypeRequestDto5;
         public ExerciseTypeDto exerciseTypeResponseDto1;
         public ExerciseTypeDto exerciseTypeResponseDto2;
         public ExerciseTypeDto exerciseTypeResponseDto3;
+        public ExerciseTypeDto exerciseTypeResponseDto4;
+        public ExerciseTypeDto exerciseTypeResponseDto5;
         public ExerciseInstanceEntity exerciseInstanceEntity1;
         public ExerciseInstanceEntity exerciseInstanceEntity2;
         public ExerciseInstanceEntity exerciseInstanceEntity3;
@@ -82,6 +88,18 @@ public class TestDataInitializer {
         public RoutineExerciseDto routineExerciseResponseDto1;
         public RoutineExerciseDto routineExerciseResponseDto2;
         public RoutineExerciseDto routineExerciseResponseDto3;
+        public UserSettingsEntity userSettingsEntity1;
+        public UserSettingsEntity userSettingsEntity2;
+        public UserSettingsEntity userSettingsEntity3;
+        public UserSettingsEntity userSettingsEntity4;
+        public UserSettingsDto userSettingsRequestDto1;
+        public UserSettingsDto userSettingsRequestDto2;
+        public UserSettingsDto userSettingsRequestDto3;
+        public UserSettingsDto userSettingsRequestDto4;
+        public UserSettingsDto userSettingsResponseDto1;
+        public UserSettingsDto userSettingsResponseDto2;
+        public UserSettingsDto userSettingsResponseDto3;
+        public UserSettingsDto userSettingsResponseDto4;
 
     }
 
@@ -101,15 +119,21 @@ public class TestDataInitializer {
         testData.categoryResponseDto1 = CategoryDataHelper.createCategoryResponseDto("category1");
         testData.categoryResponseDto2 = CategoryDataHelper.createCategoryResponseDto("category2");
         testData.categoryResponseDto3 = CategoryDataHelper.createCategoryResponseDto("category3");
-        testData.exerciseTypeEntity1 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise1");
-        testData.exerciseTypeEntity2 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise2");
-        testData.exerciseTypeEntity3 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise3");
+        testData.exerciseTypeEntity1 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise1", false);
+        testData.exerciseTypeEntity2 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise2", false);
+        testData.exerciseTypeEntity3 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise3", false);
+        testData.exerciseTypeEntity4 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise4", true);
+        testData.exerciseTypeEntity5 = ExerciseTypeDataHelper.createExerciseTypeEntity("exercise5", true);
         testData.exerciseTypeRequestDto1 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exercise1");
         testData.exerciseTypeRequestDto2 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exercise2");
         testData.exerciseTypeRequestDto3 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exercise3");
-        testData.exerciseTypeResponseDto1 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise1");
-        testData.exerciseTypeResponseDto2 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise2");
-        testData.exerciseTypeResponseDto3 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise3");
+        testData.exerciseTypeRequestDto4 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exercise4");
+        testData.exerciseTypeRequestDto5 = ExerciseTypeDataHelper.createExerciseTypeRequestDto("exercise5");
+        testData.exerciseTypeResponseDto1 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise1", false);
+        testData.exerciseTypeResponseDto2 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise2", false);
+        testData.exerciseTypeResponseDto3 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise3", false);
+        testData.exerciseTypeResponseDto4 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise4", true);
+        testData.exerciseTypeResponseDto5 = ExerciseTypeDataHelper.createExerciseTypeResponseDto("exercise5", true);
         testData.exerciseInstanceEntity1 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exercise1");
         testData.exerciseInstanceEntity2 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exercise2");
         testData.exerciseInstanceEntity3 = ExerciseInstanceDataHelper.createExerciseInstanceEntity("exercise3");
@@ -158,6 +182,18 @@ public class TestDataInitializer {
         testData.routineExerciseResponseDto1 = RoutineExerciseDataHelper.createRoutineExerciseResponseDto("exercise1");
         testData.routineExerciseResponseDto2 = RoutineExerciseDataHelper.createRoutineExerciseResponseDto("exercise2");
         testData.routineExerciseResponseDto3 = RoutineExerciseDataHelper.createRoutineExerciseResponseDto("exercise3");
+        testData.userSettingsEntity1 = UserSettingsDataHelper.createUserSettingsEntity(1.0, "kgs");
+        testData.userSettingsEntity2 = UserSettingsDataHelper.createUserSettingsEntity(10.0, "kgs");
+        testData.userSettingsEntity3 = UserSettingsDataHelper.createUserSettingsEntity(5.0, "lbs");
+        testData.userSettingsEntity4 = UserSettingsDataHelper.createUserSettingsEntity(50.0, "lbs");
+        testData.userSettingsRequestDto1 = UserSettingsDataHelper.createUserSettingsRequestDto(1.0, "kgs");
+        testData.userSettingsRequestDto2 = UserSettingsDataHelper.createUserSettingsRequestDto(10.0, "kgs");
+        testData.userSettingsRequestDto3 = UserSettingsDataHelper.createUserSettingsRequestDto(5.0, "lbs");
+        testData.userSettingsRequestDto4 = UserSettingsDataHelper.createUserSettingsRequestDto(50.0, "lbs");
+        testData.userSettingsResponseDto1 = UserSettingsDataHelper.createUserSettingsResponseDto(1.0, "kgs");
+        testData.userSettingsResponseDto2 = UserSettingsDataHelper.createUserSettingsResponseDto(10.0, "kgs");
+        testData.userSettingsResponseDto3 = UserSettingsDataHelper.createUserSettingsResponseDto(5.0, "lbs");
+        testData.userSettingsResponseDto4 = UserSettingsDataHelper.createUserSettingsResponseDto(50.0, "lbs");
 
         return testData;
 

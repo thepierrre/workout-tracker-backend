@@ -239,5 +239,20 @@ class ExerciseTypeControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(String.format("Exercise with the ID %s not found.", id.toString())));
     }
+
+    @Test
+    void findAllDefault_Success() throws Exception {
+        List<ExerciseTypeDto> defaultExercises = List.of(testData.exerciseTypeResponseDto4, testData.exerciseTypeResponseDto5);
+        when(exerciseTypeService.findAllDefault("user1")).thenReturn(defaultExercises);
+
+        mvc.perform(get("/api/default-exercise-types")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$.[0].name", is("exercise4")))
+                .andExpect(jsonPath("$.[0].isDefault", is(true)))
+                .andExpect(jsonPath("$.[1].name", is("exercise5")))
+                .andExpect(jsonPath("$.[1].isDefault", is(true)));
+    }
 }
 

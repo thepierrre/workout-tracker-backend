@@ -181,11 +181,11 @@ class ExerciseTypeServiceTest {
 
         UUID id = testData.exerciseTypeEntity1.getId();
 
-        ExerciseTypeEntity editedEntity = ExerciseTypeDataHelper.createExerciseTypeEntity("edited");
+        ExerciseTypeEntity editedEntity = ExerciseTypeDataHelper.createExerciseTypeEntity("edited", false);
         editedEntity.setCategories(List.of(testData.categoryEntity3));
         editedEntity.setId(id);
 
-        ExerciseTypeDto editedResponseDto = ExerciseTypeDataHelper.createExerciseTypeResponseDto("edited");
+        ExerciseTypeDto editedResponseDto = ExerciseTypeDataHelper.createExerciseTypeResponseDto("edited", false);
         editedResponseDto.setCategories(List.of(testData.categoryResponseDto3));
         editedResponseDto.setId(id);
 

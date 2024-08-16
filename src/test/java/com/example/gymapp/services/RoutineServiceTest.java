@@ -100,7 +100,6 @@ class RoutineServiceTest {
 
     }
 
-
     @Test
     void testFindAllForUser() {
         when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
@@ -142,7 +141,7 @@ class RoutineServiceTest {
 
         RoutineDto result = routineService.updateById(id, editedRequestDto, "user1");
 
-       assertNotNull(result);
+        assertNotNull(result);
         assertEquals(result.getId(), existingRoutine.getId());
         assertEquals(result.getName(), "edited");
         assertEquals(result.getRoutineExercises(), List.of(testData.routineExerciseResponseDto2, testData.routineExerciseResponseDto3));

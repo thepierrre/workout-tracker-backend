@@ -9,13 +9,15 @@ import java.util.UUID;
 public class ExerciseTypeDataHelper {
 
    public static ExerciseTypeEntity createExerciseTypeEntity(
-           String name
+           String name,
+           Boolean isDefault
            ) {
 
         UUID id = UUID.randomUUID();
         return ExerciseTypeEntity.builder()
                 .id(id)
                 .name(name)
+                .isDefault(isDefault)
                 .user(null)
                 .categories(new ArrayList<>())
                 .build();
@@ -30,13 +32,15 @@ public class ExerciseTypeDataHelper {
    }
 
    public static ExerciseTypeDto createExerciseTypeResponseDto(
-           String name
+           String name,
+           Boolean isDefault
           ) {
 
         UUID id = UUID.randomUUID();
         return ExerciseTypeDto.builder()
                 .id(id)
                 .name(name)
+                .isDefault(isDefault)
                 .user(null)
                 .categories(new ArrayList<>())
                 .build();
