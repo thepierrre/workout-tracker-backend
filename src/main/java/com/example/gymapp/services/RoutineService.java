@@ -190,7 +190,6 @@ public class RoutineService {
                 existingRoutine.getRoutineExercises().add(newExercise);
             }
         });
-
         RoutineEntity updatedRoutine = routineRepository.save(existingRoutine);
         return routineMapper.mapToDto(updatedRoutine);
     }

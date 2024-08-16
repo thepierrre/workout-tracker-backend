@@ -24,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -110,10 +111,9 @@ class RoutineServiceTest {
     @Test
     void updateById_Success() {
 
-        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
-
-        UUID id = UUID.fromString("c2aee7f4-72c4-4eeb-982b-5bdf3ebf1a9b");
-        testData.routineEntity1.setId(id);
+        UUID id = UUID.randomUUID();
+        RoutineEntity existingRoutine = testData.routineEntity1;
+        existingRoutine.setId(id);
 
         RoutineEntity editedEntity = RoutineDataHelper.createRoutineEntity("edited");
         editedEntity.setId(id);
@@ -127,7 +127,7 @@ class RoutineServiceTest {
         editedRequestDto.setId(id);
         editedRequestDto.setRoutineExercises(List.of(testData.routineExerciseRequestDto2, testData.routineExerciseRequestDto3));
 
-        testData.routineEntity1.setId(id);
+        when(userRepository.findByUsername("user1")).thenReturn(Optional.of(testData.user1));
         when(routineRepository.findById(id)).thenReturn(Optional.ofNullable(testData.routineEntity1));
         when(routineRepository.findByUserAndName(testData.user1, editedRequestDto.getName())).thenReturn(Optional.empty());
 
@@ -137,15 +137,15 @@ class RoutineServiceTest {
                 .thenReturn(Optional.ofNullable(testData.exerciseTypeEntity3));
 
         when(routineMapper.mapFromDto(editedRequestDto)).thenReturn(editedEntity);
-        when(routineRepository.save(editedEntity)).thenReturn(editedEntity);
+        when(routineRepository.save(existingRoutine)).thenReturn(editedEntity);
         when(routineMapper.mapToDto(editedEntity)).thenReturn(editedResponseDto);
 
         RoutineDto result = routineService.updateById(id, editedRequestDto, "user1");
 
-        assertNotNull(result);
-        assertEquals(testData.routineEntity1.getId(), editedResponseDto.getId());
-        assertEquals(editedResponseDto.getName(), "edited");
-        assertEquals(editedResponseDto.getRoutineExercises(), List.of(testData.routineExerciseResponseDto2, testData.routineExerciseResponseDto3));
+       assertNotNull(result);
+        assertEquals(result.getId(), existingRoutine.getId());
+        assertEquals(result.getName(), "edited");
+        assertEquals(result.getRoutineExercises(), List.of(testData.routineExerciseResponseDto2, testData.routineExerciseResponseDto3));
     }
 
     @Test
