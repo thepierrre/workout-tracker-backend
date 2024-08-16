@@ -33,7 +33,7 @@ class ExerciseTypeMapperTest {
 
         assertNotNull(result);
         assertNotNull(result.getId());
-        assertEquals(result.getName(), "exerciseType1");
+        assertEquals(result.getName(), "exercise1");
         assertEquals(result.getUser().getUsername(), "user2");
         assertEquals(result.getCategories(), List.of());
     }
@@ -44,7 +44,7 @@ class ExerciseTypeMapperTest {
         ExerciseTypeEntity result = exerciseTypeMapper.mapFromDto(testData.exerciseTypeRequestDto1);
 
         assertNotNull(result);
-        assertEquals(result.getName(), "exerciseType1");
+        assertEquals(result.getName(), "exercise1");
         assertEquals(result.getCategories().get(0).getName(), "category1");
     }
 }

@@ -32,7 +32,7 @@ class UserMapperTest {
         assertNotNull(result);
         assertEquals(result.getUsername(), "user1");
         assertEquals(result.getEmail(), "user1@example.com");
-        assertEquals(result.getPassword(), "encoded1");
+        assertEquals(result.getPassword(), null);
       }
 
     @Test

@@ -65,7 +65,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.username", is("user1")))
                 .andExpect(jsonPath("$.email", is("user1@example.com")))
                 .andExpect(jsonPath("$.exerciseTypes", hasSize(1)))
-                .andExpect(jsonPath("$.exerciseTypes.[0].name", is("exerciseType2")))
+                .andExpect(jsonPath("$.exerciseTypes.[0].name", is("exercise2")))
                 .andExpect(jsonPath("$.workouts", hasSize(1)))
                 .andExpect(jsonPath("$.workouts.[0].routineName", is("routine1")))
                 .andExpect(jsonPath("$.routines", hasSize(2)))

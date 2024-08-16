@@ -123,7 +123,7 @@ class ExerciseTypeControllerTest {
                         .content(jsonInput))
                 .andExpect(status().isConflict())
                 .andExpect(content().string(
-                        "{\"message\":\"Exercise with the name 'exerciseType1' already exists.\"}"));
+                        "{\"message\":\"Exercise with the name 'exercise1' already exists.\"}"));
     };
 
     @Test
@@ -159,8 +159,8 @@ class ExerciseTypeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$.[0].name", is("exerciseType1")))
-                .andExpect(jsonPath("$.[1].name", is("exerciseType2")));
+                .andExpect(jsonPath("$.[0].name", is("exercise1")))
+                .andExpect(jsonPath("$.[1].name", is("exercise2")));
     }
 
 
@@ -219,7 +219,7 @@ class ExerciseTypeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonInput))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("exerciseType1")));
+                .andExpect(jsonPath("$.name", is("exercise1")));
     }
 
     @Test

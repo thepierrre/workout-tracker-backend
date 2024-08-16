@@ -1,7 +1,7 @@
 package com.example.gymapp.mappers.impl;
 
-import com.example.gymapp.domain.dto.WorkingSetDto;
-import com.example.gymapp.domain.entities.WorkingSetEntity;
+import com.example.gymapp.domain.dto.InstanceWorkingSetDto;
+import com.example.gymapp.domain.entities.InstanceWorkingSetEntity;
 import com.example.gymapp.helpers.TestDataInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-class WorkingSetMapperTest {
+class InstanceWorkingSetMapperTest {
 
     TestDataInitializer.TestData testData;
 
@@ -21,11 +21,11 @@ class WorkingSetMapperTest {
         testData = TestDataInitializer.initializeTestData();
     }
     @Autowired
-    WorkingSetMapper workingSetMapper;
+    InstanceWorkingSetMapper instanceWorkingSetMapper;
 
     @Test
     void mapToDto() {
-        WorkingSetDto result = workingSetMapper.mapToDto(testData.workingSetEntity1);
+        InstanceWorkingSetDto result = instanceWorkingSetMapper.mapToDto(testData.instanceWorkingSetEntity1);
 
         assertNotNull(result);
         assertEquals(result.getReps(), (short) 10);
@@ -34,7 +34,7 @@ class WorkingSetMapperTest {
 
     @Test
     void mapFromDto() {
-        WorkingSetEntity result = workingSetMapper.mapFromDto(testData.workingSetResponseDto1);
+        InstanceWorkingSetEntity result = instanceWorkingSetMapper.mapFromDto(testData.workingSetResponseDto1);
 
         assertNotNull(result);
         assertNotNull(result.getId());

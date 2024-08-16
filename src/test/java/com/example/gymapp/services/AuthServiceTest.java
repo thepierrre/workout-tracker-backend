@@ -9,10 +9,7 @@ import com.example.gymapp.security.JWTGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Optional;
 
@@ -59,9 +58,9 @@ class AuthServiceTest {
 
     private TestDataInitializer.TestData testData;
 
+
     @BeforeEach
-    void setUp() {
-        testData = TestDataInitializer.initializeTestData();
+    void setUp() {testData = TestDataInitializer.initializeTestData();
     }
 
     @AfterEach

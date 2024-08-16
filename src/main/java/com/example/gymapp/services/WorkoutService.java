@@ -71,20 +71,19 @@ public class WorkoutService {
 
         List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
-        for (ExerciseTypeEntity exerciseType : trainingRoutine.getExerciseTypes()) {
+        for (RoutineExerciseEntity routineExercise : trainingRoutine.getRoutineExercises()) {
             ExerciseInstanceEntity exerciseInstance = new ExerciseInstanceEntity();
-            exerciseInstance.setExerciseTypeName(exerciseType.getName());
+            exerciseInstance.setExerciseTypeName(routineExercise.getName());
             exerciseInstance.setWorkout(workoutEntity);
-
 
             LocalDateTime now = LocalDateTime.now();
 
-            List<WorkingSetEntity> workingSets = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                WorkingSetEntity workingSet = new WorkingSetEntity();
-                workingSet.setReps((short) 10);
-                workingSet.setWeight((short) 30);
-                workingSet.setCreationTimedate(now.plusNanos(i * 1000000));
+            List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
+            for (BlueprintWorkingSetEntity blueprintWorkingSet : routineExercise.getWorkingSets()) {
+                InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
+                workingSet.setReps(blueprintWorkingSet.getReps());
+                workingSet.setWeight(blueprintWorkingSet.getWeight());
+                workingSet.setCreationTimedate(now.plusNanos(workingSets.size() * 1000000L));
                 workingSet.setExerciseInstance(exerciseInstance);
                 workingSets.add(workingSet);
             }
@@ -99,9 +98,8 @@ public class WorkoutService {
 
         return workoutMapper.mapToDto(savedWorkoutEntity);
     }
-
     public void deleteById(UUID id) {
-        WorkoutEntity workoutEntity = workoutRepository.findById(id)
+        workoutRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(
                         "Workout with the ID \"%s\" not found.", id)));
 

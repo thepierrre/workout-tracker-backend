@@ -26,7 +26,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class AuthService {
@@ -88,29 +90,35 @@ public class AuthService {
             throw new ConflictException("User with the email \"" + registerDto.getEmail() + "\" already exists.");
         }
 
-        UserEntity user = new UserEntity();
-        user.setUsername(registerDto.getUsername());
-        user.setEmail(registerDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-
-        UserSettingsEntity userSettingsEntity = new UserSettingsEntity();
-        userSettingsEntity.setChangeThreshold((double) 1);
-        userSettingsEntity.setWeightUnit("kgs");
-        userSettingsEntity.setUser(user);
-        user.setUserSettings(userSettingsEntity);
-        // userSettingsRepository.save(userSettingsEntity);
-
-
         Role role = roleRepository.findByName("USER")
-                        .orElseThrow(
-                                () -> new EntityNotFoundException(
-                                        "Cannot register a new user because the \"USER\" role hasn't been set."));
-        user.setRoles(Collections.singletonList(role));
+                .orElseThrow(
+                        () -> new EntityNotFoundException(
+                                "Cannot register a new user because the \"USER\" role hasn't been set."));
 
+        UserEntity user = new UserEntity(
+                registerDto.getUsername(),
+                registerDto.getEmail(),
+                passwordEncoder.encode(registerDto.getPassword()),
+                new ArrayList<>(List.of(role))
+
+        );
+
+        UserSettingsEntity userSettingsEntity = new UserSettingsEntity(
+                (double) 1,
+                "kgs"
+                //user
+        );
+
+        user.setUserSettings(userSettingsEntity);
         userRepository.save(user);
 
         return "User \"" + registerDto.getUsername() + "\" registered.";
+    }
 
+    public void createUserIfNotExistent(RegisterDto registerDto) {
+        if (userRepository.findByUsername(registerDto.getUsername()).isEmpty()) {
+            register(registerDto);
+        }
     }
 }
 

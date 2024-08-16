@@ -27,29 +27,29 @@ class RoutineMapperTest {
     @Test
     void mapToDto() {
         testData.routineEntity1.setUser(testData.user1);
-        testData.routineEntity1.getExerciseTypes().add(testData.exerciseTypeEntity1);
-        testData.routineEntity1.getExerciseTypes().add(testData.exerciseTypeEntity2);
+        testData.routineEntity1.getRoutineExercises().add(testData.routineExerciseEntity1);
+        testData.routineEntity1.getRoutineExercises().add(testData.routineExerciseEntity2);
 
         RoutineDto result = routineMapper.mapToDto(testData.routineEntity1);
 
         assertNotNull(result);
         assertNotNull(result.getId());
         assertEquals(result.getUser().getUsername(), "user1");
-        assertEquals(result.getExerciseTypes().get(0).getName(), "exerciseType1");
-        assertEquals(result.getExerciseTypes().get(result.getExerciseTypes().size() - 1).getName(), "exerciseType2");
+        assertEquals(result.getRoutineExercises().get(0).getName(), "exercise1");
+        assertEquals(result.getRoutineExercises().get(result.getRoutineExercises().size() - 1).getName(), "exercise2");
     }
 
     @Test
     void mapFromDto() {
         testData.routineRequestDto1.setUser(testData.userDto1);
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeRequestDto1);
-        testData.routineRequestDto1.getExerciseTypes().add(testData.exerciseTypeRequestDto2);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseRequestDto1);
+        testData.routineRequestDto1.getRoutineExercises().add(testData.routineExerciseRequestDto2);
 
         RoutineEntity result = routineMapper.mapFromDto(testData.routineRequestDto1);
 
         assertNotNull(result);
         assertEquals(result.getUser().getUsername(), "user1");
-        assertEquals(result.getExerciseTypes().get(0).getName(), "exerciseType1");
-        assertEquals(result.getExerciseTypes().get(result.getExerciseTypes().size() - 1).getName(), "exerciseType2");
+        assertEquals(result.getRoutineExercises().get(0).getName(), "exercise1");
+        assertEquals(result.getRoutineExercises().get(result.getRoutineExercises().size() - 1).getName(), "exercise2");
     }
 }

@@ -1,17 +1,17 @@
 package com.example.gymapp.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,20 +25,19 @@ public class RoutineEntity {
 
     private String name;
 
-    //@ManyToMany(cascade = CascadeType.ALL)
-    @ManyToMany
-    @JoinTable(
-            name = "routines_exercise_types",
-            joinColumns = @JoinColumn(name = "routine_id"),
-            inverseJoinColumns = @JoinColumn(name = "exercise_type_id")
-    )
-    @JsonIgnoreProperties("exerciseInstances")
+    @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "exercise_order")
-    private List<ExerciseTypeEntity> exerciseTypes;
+    @JsonIgnoreProperties({"routine"})
+    private List<RoutineExerciseEntity> routineExercises  = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"routines", "password", "email", "workouts"})
+    @JsonIgnore
     private UserEntity user;
+
+    public void removeRoutineExercise(RoutineExerciseEntity routineExercise) {
+        routineExercises.remove(routineExercise);
+        routineExercise.setRoutine(null);
+    }
 
 }

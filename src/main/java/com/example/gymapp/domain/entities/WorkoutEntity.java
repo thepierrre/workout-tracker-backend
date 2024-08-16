@@ -2,17 +2,16 @@ package com.example.gymapp.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,7 +27,7 @@ public class WorkoutEntity {
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"exerciseType", "workout"})
-    private List<ExerciseInstanceEntity> exerciseInstances;
+    private List<ExerciseInstanceEntity> exerciseInstances = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

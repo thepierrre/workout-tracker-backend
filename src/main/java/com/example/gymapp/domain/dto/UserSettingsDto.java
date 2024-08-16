@@ -9,14 +9,12 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,11 +22,8 @@ public class UserSettingsDto {
 
     private UUID id;
 
-    @JsonIgnore
-    private UserDto user;
-
-    @Transient
-    private String username;
+//    @JsonIgnoreProperties({"userSettings"})
+//    private UserDto user;
 
     @DecimalMin(value = "0.1", message = "The minimum value is 0.1.")
     @Max(value = 200, message = "The maximum value is 200.")

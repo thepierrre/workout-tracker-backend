@@ -37,7 +37,7 @@ class ExerciseInstanceMapperTest {
         assertNotNull(result);
         assertNotNull(result.getId());
         assertEquals(result.getWorkout().getRoutineName(), "routine1");
-        assertEquals(result.getExerciseTypeName(), "exerciseType1");
+        assertEquals(result.getExerciseTypeName(), "exercise1");
       }
 
     @Test
@@ -47,6 +47,6 @@ class ExerciseInstanceMapperTest {
 
         assertNotNull(result);
         assertEquals(result.getWorkout().getRoutineName(), "routine2");
-        assertEquals(result.getExerciseTypeName(), "exerciseType2");
+        assertEquals(result.getExerciseTypeName(), "exercise2");
       }
 }

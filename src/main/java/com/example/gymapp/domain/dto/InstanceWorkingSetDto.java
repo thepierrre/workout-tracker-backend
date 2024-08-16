@@ -1,20 +1,17 @@
 package com.example.gymapp.domain.dto;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WorkingSetDto {
+public class InstanceWorkingSetDto {
 
     private UUID id;
 
@@ -22,11 +19,11 @@ public class WorkingSetDto {
 
     private Short reps;
 
-    private double weight;
+    private Double weight;
 
     private LocalDateTime creationTimedate;
 
-    public WorkingSetDto(String id) {
+    public InstanceWorkingSetDto(String id) {
         this.id = UUID.fromString(id);
     }
 

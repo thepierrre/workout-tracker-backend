@@ -2,11 +2,10 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
 import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.dto.WorkingSetDto;
-import com.example.gymapp.domain.dto.WorkoutDto;
+import com.example.gymapp.domain.dto.InstanceWorkingSetDto;
 import com.example.gymapp.domain.entities.*;
 import com.example.gymapp.mappers.impl.ExerciseInstanceMapper;
-import com.example.gymapp.mappers.impl.WorkingSetMapper;
+import com.example.gymapp.mappers.impl.InstanceWorkingSetMapper;
 import com.example.gymapp.mappers.impl.WorkoutMapper;
 import com.example.gymapp.repositories.ExerciseInstanceRepository;
 import com.example.gymapp.repositories.UserRepository;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class ExerciseInstanceService {
@@ -31,7 +29,7 @@ public class ExerciseInstanceService {
     ExerciseInstanceMapper exerciseInstanceMapper;
 
     @Autowired
-    WorkingSetMapper workingSetMapper;
+    InstanceWorkingSetMapper instanceWorkingSetMapper;
 
     @Autowired
     WorkoutMapper workoutMapper;
@@ -48,33 +46,43 @@ public class ExerciseInstanceService {
     @Autowired
     UserRepository userRepository;
 
-    public ExerciseInstanceDto createWorkingSetforExercise(UUID exerciseId, WorkingSetDto workingSetDto) {
+    public ExerciseInstanceDto createWorkingSetforExercise(UUID exerciseId, InstanceWorkingSetDto instanceWorkingSetDto) {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseId.toString())));
 
-        WorkingSetEntity newWorkingSetEntity = workingSetMapper.mapFromDto(workingSetDto);
-        newWorkingSetEntity.setExerciseInstance(exerciseInstance);
-        workingSetRepository.save(newWorkingSetEntity);
-        exerciseInstance.getWorkingSets().add(newWorkingSetEntity);
+        InstanceWorkingSetEntity newInstanceWorkingSetEntity = instanceWorkingSetMapper.mapFromDto(instanceWorkingSetDto);
+        newInstanceWorkingSetEntity.setExerciseInstance(exerciseInstance);
+        workingSetRepository.save(newInstanceWorkingSetEntity);
+        exerciseInstance.getWorkingSets().add(newInstanceWorkingSetEntity);
 
         exerciseInstance.setWorkingSets(new ArrayList<>(exerciseInstance.getWorkingSets()));
 
         return exerciseInstanceMapper.mapToDto(exerciseInstance);
     }
 
-    @Transactional
-    public ExerciseInstanceDto updateWorkingSetById(UUID exerciseInstanceId, UUID setId, WorkingSetDto workingSetDto) {
+    public ExerciseInstanceDto updateNotesForExercise(UUID exerciseInstanceId, ExerciseInstanceDto exerciseInstanceDto) {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
 
-        WorkingSetEntity workingSet = workingSetRepository.findById(setId)
+        exerciseInstance.setNotes(exerciseInstanceDto.getNotes());
+        exerciseInstanceRepository.save(exerciseInstance);
+
+        return exerciseInstanceMapper.mapToDto(exerciseInstance);
+    }
+
+    @Transactional
+    public ExerciseInstanceDto updateWorkingSetById(UUID exerciseInstanceId, UUID setId, InstanceWorkingSetDto instanceWorkingSetDto) {
+        ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
+
+        InstanceWorkingSetEntity workingSet = workingSetRepository.findById(setId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Set with the ID %s not found.", setId.toString())));
 
-        workingSet.setReps(workingSetDto.getReps());
-        workingSet.setWeight(workingSetDto.getWeight());
+        workingSet.setReps(instanceWorkingSetDto.getReps());
+        workingSet.setWeight(instanceWorkingSetDto.getWeight());
         workingSetRepository.save(workingSet);
 
-        exerciseInstance.getWorkingSets().sort(Comparator.comparing(WorkingSetEntity::getCreationTimedate));
+        exerciseInstance.getWorkingSets().sort(Comparator.comparing(InstanceWorkingSetEntity::getCreationTimedate));
 
         return exerciseInstanceMapper.mapToDto(exerciseInstance);
     }
@@ -84,7 +92,7 @@ public class ExerciseInstanceService {
         ExerciseInstanceEntity exerciseInstance = exerciseInstanceRepository.findById(exerciseInstanceId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Exercise instance with the ID %s not found.", exerciseInstanceId.toString())));
 
-        WorkingSetEntity workingSet = workingSetRepository.findById(setId)
+        InstanceWorkingSetEntity workingSet = workingSetRepository.findById(setId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Set with the ID %s not found.", setId.toString())));
 
         workingSetRepository.deleteById(setId);
@@ -114,11 +122,11 @@ public class ExerciseInstanceService {
         exerciseToAdd.setExerciseTypeName(exerciseTypeDto.getName());
         exerciseToAdd.setWorkout(workoutEntity);
 
-        List<WorkingSetEntity> workingSets = new ArrayList<>();
+        List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            WorkingSetEntity workingSet = new WorkingSetEntity();
-            workingSet.setReps((short) 10);
-            workingSet.setWeight((short) 30);
+            InstanceWorkingSetEntity workingSet = new InstanceWorkingSetEntity();
+            workingSet.setReps((short) 0);
+            workingSet.setWeight((double) 0);
             workingSet.setExerciseInstance(exerciseToAdd);
             workingSets.add(workingSet);
         }

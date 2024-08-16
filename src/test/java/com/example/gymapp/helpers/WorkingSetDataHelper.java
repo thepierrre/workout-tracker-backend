@@ -1,15 +1,14 @@
 package com.example.gymapp.helpers;
 
-import com.example.gymapp.domain.dto.WorkingSetDto;
-import com.example.gymapp.domain.entities.WorkingSetEntity;
+import com.example.gymapp.domain.dto.InstanceWorkingSetDto;
+import com.example.gymapp.domain.entities.InstanceWorkingSetEntity;
 
 import java.time.LocalDateTime;
-import java.util.Random;
 import java.util.UUID;
 
 public class WorkingSetDataHelper {
 
-    public static WorkingSetEntity createWorkingSetEntity(
+    public static InstanceWorkingSetEntity createWorkingSetEntity(
             Short reps,
             Short weight,
             LocalDateTime creationTimedate
@@ -17,41 +16,41 @@ public class WorkingSetDataHelper {
 
         UUID id = UUID.randomUUID();
 
-        return WorkingSetEntity.builder()
+        return InstanceWorkingSetEntity.builder()
                 .id(id)
                 .reps(reps)
-                .weight(weight)
+                .weight(Double.valueOf(weight))
                 .build();
 
     };
 
-    public static WorkingSetDto createWorkingSetResponseDto(
+    public static InstanceWorkingSetDto createWorkingSetResponseDto(
             Short reps,
             Short weight,
             LocalDateTime creationTimedate
     ) {
         UUID id = UUID.randomUUID();
 
-        return WorkingSetDto.builder()
+        return InstanceWorkingSetDto.builder()
                 .id(id)
                 .reps(reps)
-                .weight(weight)
+                .weight(Double.valueOf(weight))
                 .build();
     };
 
-    public static WorkingSetDto createWorkingSetRequestDto(
+    public static InstanceWorkingSetDto createWorkingSetRequestDto(
             Short reps,
             Short weight
     ) {
 
-        return WorkingSetDto.builder()
+        return InstanceWorkingSetDto.builder()
                 .reps(reps)
-                .weight(weight)
+                .weight(Double.valueOf(weight))
                 .build();
     };
 
     public static void main(String[] args) {
-        WorkingSetEntity workingSetEntity1 = WorkingSetDataHelper.createWorkingSetEntity((short) 10, (short) 50, LocalDateTime.now());
+        InstanceWorkingSetEntity instanceWorkingSetEntity1 = WorkingSetDataHelper.createWorkingSetEntity((short) 10, (short) 50, LocalDateTime.now());
 
     }
 

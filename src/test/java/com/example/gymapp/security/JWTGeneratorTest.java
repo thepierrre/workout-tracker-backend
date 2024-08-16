@@ -12,9 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.crypto.SecretKey;
 
+import java.security.SecureRandom;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,14 +103,20 @@ class JWTGeneratorTest {
     @Test
     void validateToken_InvalidSignature() {
         when(authentication.getName()).thenReturn(username);
+        
+//        SecretKey anotherKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-        SecretKey anotherKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        byte[] keyBytes = new byte[32];
+        SecureRandom random = new SecureRandom();
+        random.nextBytes(keyBytes);
+
+        SecretKey key = Keys.hmacShaKeyFor(keyBytes);
 
         String token = Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 5000))
-                .signWith(anotherKey)
+                .signWith(key)
                 .compact();
 
         AuthenticationCredentialsNotFoundException exception = assertThrows(

@@ -2,15 +2,14 @@ package com.example.gymapp.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -20,9 +19,9 @@ public class RoutineDto {
 
     private String name;
 
-    private List<ExerciseTypeDto> exerciseTypes;
+    @JsonIgnoreProperties({"routine"})
+    private List<RoutineExerciseDto> routineExercises = new ArrayList<>();
 
-    //@JsonIgnoreProperties({"routines", "password", "email", "workouts"})
     @JsonIgnore
     private UserDto user;
 

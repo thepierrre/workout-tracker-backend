@@ -1,8 +1,7 @@
 package com.example.gymapp.mappers.impl;
 
 import com.example.gymapp.domain.dto.ExerciseInstanceDto;
-import com.example.gymapp.domain.dto.ExerciseTypeDto;
-import com.example.gymapp.domain.dto.WorkingSetDto;
+import com.example.gymapp.domain.dto.InstanceWorkingSetDto;
 import com.example.gymapp.domain.entities.ExerciseInstanceEntity;
 import com.example.gymapp.mappers.Mapper;
 import org.modelmapper.ModelMapper;
@@ -24,7 +23,7 @@ public class ExerciseInstanceMapper implements Mapper<ExerciseInstanceEntity, Ex
                 map(exerciseInstanceEntity, ExerciseInstanceDto.class);
 
         exerciseInstanceDto.setWorkingSets(exerciseInstanceDto.getWorkingSets().stream()
-                .sorted(Comparator.comparing(WorkingSetDto::getCreationTimedate)).collect(Collectors.toList()));
+                .sorted(Comparator.comparing(InstanceWorkingSetDto::getCreationTimedate)).collect(Collectors.toList()));
 
         return exerciseInstanceDto;
     }

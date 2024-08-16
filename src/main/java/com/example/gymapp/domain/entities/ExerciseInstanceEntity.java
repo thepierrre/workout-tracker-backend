@@ -5,16 +5,16 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Getter
-@Setter
 @Table(name = "exercise_instances")
 public class ExerciseInstanceEntity {
 
@@ -24,11 +24,13 @@ public class ExerciseInstanceEntity {
 
     @OneToMany(mappedBy = "exerciseInstance", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("exerciseInstance")
-    private List<WorkingSetEntity> workingSets;
+    private List<InstanceWorkingSetEntity> workingSets = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "workout_id", referencedColumnName = "id")
     private WorkoutEntity workout;
 
     private String exerciseTypeName;
+
+    private String notes;
 }
