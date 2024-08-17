@@ -23,6 +23,9 @@ public class RoutineExerciseEntity {
     @UuidGenerator
     private UUID id;
 
+    @Column(name = "exercise_order")
+    private short exerciseOrder;
+
     private String name;
 
     @ManyToOne

@@ -18,11 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class RoutineService {
@@ -51,7 +49,7 @@ public class RoutineService {
     @Autowired
     private BlueprintWorkingSetMapper workingSetMapper;
 
-    private RoutineExerciseEntity createExerciseForRoutine(UserEntity user, RoutineExerciseDto routineExerciseDto) {
+    private RoutineExerciseEntity createExerciseForRoutine(UserEntity user, RoutineExerciseDto routineExerciseDto, int order) {
         ExerciseTypeEntity exerciseTypeEntity = exerciseTypeRepository.findByUserAndName(user, routineExerciseDto.getName())
                 .orElseGet(() -> exerciseTypeRepository.findByDefaultAndName(routineExerciseDto.getName())
                         .orElseThrow(() -> new EntityNotFoundException(String.format(
@@ -60,6 +58,7 @@ public class RoutineService {
 
         RoutineExerciseEntity routineExerciseEntity = new RoutineExerciseEntity();
         routineExerciseEntity.setName(exerciseTypeEntity.getName());
+        routineExerciseEntity.setExerciseOrder((short) order);
 
         List<BlueprintWorkingSetEntity> workingSetEntities = new ArrayList<>();
         if (routineExerciseDto.getWorkingSets() != null) {
@@ -92,8 +91,12 @@ public class RoutineService {
         routineEntity.setUser(user);
 
         if (!routineDto.getRoutineExercises().isEmpty()) {
-            List<RoutineExerciseEntity> routineExercises = routineDto.getRoutineExercises().stream()
-                    .map(routineExerciseDto -> createExerciseForRoutine(user, routineExerciseDto)).collect(Collectors.toList());
+            List<RoutineExerciseEntity> routineExercises = IntStream.range(0, routineDto.getRoutineExercises().size())
+                            .mapToObj(index -> {
+                                RoutineExerciseDto routineExerciseDto = routineDto.getRoutineExercises().get(index);
+                                return createExerciseForRoutine(user, routineExerciseDto, index);
+                                    })
+                    .collect(Collectors.toList());
 
             routineExercises.forEach(routineExercise -> {
                 routineExercise.setRoutine(routineEntity);
@@ -121,8 +124,9 @@ public class RoutineService {
                 .map(routineEntity -> routineMapper.mapToDto(routineEntity)).toList();
     }
 
-    private void updateRoutineExercise(RoutineExerciseEntity existingExercise, RoutineExerciseDto routineExerciseDto) {
+    private RoutineExerciseEntity updateRoutineExercise(RoutineExerciseEntity existingExercise, RoutineExerciseDto routineExerciseDto, int order) {
         existingExercise.setName(routineExerciseDto.getName());
+        existingExercise.setExerciseOrder((short) order);
 
         // If a working set from the old (existing) exercise is not in the DTO, delete it.
         existingExercise.getWorkingSets().removeIf(existingWorkingSet ->
@@ -149,6 +153,8 @@ public class RoutineService {
                 workingSetRepository.save(newWorkingSet);
             }
         });
+
+        return existingExercise;
     }
 
     @Transactional
@@ -177,19 +183,23 @@ public class RoutineService {
                 )
         );
 
-        routineDto.getRoutineExercises().forEach(routineExerciseDto -> {
+        for (int i = 0; i < routineDto.getRoutineExercises().size(); i++) {
+            RoutineExerciseDto routineExerciseDto = routineDto.getRoutineExercises().get(i);
+
             if (routineExerciseDto.getId() != null) {
                 RoutineExerciseEntity existingExercise = routineExerciseRepository.findById(routineExerciseDto.getId())
                         .orElseThrow(() -> new EntityNotFoundException(String.format(
                                 "Routine exercise with ID %s not found", routineExerciseDto.getId())));
 
-                updateRoutineExercise(existingExercise, routineExerciseDto);
+                updateRoutineExercise(existingExercise, routineExerciseDto, i);
             } else {
-                RoutineExerciseEntity newExercise = createExerciseForRoutine(user, routineExerciseDto);
+                RoutineExerciseEntity newExercise = createExerciseForRoutine(user, routineExerciseDto, i);
                 newExercise.setRoutine(existingRoutine);
                 existingRoutine.getRoutineExercises().add(newExercise);
             }
-        });
+        }
+
+        existingRoutine.getRoutineExercises().sort(Comparator.comparing(RoutineExerciseEntity::getExerciseOrder));
         RoutineEntity updatedRoutine = routineRepository.save(existingRoutine);
         return routineMapper.mapToDto(updatedRoutine);
     }

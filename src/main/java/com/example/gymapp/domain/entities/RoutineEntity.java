@@ -26,8 +26,8 @@ public class RoutineEntity {
     private String name;
 
     @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderColumn(name = "exercise_order")
     @JsonIgnoreProperties({"routine"})
+    @OrderColumn(name = "exercise_order")
     private List<RoutineExerciseEntity> routineExercises  = new ArrayList<>();
 
     @ManyToOne

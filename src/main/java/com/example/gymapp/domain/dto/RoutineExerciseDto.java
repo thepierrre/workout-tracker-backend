@@ -17,6 +17,8 @@ public class RoutineExerciseDto {
 
     private UUID id;
 
+    private short exerciseOrder;
+
     private String name;
 
     @JsonIgnore
