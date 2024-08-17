@@ -12,11 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +43,19 @@ public class WorkoutService {
         }
         return List.of();
     }
+
+    public List<WorkoutDto> findWorkoutsForUserForDate(String username, LocalDate date) {
+        if (userRepository.findByUsername(username).isEmpty()) {
+            throw new UsernameNotFoundException(String.format(
+                    "User with the username \"%s\" not found.", username));
+        }
+
+        return workoutRepository.findByUserUsernameAndCreationDate(username, date)
+                .stream()
+                .map(workoutMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
+
 
     public Optional<WorkoutDto> findById(UUID id) {
         WorkoutEntity workoutEntity = workoutRepository.findById(id)

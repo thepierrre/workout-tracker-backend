@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +25,15 @@ public class WorkoutController {
     @GetMapping(path = "user-workouts")
     public ResponseEntity<List<WorkoutDto>> findAllForUser(@AuthenticationPrincipal UserDetails userDetails) {
         List<WorkoutDto> workouts = workoutService.findAllForUser(userDetails.getUsername());
+        return new ResponseEntity<>(workouts, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "user-workouts/{date}")
+    public ResponseEntity<List<WorkoutDto>> findWorkoutsForUserForDate(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable LocalDate date
+    ) {
+        List<WorkoutDto> workouts = workoutService.findWorkoutsForUserForDate(userDetails.getUsername(), date);
         return new ResponseEntity<>(workouts, HttpStatus.OK);
     }
 
