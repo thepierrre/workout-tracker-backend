@@ -15,6 +15,11 @@ import java.util.UUID;
 @Builder
 public class RoutineExerciseDto {
 
+    public RoutineExerciseDto (String name, List<BlueprintWorkingSetDto> workingSets) {
+        this.name = name;
+        this.workingSets = workingSets;
+    }
+
     private UUID id;
 
     private short exerciseOrder;

@@ -138,9 +138,6 @@ public class ExerciseTypeService {
         existingExerciseType.get().setUser(existingExerciseType.get().getUser());
         existingExerciseType.get().setIsDefault(false);
 
-        //TODO
-//        existingExerciseType.get().setRoutines(existingExerciseType.get().getRoutines());
-
         List<CategoryEntity> newCategories = exerciseTypeDto.getCategories().stream()
                 .map(categoryDto -> categoryMapper.mapFromDto(categoryDto)).toList();
 
@@ -152,7 +149,7 @@ public class ExerciseTypeService {
         return exerciseTypeMapper.mapToDto(updatedExercise);
     }
 
-    public void createDefaultExercisesIfNotExistent() {
+    public void createDefaultExercisesIfNonExistent() {
         Map<String, Map<ExerciseTypeEntity.Equipment, List<String>>> exercisesWithCategories = Map.ofEntries(
         Map.entry("Barbell bench press", Map.of(ExerciseTypeEntity.Equipment.BARBELL, List.of("Chest", "Anterior delts", "Triceps"))),
         Map.entry("Incline barbell bench press", Map.of(ExerciseTypeEntity.Equipment.BARBELL, List.of("Chest", "Anterior delts", "Triceps"))),
@@ -176,17 +173,52 @@ public class ExerciseTypeService {
 
         exercisesWithCategories.forEach((exerciseName, details) -> {
             details.forEach((equipment, categoryNames) -> {
-                createExerciseTypeIfNotExistent(exerciseName, categoryNames, equipment, true);
+                createExerciseTypeIfNonExistent(exerciseName, categoryNames, equipment, true, null);
             });
         });
     }
 
-    private void createExerciseTypeIfNotExistent(String name, List<String> categoryNames, ExerciseTypeEntity.Equipment equipment, Boolean isDefault) {
+    // Create several custom exercises for the example user for demonstration purposes.
+    public void createCustomExercisesForExampleUserIfNonExistent(String username) {
+
+        Map<String, Map<ExerciseTypeEntity.Equipment, List<String>>> exercisesWithCategories = Map.ofEntries(
+                Map.entry("Decline barbell bench press", Map.of(ExerciseTypeEntity.Equipment.BARBELL, List.of("Upper chest", "Anterior delts", "Triceps"))),
+                Map.entry("Leg press", Map.of(ExerciseTypeEntity.Equipment.MACHINE, List.of("Quadriceps", "Hamstrings", "Glutes"))),
+                Map.entry("Hanging leg raises with twist", Map.of(ExerciseTypeEntity.Equipment.MACHINE, List.of("Abs", "Obliques")))
+        );
+
+        exercisesWithCategories.forEach((exerciseName, details) -> {
+            details.forEach((equipment, categoryNames) -> {
+                createExerciseTypeIfNonExistent(exerciseName, categoryNames, equipment, false, username);
+            });
+        });
+    }
+
+    private void createExerciseTypeIfNonExistent(
+            String name,
+            List<String> categoryNames,
+            ExerciseTypeEntity.Equipment equipment,
+            Boolean isDefault,
+            String username
+    ) {
+        Optional<UserEntity> user = Optional.empty();
+        if (username != null) {
+            user = userRepository.findByUsername(username);
+        }
+
         Optional<ExerciseTypeEntity> existingExerciseType = exerciseTypeRepository.findByName(name);
+
         if (existingExerciseType.isEmpty()) {
             List<CategoryEntity> categories = categoryService.findCategoriesByNames(categoryNames);
             ExerciseTypeEntity exerciseType = new ExerciseTypeEntity(name, categories, equipment, isDefault);
+
             exerciseTypeRepository.save(exerciseType);
+
+            if (user.isPresent()) {
+                exerciseType.setUser(user.get());
+                user.get().getExerciseTypes().add(exerciseType);
+                userRepository.save(user.get());
+            }
         }
     }
 }

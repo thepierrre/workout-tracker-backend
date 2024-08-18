@@ -20,6 +20,11 @@ import java.util.UUID;
 @Builder
 public class BlueprintWorkingSetDto {
 
+    public BlueprintWorkingSetDto (Short reps, Double weight) {
+        this.reps = reps;
+        this.weight = weight;
+    }
+
     private UUID id;
 
     @JsonIgnoreProperties({"routine", "workingSets"})
