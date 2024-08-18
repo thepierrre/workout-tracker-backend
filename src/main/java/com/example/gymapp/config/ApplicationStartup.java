@@ -21,10 +21,10 @@ public class ApplicationStartup {
     private CategoryService categoryService;
 
     @Autowired
-    private ExerciseTypeService exerciseTypeService;
+    private SetupExerciseTypeService setupExerciseTypeService;
 
     @Autowired
-    private RoutineService routineService;
+    private SetupRoutineService setupRoutineService;
 
     @Autowired
     private AuthService authService;
@@ -41,10 +41,10 @@ public class ApplicationStartup {
                 "123"
         ));
         // Create default exercises to be available for every new user.
-        exerciseTypeService.createDefaultExercisesIfNonExistent();
+        setupExerciseTypeService.createDefaultExercisesIfNonExistent();
         // Create custom exercises for the example user for demonstration.
-        exerciseTypeService.createCustomExercisesForExampleUserIfNonExistent("CardioManiac");
+        setupExerciseTypeService.createCustomExercisesForExampleUserIfNonExistent("CardioManiac");
         // Create training routines for the example user for demonstration.
-        routineService.createRoutinesForExampleUserIfNonExistent("CardioManiac");
+        setupRoutineService.createRoutinesForExampleUserIfNonExistent("CardioManiac");
     }
 }

@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -48,6 +49,14 @@ public class AuthService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    private Optional<String> getUsernameFromLogin(LoginDto loginDto) {
+        return Optional.ofNullable(loginDto.getUsername());
+    }
+
+    private Optional<String> getEmailFromLogin(LoginDto loginDto) {
+        return Optional.ofNullable(loginDto.getEmail());
+    }
 
     public String login(LoginDto loginDto, HttpServletResponse response) {
 
