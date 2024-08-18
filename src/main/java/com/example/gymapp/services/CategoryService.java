@@ -2,6 +2,7 @@ package com.example.gymapp.services;
 
 import com.example.gymapp.domain.dto.CategoryDto;
 import com.example.gymapp.domain.entities.CategoryEntity;
+import com.example.gymapp.domain.entities.ExerciseTypeEntity;
 import com.example.gymapp.mappers.impl.CategoryMapper;
 import com.example.gymapp.repositories.CategoryRepository;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +31,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public void createCategoriesIfNotExistent() {
+    public void createCategoriesIfNonExistent() {
 
         List<CategoryEntity> categories = new ArrayList<>(List.of(
                 new CategoryEntity("Core", CategoryEntity.MuscleGroup.CORE),
@@ -67,7 +69,10 @@ public class CategoryService {
                 ));
 
         for (CategoryEntity category : categories) {
-            categoryRepository.save(category);
+            Optional<CategoryEntity> existingCategory = categoryRepository.findByName(category.getName());
+            if (existingCategory.isEmpty()) {
+                categoryRepository.save(category);
+            }
         }
     }
 

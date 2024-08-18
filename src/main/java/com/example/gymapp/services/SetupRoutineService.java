@@ -3,7 +3,12 @@ package com.example.gymapp.services;
 import com.example.gymapp.domain.dto.BlueprintWorkingSetDto;
 import com.example.gymapp.domain.dto.RoutineDto;
 import com.example.gymapp.domain.dto.RoutineExerciseDto;
+import com.example.gymapp.domain.entities.UserEntity;
+import com.example.gymapp.repositories.RoutineRepository;
+import com.example.gymapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -15,7 +20,23 @@ public class SetupRoutineService {
     @Autowired
     RoutineService routineService;
 
+    @Autowired
+    RoutineRepository routineRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
     public void createRoutinesForExampleUserIfNonExistent(String username) {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+                        "User with the username \"%s\" not found.", username)));
+
+        if (routineRepository.findByUserAndName(user, "Full Body Workout A").isPresent() ||
+                routineRepository.findByUserAndName(user, "Full Body Workout B").isPresent()
+        ) {
+            return;
+        }
+
         BlueprintWorkingSetDto workingSet1 = new BlueprintWorkingSetDto((short) 10, 12.0);
         BlueprintWorkingSetDto workingSet2 = new BlueprintWorkingSetDto((short) 11, 40.0);
         BlueprintWorkingSetDto workingSet3 = new BlueprintWorkingSetDto((short) 11, 60.0);

@@ -33,7 +33,7 @@ public class ApplicationStartup {
     @Transactional
     public void onApplicationReady() {
         roleService.createRoleIfNotExistent("USER");
-        categoryService.createCategoriesIfNotExistent();
+        categoryService.createCategoriesIfNonExistent();
         // Create an example user for demonstration.
         authService.createUserIfNotExistent(new RegisterDto(
                 "CardioManiac",
