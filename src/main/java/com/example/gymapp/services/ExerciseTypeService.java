@@ -72,10 +72,7 @@ public class ExerciseTypeService {
         return exerciseTypeMapper.mapToDto(savedEntity);
     }
 
-    public List<ExerciseTypeDto> findAllDefault(String username) {
-        UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with the username \"%s\" not found.", username)));
-
+    public List<ExerciseTypeDto> findAllDefault() {
         List<ExerciseTypeEntity> defaultExercises = exerciseTypeRepository.findAllDefault();
         return defaultExercises.stream()
                 .map(exerciseTypeMapper::mapToDto)

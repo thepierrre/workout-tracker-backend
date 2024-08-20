@@ -4,6 +4,7 @@ import com.example.gymapp.exceptions.ConflictException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,5 +51,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<Object> handleConflictException(ConflictException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<Object> handleConflictException(AuthenticationCredentialsNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Token expired."));
     }
 }

@@ -23,8 +23,8 @@ public class ExerciseTypeController {
     private ExerciseTypeService exerciseTypeService;
 
     @GetMapping(path = "default-exercise-types")
-    public ResponseEntity<List<ExerciseTypeDto>> findAllDefault(@AuthenticationPrincipal UserDetails userDetails) {
-        List<ExerciseTypeDto> exerciseTypes = exerciseTypeService.findAllDefault(userDetails.getUsername());
+    public ResponseEntity<List<ExerciseTypeDto>> findAllDefault() {
+        List<ExerciseTypeDto> exerciseTypes = exerciseTypeService.findAllDefault();
         return new ResponseEntity<>(exerciseTypes, HttpStatus.OK);
     }
 

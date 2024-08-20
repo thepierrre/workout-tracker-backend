@@ -243,7 +243,7 @@ class ExerciseTypeControllerTest {
     @Test
     void findAllDefault_Success() throws Exception {
         List<ExerciseTypeDto> defaultExercises = List.of(testData.exerciseTypeResponseDto4, testData.exerciseTypeResponseDto5);
-        when(exerciseTypeService.findAllDefault("user1")).thenReturn(defaultExercises);
+        when(exerciseTypeService.findAllDefault()).thenReturn(defaultExercises);
 
         mvc.perform(get("/api/default-exercise-types")
                         .contentType(MediaType.APPLICATION_JSON))

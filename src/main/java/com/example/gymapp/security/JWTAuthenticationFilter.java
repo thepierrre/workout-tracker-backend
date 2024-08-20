@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +33,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = getJWTFromRequest(request);
+
+        try {
             if (StringUtils.hasText(token) && tokenGenerator.validateToken(token)) {
                 String username = tokenGenerator.getUsernameFromJWT(token);
 
@@ -42,6 +45,20 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
             filterChain.doFilter(request, response);
+        } catch (AuthenticationCredentialsNotFoundException ex) {
+            Cookie cookie = new Cookie("token", token);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+
+            response.addCookie(cookie);
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write(ex.getMessage());
+
+            //response.getWriter().write("error occurred!");
+        }
     }
 
     private String getJWTFromRequest(HttpServletRequest request) {

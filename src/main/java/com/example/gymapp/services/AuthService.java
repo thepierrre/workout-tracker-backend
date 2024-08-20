@@ -78,7 +78,7 @@ public class AuthService {
         cookie.setHttpOnly(true);
         cookie.setSecure(true); // Use true if HTTPS
         cookie.setPath("/");
-        cookie.setMaxAge(7 * 24 * 60 * 60);
+        cookie.setMaxAge(43200); // 12 h
 
         response.addCookie(cookie);
 
