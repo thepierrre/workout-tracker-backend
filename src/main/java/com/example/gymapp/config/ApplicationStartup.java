@@ -7,6 +7,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,13 @@ public class ApplicationStartup {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    Environment environment;
+
+    public String getPassword() {
+        return environment.getProperty("dummyuser.password");
+    }
+
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void onApplicationReady() {
@@ -38,7 +46,7 @@ public class ApplicationStartup {
         authService.createUserIfNotExistent(new RegisterDto(
                 "CardioManiac",
                 "cardiomaniac@gymmail.com",
-                "123"
+                getPassword()
         ));
         // Create default exercises to be available for every new user.
         setupExerciseTypeService.createDefaultExercisesIfNonExistent();
