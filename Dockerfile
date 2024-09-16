@@ -22,7 +22,11 @@ COPY --from=build /app/target/workout-tracker-service-*.jar workout-tracker-serv
 
 USER 1001
 
-ENTRYPOINT ["java", "-jar", "workout-tracker-service.jar"]
+# ENTRYPOINT ["java", "-jar", "workout-tracker-service.jar"]
+
+# CMD export POSTGRES_PASSWORD=$(cat /run/secrets/postgres_pwd) && \
+#     export DUMMYUSER_PASSWORD=$(cat /run/secrets/dummyuser_pwd) && \
+#     java -jar workout-tracker-service.jar
 
 
 # Set the entrypoint to use the dynamically determined jar name
