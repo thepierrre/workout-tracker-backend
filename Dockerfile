@@ -20,3 +20,7 @@ WORKDIR /app
 # Copy the jar file from the build stage
 COPY --from=build /app/target/workout-tracker-service-*.jar workout-tracker-service.jar
 
+USER 1001
+
+CMD ["java", "-jar", "workout-tracker-service.jar"]
+
