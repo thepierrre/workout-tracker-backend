@@ -1,8 +1,11 @@
+# Define the base image for the build stage
 FROM maven:3.8.4-openjdk-17 AS build
 
 WORKDIR /app
 
 COPY pom.xml .
+
+# Download the Maven dependencies and store them in the local Maven repository
 RUN mvn dependency:go-offline
 
 COPY src ./src

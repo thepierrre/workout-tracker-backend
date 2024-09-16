@@ -56,8 +56,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(ex.getMessage());
-
-            //response.getWriter().write("error occurred!");
         }
     }
 
